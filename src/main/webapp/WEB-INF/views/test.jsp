@@ -38,6 +38,8 @@
 					//age:"20",
 					input1 :"input1 value" ,
 					input2 :"input2 value" ,
+					childParam1 :"childParam1 value" ,
+					childParam2 :"childParam2 value" ,
 					list : list
 			}
 			console.dir(formData);
@@ -48,6 +50,48 @@
 				encode :true,
 				type: 'POST',
 				traditional: true,
+				success: function(data){
+					
+					console.dir(data);
+					console.log(data.name);
+					console.log(data.age);
+					
+				},
+				 error: function(XMLHttpRequest, textStatus, errorThrown) { 
+					 
+					 alert('관리자에게 문의하세요.');
+					 
+	             }       
+			});// ajax
+			
+			
+		})
+		
+		
+		$("#btn3").click(function() {
+			var list = [];
+			list.push(1);
+			list.push(2);
+			var map = {};
+			
+			map.list = list;
+			
+			var formData = {
+					//name:"test",
+					//age:"20",
+					input1 :"input1 value" ,
+					input2 :"input2 value" ,
+					list : list,
+					map : map
+			}
+			console.dir(formData);
+			$.ajax({
+				url: "<%= request.getContextPath() %>/test/form4",
+				data: JSON.stringify(formData),
+				dataType: 'json',
+				//encode :true,
+				type: 'POST',
+				//traditional: true,
 				success: function(data){
 					
 					console.dir(data);
@@ -96,6 +140,8 @@ ${jpaObject.phone}<br>
 <input type="text" id="test" name ="test">
 <button type="button" id="btn1">발송</button>
 <button type="button" id="btn2">발송</button>
+<br>
+실패 - <button type="button" id="btn3">발송3</button>
 
 </body>
 </html>

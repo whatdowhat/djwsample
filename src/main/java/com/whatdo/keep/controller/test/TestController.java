@@ -1,10 +1,11 @@
 package com.whatdo.keep.controller.test;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.logging.LogManager;
-import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,14 +13,16 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mysql.cj.log.Log;
+import com.google.gson.Gson;
 import com.whatdo.keep.repository.TestVORepository;
 import com.whatdo.keep.service.dao.TimeDAO;
+import com.whatdo.keep.vo.ChildTestVO;
 import com.whatdo.keep.vo.Customer;
 import com.whatdo.keep.vo.InputForm;
 import com.whatdo.keep.vo.TestVO;
@@ -78,13 +81,33 @@ public class TestController {
 	@RequestMapping(value = "/test/form3", method = { RequestMethod.GET,RequestMethod.POST })
 	@ResponseBody
 	public Map form3(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
-			,InputForm inputform	){
+			,ChildTestVO inputform	){
 
 //		Map m = returnParamMap(req);
 		System.out.println(inputform.toString());
 		System.out.println(inputform.getList().size());
-		System.out.println(inputform.getList().get(0));
+		System.out.println(inputform.getList().toString());
 		return new HashMap<String, String>();
+		
+	}
+	
+	//너무 과함.
+	// 디코딩 인코딩
+	// 오류
+	@RequestMapping(value = "/test/form4", method = { RequestMethod.GET,RequestMethod.POST })
+	@ResponseBody
+	public Map form4(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
+			,@RequestBody String data) throws UnsupportedEncodingException{
+
+		data = URLDecoder.decode(data,"UTF-8");
+		
+		System.out.println(data);
+		Gson g = new Gson();
+		Map mm =  g.fromJson(data, Map.class);
+		Map m = new HashMap();
+	
+		System.out.println(mm);
+		return m;
 		
 	}
 	
