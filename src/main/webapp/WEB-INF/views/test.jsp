@@ -15,8 +15,6 @@
 <h1>hello world test 1</h1>
 <script type="text/javascript">
 
-	
-
 	$(document).ready(function() {
 	
 		
