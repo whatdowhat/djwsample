@@ -1,0 +1,38 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.sample">
+
+	<select id="getTime" resultType="java.lang.String">
+	
+		select sysdate()
+		
+	</select>
+
+	<select id="getCustomer" parameterType="java.util.HashMap"   resultType="java.util.HashMap">
+	
+		select * from customuser 
+		where 1=1
+		
+		and seq = #{seq}
+		
+	</select>
+
+
+	<select id="getCustomer2" parameterType="java.util.HashMap"   resultType="Customer">
+	
+		select * from customuser 
+		where 1=1
+		and seq =#{seq}
+		
+	</select>
+	
+	
+		<select id="getHistory" parameterType="java.util.HashMap"   resultType="Historylog">
+	
+		select * from historylog 
+		where 1=1
+		and seq =#{seq}
+		
+	</select>
+
+
+</mapper>
