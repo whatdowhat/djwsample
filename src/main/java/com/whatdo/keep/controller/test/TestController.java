@@ -2,6 +2,7 @@ package com.whatdo.keep.controller.test;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,11 +22,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.whatdo.keep.repository.SystemCommonVORepository;
 import com.whatdo.keep.repository.TestVORepository;
 import com.whatdo.keep.service.dao.TimeDAO;
+import com.whatdo.keep.util.CustomExcel;
 import com.whatdo.keep.vo.ChildTestVO;
 import com.whatdo.keep.vo.Customer;
 import com.whatdo.keep.vo.InputForm;
+import com.whatdo.keep.vo.SystemCommonVO;
 import com.whatdo.keep.vo.TestVO;
 
 
@@ -36,6 +41,10 @@ public class TestController {
 	
 	@Autowired
 	TimeDAO dao;
+	
+	@Autowired
+	private SystemCommonVORepository systemCommonVORepository;
+	
 //	
 	@RequestMapping(value = "/test/qrenter.do", method = { RequestMethod.GET,RequestMethod.POST })
 	public ModelAndView qrenter(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
@@ -45,10 +54,10 @@ public class TestController {
 		TestVO vo = re.findBySeq(1);
 		modelAndView.addObject("jpaObject", vo);
 		
-		Map<String,Object> m = new HashMap();
-		m.put("seq", 194);
-		Customer resultVo =  dao.getCustomer2(m);
-		modelAndView.addObject("daoObject", resultVo);
+//		Map<String,Object> m = new HashMap();
+//		m.put("seq", 194);
+//		Customer resultVo =  dao.getCustomer2(m);
+//		modelAndView.addObject("daoObject", resultVo);
 		
 		modelAndView.setViewName("/test");
 		return modelAndView;
@@ -83,6 +92,17 @@ public class TestController {
 	public Map form3(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
 			,ChildTestVO inputform	){
 
+		
+		
+		SystemCommonVO commonVO = new SystemCommonVO();
+		commonVO.setStrParam01("value1");
+		commonVO.setStrParam02("value2");
+		commonVO.setIntParam01(1);
+		commonVO.setIntParam01(2);
+		
+		System.out.println(systemCommonVORepository.save(commonVO));
+		
+		
 //		Map m = returnParamMap(req);
 		System.out.println(inputform.toString());
 		System.out.println(inputform.getList().size());
@@ -109,6 +129,19 @@ public class TestController {
 		System.out.println(mm);
 		return m;
 		
+	}
+	
+	@RequestMapping(value = "/test/exceldownload", method = { RequestMethod.GET,RequestMethod.POST })
+	public CustomExcel exceldownload(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session,Model model) throws UnsupportedEncodingException{
+
+	
+		List<SystemCommonVO> list = systemCommonVORepository.findAll();
+		String filename =  "REST_API_이력조회";
+		list = new ArrayList<SystemCommonVO>();
+       model.addAttribute("targetList", list);
+       model.addAttribute("sheetName", "first");
+       model.addAttribute("workBookName", filename);
+       return new CustomExcel();
 	}
 	
 	public Map<String,String> returnParamMap(HttpServletRequest req){

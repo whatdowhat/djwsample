@@ -30,11 +30,12 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.BeanNameViewResolver;
 
+import com.whatdo.keep.util.CustomExcel;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-@ComponentScan(basePackages = "com.whatdo.keep.*") //서버기동용
-//@ComponentScan(basePackages = "com.whatdo.keep.config.* com.whatdo.keep.repository.* com.whatdo.keep.vo.*") //junit test용
+//@ComponentScan(basePackages = "com.whatdo.keep.*") //서버기동용
+@ComponentScan(basePackages = "com.whatdo.keep.config.* com.whatdo.keep.repository.* com.whatdo.keep.vo.*") //junit test용
 @EnableJpaRepositories(basePackages = "com.whatdo.keep.*")
 @Configuration
 @EnableWebMvc
@@ -93,6 +94,11 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 //		InternalResourceViewResolver resolver = new InternalResourceViewResolver("/WEB-INF/view", ".jsp");
 //		return resolver;
 //	}
+	
+	@Bean
+	public CustomExcel CustomExcel(){
+		return new CustomExcel();
+	}
 	
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

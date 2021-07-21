@@ -10,8 +10,10 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- 1. DB Connection을 위한 객체 생성 -->
-						
-	<!-- <context:component-scan base-package="com.whatdo.keep.service.* com.whatdo.keep.vo.*"></context:component-scan> -->
+	
+	<!-- controller에서 없을시 에러발생 -->
+	<!-- expected at least 1 bean which qualifies as autowire candidate -->
+	<context:component-scan base-package="com.whatdo.keep.service.* com.whatdo.keep.vo.*"></context:component-scan>
 	<!-- <context:component-scan base-package="com.whatdo.keep.*"></context:component-scan> -->
 
 	<bean id="dataSource2" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
