@@ -17,6 +17,9 @@
   		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository" />
     </context:component-scan>
      
+     <mvc:resources location="/resources/" mapping="/resources/**"></mvc:resources>
+
+     
     <bean id="objectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean" />
     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>

@@ -1,5 +1,6 @@
 package com.whatdo.keep.config;
 
+import java.util.List;
 import java.util.Properties;
 
 import javax.persistence.EntityManager;
@@ -25,6 +26,7 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -99,6 +101,7 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 	public CustomExcel CustomExcel(){
 		return new CustomExcel();
 	}
+	
 	
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -179,23 +182,24 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 		return pspc;
 	}
 	
-//	@Bean
-//	public CommonsMultipartResolver multipartResolver() {
-//		 CommonsMultipartResolver resolver=new CommonsMultipartResolver();
-//		 resolver.setDefaultEncoding("utf-8");
-//		 resolver.setMaxInMemorySize(fileuploadMax);
-//		 File dirPath = new File(File.separator+fileuploadUrl);
-//		 
-//			
-//		 if(!dirPath.exists()) {
-//				dirPath.mkdir();
-//		}//if
-//		 System.out.println("CommonsMultipartResolver created");
-//		 
-//		 return resolver;
-//	}
-//	
+	@Bean(name="httpServletRequest")
+	public HttpServletRequest httpServletRequest() {
 
+		return httpServletRequest;
+	}
+
+	@Bean(name="httpServletResponse")
+	public HttpServletResponse httpServletResponse() {
+
+		return httpServletResponse;
+	}
+	
+	
+	@Bean(name="httpSession")
+	public HttpSession HttpSession() {
+
+		return httpSession;
+	}
 	
 	@Bean
 	public BeanNameViewResolver beanNameViewResolver() {

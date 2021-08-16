@@ -21,9 +21,9 @@
 		<!-- <property name="driverClassName" value="com.mysql.jdbc.Driver"/> -->
 		
 		<!-- <property name="url" value="jdbc:mysql://localhost:3306/adminweb?useSSL=false&amp;characterEncoding=UTF-8;serverTimezone=Asia/Seoul"/> -->
-		<property name="url" value="jdbc:mysql://localhost:3306/adminweb?serverTimezone=Asia/Seoul"/>
-		<property name="username" value="admin"/>
-		<property name="password" value="root"/>
+		<property name="url" value="jdbc:mysql://koreacrpgp.cafe24.com/koreacrpgp?serverTimezone=Asia/Seoul"/>
+		<property name="username" value="koreacrpgp"/>
+		<property name="password" value="koreacrpgp!804"/>
 	</bean>	
 
 

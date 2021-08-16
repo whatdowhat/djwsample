@@ -27,7 +27,6 @@ import com.whatdo.keep.repository.TestVORepository;
 import com.whatdo.keep.service.dao.TimeDAO;
 import com.whatdo.keep.util.CustomExcel;
 import com.whatdo.keep.vo.ChildTestVO;
-import com.whatdo.keep.vo.Customer;
 import com.whatdo.keep.vo.InputForm;
 import com.whatdo.keep.vo.SystemCommonVO;
 import com.whatdo.keep.vo.TestVO;
@@ -44,6 +43,7 @@ public class TestController {
 	
 	@Autowired
 	private SystemCommonVORepository systemCommonVORepository;
+	
 	
 //	
 	@RequestMapping(value = "/test/qrenter.do", method = { RequestMethod.GET,RequestMethod.POST })
@@ -65,6 +65,18 @@ public class TestController {
 	}
 	
 	
+	@RequestMapping(value = "/test/cssLoading", method = { RequestMethod.GET,RequestMethod.POST })
+	public ModelAndView cssLoading(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
+			){
+		
+		String data = "testCssLoading";
+		modelAndView.addObject("data",data );
+		modelAndView.setViewName("/testCssLoading");
+		return modelAndView;
+		
+	}
+	
+	
 	@RequestMapping(value = "/test/form1", method = { RequestMethod.GET,RequestMethod.POST })
 	public ModelAndView form1(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
 			,InputForm inputform ){
@@ -77,10 +89,10 @@ public class TestController {
 	
 	@RequestMapping(value = "/test/form2", method = { RequestMethod.GET,RequestMethod.POST })
 	public ModelAndView form2(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
-			,Map<String,Object> inputform	){
+			,Map<String,Object> inputform	) throws InterruptedException{
 		
 		Map m = returnParamMap(req);
-		
+		Thread.sleep(5000);
 		
 		modelAndView.setViewName("/test");
 		return modelAndView;
@@ -90,7 +102,7 @@ public class TestController {
 	@RequestMapping(value = "/test/form3", method = { RequestMethod.GET,RequestMethod.POST })
 	@ResponseBody
 	public Map form3(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
-			,ChildTestVO inputform	){
+			,ChildTestVO inputform	) throws InterruptedException{
 
 		
 		

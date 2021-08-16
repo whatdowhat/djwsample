@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Transient;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,9 +22,12 @@ public class InputForm {
 
 	String input1;
 	String input2;
-//	String[] list;
 	List<String> list = new ArrayList<String>();
 	
 	Map<String,Object> map = new HashMap();
-//	Integer[] list;
+	
+	@Transient
+	int length;
+	@Transient
+	int start;
 }
