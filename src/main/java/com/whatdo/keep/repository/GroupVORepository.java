@@ -16,4 +16,5 @@ public interface GroupVORepository extends JpaRepository<GroupVO, Long>{
 	GroupVO findByGroupKey(String groupKey);
 	Page<GroupVO> findAll(Specification<GroupVO> condition,Pageable pageable);
 	
+	
 }

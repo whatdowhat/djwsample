@@ -118,7 +118,7 @@
         
 
     </body>
-    
+<script src="/resources/assets/libs/jquery/jquery.min.js"></script>
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -169,6 +169,13 @@ $(document).ready(function() {
                 "columnsize" : 12,
             }
         },
+        
+        "createdRow": function ( row, data, index ) {
+        	console.log("지역!!");
+        	console.dir(row);
+        	console.dir(data);
+        	console.dir(index);
+        }
        
     });
 
