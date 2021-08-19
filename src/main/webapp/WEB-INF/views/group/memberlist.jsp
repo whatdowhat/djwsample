@@ -256,6 +256,7 @@ var inputform = {};
 	inputform.recommandName = $("#recommandName").val();
 	inputform.recommandPhone = $("#recommandPhone").val();
 	
+	inputform.groupKey = "${groupKey}";
 	inputform.groupName = $("#groupName").val();
 	inputform.detailAddress = $("#detailAddress").val();
 	inputform.level = $("#level").val();
@@ -272,7 +273,7 @@ var inputform = {};
 	
 	
 	
-    var url = "/admin/member/listtable.do";
+    var url = "/admin/group/memberlisttable.do";
     $('#datatable').DataTable({
     	paging : true,
     	info: true,
@@ -346,6 +347,7 @@ function search(){
 	inputform.recommandName = $("#recommandName").val();
 	inputform.recommandPhone = $("#recommandPhone").val();
 	
+	inputform.groupKey = "${groupKey}";
 	inputform.groupName = $("#groupName").val();
 	inputform.detailAddress = $("#detailAddress").val();
 	inputform.level = $("#level").val();
@@ -360,7 +362,7 @@ function search(){
 	
 	console.dir(inputform);
 	
-    var url = "/admin/member/listtable.do";
+    var url = "/admin/group/memberlisttable.do";
     $('#datatable').DataTable({
     	paging : true,
     	info: true,

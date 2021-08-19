@@ -15,7 +15,20 @@
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesdesign" name="author" />
         <!-- App favicon -->
+
         <link rel="shortcut icon" href="/resources/assets/images/favicon.ico">
+
+        <!-- jvectormap -->
+        <link href="/resources/assets/libs/jqvmap/jqvmap.min.css" rel="stylesheet" />
+
+        <!-- Bootstrap Css -->
+        <link href="/resources/assets/css/bootstrap.min.css" rel="stylesheet" />
+        <!-- Icons Css -->
+        <link href="/resources/assets/css/icons.min.css" rel="stylesheet" />
+        <!-- App Css-->
+        <link href="/resources/assets/css/app.min.css"  rel="stylesheet"/>
+    	<!-- Sweet Alert-->
+        <link href="/resources/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 
         <!-- Bootstrap Css -->
         <link href="/resources/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
@@ -23,7 +36,29 @@
         <link href="/resources/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
         <!-- App Css-->
         <link href="/resources/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+        <!-- CANVAS SIGN -->
+        <script src="/resources/assets/js/siginPad.js"></script>
+		<style type="text/css">
+		
+.wrapper {
+  position: relative;
+  width: 400px;
+  height: 200px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
+.signature-pad {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width:400px;
+  height:200px;
+  background-color: white;
+}
+		</style>
     </head>
 
     <body class="bg-pattern">
@@ -38,24 +73,24 @@
                                     <div class="text-center">
                                         <h1>${vo.name}</h1>
                                     </div>
+                                    
                                     <!-- end row -->
                                     <h4 class="font-size-18 text-muted mt-4 text-center">당가입신청서</h4>
-                                    <form class="form-horizontal" action="index.html">
 
 										<hr>
                                         <div class="row" style="margin-top: 40px">
                                                 <div class="col-6 mb-4">
                                                     <label class="form-label" for="username">이름 </label>
-                                                    <input type="text" class="form-control" id="username" >
+                                                    <input type="text" class="form-control" id="name" >
                                                 </div>
                                                 <div class="col-6 mb-4">
                                                     <label class="form-label" for="userpassword">생년월일</label>
-                                                    <input type="password" class="form-control" id="userpassword" >
+                                                    <input type="text" class="form-control" id="yyyymmdd" >
                                                 </div>
                                                 <div class="col-6 mb-4">
                                                     <label class="form-label" for="username">연락처</label>
                                                     <div class="input-group date">
-                                                    	<input type="text" class="form-control" id="username" ><button type="button" class="btn btn-primary">인증 요청</button>
+                                                    	<input type="text" class="form-control" id="phone" ><button type="button" class="btn btn-primary">인증 요청</button>
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
@@ -107,18 +142,33 @@
                                                 
                                                 <div class="col-6 mb-4">
                                                     <label class="form-label" for="username">추천인 이름 </label>
-                                                    <input type="text" class="form-control" id="username" >
+                                                    <input type="text" class="form-control" id="recommandName" >
                                                 </div>
                                                 <div class="col-6 mb-4">
                                                     <label class="form-label" for="userpassword">추천인 연락처</label>
-                                                    <input type="password" class="form-control" id="userpassword" >
+                                                    <input type="text" class="form-control" id="recommandPhone" >
                                                 </div>
+                                                <div class="col-12 mb-4">
+                                                    <label class="form-label" for="userpassword">서명</label>
+														<div class="wrapper" style="border-color: black;max-width: 100% ">
+														  <%-- <canvas id="signature-pad" class="signature-pad" width=400 height=200></canvas> --%>
+														  <canvas id="signature-pad" class="signature-pad" style="max-width: 100%;border: 1px solid #0bb197"></canvas>
+														</div>
+														<button class="btn btn-primary waves-effect waves-light" id="clear">지우기</button>
+														<button class="btn btn-primary waves-effect waves-light" id="save-png">저장</button>     
+														                                              
+                                                </div>
+												
+												<!-- <button id="save-png">Save as PNG</button>
+												<button id="save-jpeg">Save as JPEG</button> -->
+												
+												
+                                                
                                                 <hr>
                                                 <div class="d-grid mt-4">
-                                                    <button class="btn btn-primary waves-effect waves-light" type="submit">당원가입</button>
+                                                    <button class="btn btn-primary waves-effect waves-light" onclick="submit()">당원가입</button>
                                                 </div>
                                         </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -152,52 +202,33 @@
 
 	<script type="text/javascript">
 	
-	$(document).ready(function() {
-		
-	});
+	//pad
+	//init
+	var signaturePad;
+	var sex ="남";
+	//init
 	
-	
-	function selectFunction(event){
-		
-		console.dir(event);
-		console.log(event.id);
-		console.dir(event.labels[0]['class']);
-		var selected = event.labels[0];
-		selected.className = "btn btn-primary active";
-		if(event.id == "option1"){
-			$("#option1t")[0].className = "btn btn-primary active";
-			$("#option2t")[0].className = "btn btn-primary";
-		}else{
-			$("#option2t")[0].className = "btn btn-primary active";
-			$("#option1t")[0].className = "btn btn-primary";
-		}
-		//console.log(selected);
-		//event.removeClass("active");
-		
+	function clearPad(event){
+		event.preventDefault();
+		var canvas = document.getElementById('signature-pad');
+	    var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+	    canvas.width = canvas.offsetWidth * ratio;
+	    canvas.height = canvas.offsetHeight * ratio;
+	    canvas.getContext("2d").scale(ratio, ratio);
 	}
 	
-
-	function make(){
+	function submit(){
 		var inputform = {};
 		
-		var group = $("#groupKey").val();
-		var groups = [];
-		if(group == "" || group == undefined){
-			groups[0] = "";
-			groups[1] = "";
-		}else{
-			groups = group.split(":");	
-		}
+ 		
+		inputform.groupKey = "${vo.groupKey}";
+		inputform.groupName = "${vo.name}";
 		
-		
-		inputform.groupKey = groups[0];
-		inputform.groupName = groups[1];
 		
 		inputform.name = $("#name").val();
 		inputform.yyyymmdd = $("#yyyymmdd").val();
 		inputform.phone = $("#phone").val();
-		inputform.sex = $("#sex option:selected").val();
-		
+
 		inputform.cityCode = $("#city").val();
 		inputform.gunCode = $("#gun").val();
 		inputform.dongCode = $("#dong").val();
@@ -208,33 +239,17 @@
 		
 		inputform.recommandName = $("#recommandName").val();
 		inputform.recommandPhone = $("#recommandPhone").val();
+		 
+		inputform.representiveName = $("#representiveName").val();
+		inputform.representiveCode = $("#representiveCode").val();
 
+		inputform.signPad = signaturePad.toDataURL('image/png');
 		
-		inputform.groupJikham = $("#groupJikham").val(); //단체직함
+		inputform.sex = sex;
 		
-		inputform.rank = $("#rank").val();
-		inputform.level = $("#level option:selected").val();
-		inputform.dangwon = $("#dangwon option:selected").val();
-		inputform.church = $("#church").val();
-		inputform.churchRank = $("#churchRank option:selected").val();
-		inputform.adminAuth = $("#adminAuth option:selected").val();
+		var validation = true;
 		
-		
-		
-		if(inputform.groupKey == ""){
-			  Swal.fire({
-	              title: "단체를 먼저 선택해주세요",
-	              text: "",
-	              icon: "error",
-	              confirmButtonColor: "#ff3d60",
-	              confirmButtonText: "확인"
-	          })
-	          return false;
-		}
-		
-	 	var validation = true;
-		
-	 	$.each( inputform, function( key, value ) {
+		$.each( inputform, function( key, value ) {
 			  console.log("key : " + key  + ", value :" + value);
 			  if(value == ""){
 				  validation = false;
@@ -249,13 +264,26 @@
 				  
 				  return false;
 			  }
-		}); 
+		});
 
-	 	if(!validation) return false;
+		if(!validation) return false;
 		
+		
+		
+		if(signaturePad.isEmpty()){
+			  Swal.fire({
+	                title: "서명은 필수입니다.",
+	                text: "",
+	                icon: "error",
+	                confirmButtonColor: "#ff3d60",
+	                confirmButtonText: "확인"
+	            })
+			  
+			  return false;
+		}
 		
 		Swal.fire({
-	        title: "회원을 등록하시겠습니까?",
+	        title: "당원을 생성하시겠습니까?",
 	        text: "",
 	        icon: "warning",
 	        showCancelButton: !0,
@@ -274,13 +302,75 @@
 	    		//nothing
 	    	}
 	        
-	    });  
+	    });
 
 	}
+	
+	$(document).ready(function() {
 		
+		//canvas
+		
+		var canvas = document.getElementById('signature-pad');
+
+		// Adjust canvas coordinate space taking into account pixel ratio,
+		// to make it look crisp on mobile devices.
+		// This also causes canvas to be cleared.
+		function resizeCanvas() {
+		    // When zoomed out to less than 100%, for some very strange reason,
+		    // some browsers report devicePixelRatio as less than 1
+		    // and only part of the canvas is cleared then.
+		    var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+		    canvas.width = canvas.offsetWidth * ratio;
+		    canvas.height = canvas.offsetHeight * ratio;
+		    canvas.getContext("2d").scale(ratio, ratio);
+		}
+
+		window.onresize = resizeCanvas;
+		resizeCanvas();
+
+		signaturePad = new SignaturePad(canvas, {
+		  backgroundColor: 'rgb(255, 255, 255)' // necessary for saving image as JPEG; can be removed is only saving as PNG or SVG
+		});
+
+ 		document.getElementById('clear').addEventListener('click', function () {
+ 			 signaturePad.clear();
+		}); 
+		
+ 	/* 	 document.getElementById('save-png').addEventListener('click', function () {
+		  if (signaturePad.isEmpty()) {
+		    return alert("Please provide a signature first.");
+		  }
+		  var data = signaturePad.toDataURL('image/png');
+		}); */
+		 
+	});
+	
+	
+	function selectFunction(event){
+		
+		console.dir(event);
+		console.log(event.id);
+		console.dir(event.labels[0]['class']);
+		var selected = event.labels[0];
+		selected.className = "btn btn-primary active";
+		if(event.id == "option1"){
+			$("#option1t")[0].className = "btn btn-primary active";
+			$("#option2t")[0].className = "btn btn-primary";
+			sex = "남자";
+		}else{
+			$("#option2t")[0].className = "btn btn-primary active";
+			$("#option1t")[0].className = "btn btn-primary";
+			sex = "여자";
+		}
+		//console.log(selected);
+		//event.removeClass("active");
+		
+	}
+	
+
 
 	function commit(inputform){
-		var url = "/admin/member/commit";
+		var url = "/public/member/commit";
 		ajax(url,inputform,function(result){
 			console.log("ajax");
 			console.dir(result);
@@ -294,7 +384,7 @@
 			}else{
 				Swal.fire({
 			        title: "실패",
-			        text: "이미 생성된 단체코드 입니다.",
+			        text: "이미 가입된 연락처가 있습니다.",
 			        icon: "error"
 			    });
 			}

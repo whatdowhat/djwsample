@@ -1,7 +1,8 @@
 package com.whatdo.keep.config;
 
-import java.util.List;
+import java.io.File;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -25,8 +26,8 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -152,7 +153,8 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 //		containerEntityManagerFactoryBean.setPackagesToScan("com.whatdo.keep.config.* com.whatdo.keep.repository.* com.whatdo.keep.vo.*");
 		containerEntityManagerFactoryBean.setPackagesToScan("com.whatdo.keep.*");
 		Properties props = new Properties();
-		//props.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+		System.out.println("jpa dialect :: "+dialect);
+//		props.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
 		props.setProperty("hibernate.dialect", dialect);
 		
 		
@@ -208,6 +210,26 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 		excelView.setOrder(0);
 		 
 		 return excelView;
+	}
+	
+	
+	public static String uploadFile(String rootPath,String uploadPath,String savedName ,String originalName, byte[] fileData) throws Exception {
+		
+		//겹쳐지지 않는 파일명을 위한 유니크한 값 생성
+		UUID uid = UUID.randomUUID();
+		File dirPath = new File(rootPath + File.separator +uploadPath);
+		
+			if(!dirPath.exists()) {
+				System.out.println("존재 안함.");
+				dirPath.mkdirs();
+			}//if		
+		//저장할 파일준비
+//		File target = new File(File.separator+rootPath + File.separator+uploadPath, savedName);
+		File target = new File(rootPath+ File.separator +uploadPath, savedName);
+		System.out.println("save file path : "+target.getCanonicalPath());
+		//파일을 저장
+		FileCopyUtils.copy(fileData, target);
+		return originalName;
 	}
 	
 	

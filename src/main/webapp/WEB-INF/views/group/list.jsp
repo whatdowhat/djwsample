@@ -3,6 +3,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+
+
 <!doctype html>
 <html lang="en">
 
@@ -50,21 +52,18 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <!-- <th>단체명</th>
-                                                <th>단체장</th>
-                                                <th>단체연락처</th> -->
-                                                
+                                                <th>단체명</th>
                                                 <th>단체장</th>
                                                 <th>단체연락처</th>
                                                 <th>단체장연락처</th>
                                                 <th>단체회원수</th>
                                                 <th>단체주소</th>
+                                                <th>초대url</th>
+                                                
                                                 <!-- <th>당원가입수</th>
                                                 <th>수정삭제</th>  -->
                                             </tr>
                                             </thead>
-        
-        
                                             <%-- <tbody>
                                            
 		                                        <c:if test="${page.getContent().size()>=1 }">
@@ -92,11 +91,6 @@
                                            
                                             </tbody> --%>
                                         </table>
-                                        <c:if test="${page.getContent().size()==0 }">
-													<tr >
-														<td colspan="9">데이터가 없습니다.</td>	                                                       
-													</tr>
-										</c:if>
                                         </div>
         
                                     </div>
@@ -115,28 +109,17 @@
         	<jsp:include page="../template/footer.jsp"></jsp:include>
 
         </div>
-        
+
+         
 
     </body>
+
     
 <script type="text/javascript">
 
+
 $(document).ready(function() {
-/*     $("#datatable").DataTable({
-       language: {
-            paginate: {
-                previous: "<i class='mdi mdi-chevron-left'>",
-                next: "<i class='mdi mdi-chevron-right'>"
-            }
-        },
-        drawCallback: function() {
-            $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
-        }
-        
-    }); */
-    
-    var hangNumber = 1;
-    
+	
     $('#datatable').DataTable({
     	paging : true,
     	info: true,
@@ -148,22 +131,36 @@ $(document).ready(function() {
     	"destroy" : true,
     	"lengthChange" : true,
         "columns" : [ 
-        	{"data" : "name"},
+        	{"data" : "phone",render:function(a,b,c,d){
+        		return d.row + d.settings._iDisplayStart +1;
+        	}},
+        	{"data" : "name",render:function(a,b,c,d){
+        		
+        		var str = "<a href='/admin/group/memberlist.do?groupKey="+c.groupKey+"'>";
+        		str+=c.name;
+        		return str;
+        	}},
+        	/* {"data" : "name"}, */
+        	
+        	
         	{"data" : "representiveName"},
         	{"data" : "phone"},
         	{"data" : "representiveCode"},
         	{"data" : "totalCount"},
         	{"data" : "detailAddress"},
-        	
+        	{"data" : "phone",render:function(a,b,c,d){
+        		return "/public/manage/inviteMember?groupKey="+c.groupKey;
+        	}},
+        	/* {"data" : "phone",render:$.fn.dataTable.render.number(',','.',0,'$')}, */
+
        	],
         "ajax" : {
         	type : "POST",
             url : "/admin/group/listtable.do",
             "data" : {
-                "columnsize" : 6,
+                "columnsize" : 8,
             }
         },
-       
     });
 
 

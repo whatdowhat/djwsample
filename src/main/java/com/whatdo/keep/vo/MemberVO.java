@@ -34,8 +34,8 @@ public class MemberVO extends InputForm {
 	private String adminAuth;
 	
 	
-	@Column(name = "rank") //직책 당협위원장 01, 지역장 02, 구역장 03, 단체장 04
-	private String rank;
+	@Column(name = "mrank") //직책 당협위원장 01, 지역장 02, 구역장 03, 단체장 04
+	private String mrank;
 	@Column(name = "dangwon") //일반:01/책임:02
 	private String dangwon;
 	
@@ -57,6 +57,8 @@ public class MemberVO extends InputForm {
 	@Column(name = "phone")
 	private String phone;
 	
+	@Column(name = "signPad")
+	private String signPad;
 	
 	
 	@Column(name = "sex")

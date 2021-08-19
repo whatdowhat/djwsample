@@ -1,5 +1,9 @@
 package com.whatdo.keep.controller.group;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -48,19 +52,19 @@ public class GroupController extends MotherController{
 		
 		LOGGER.debug("##grouppage enter");
 		
-		List<AddressCodeVO> citys = dao.getCitys();
-		Map<String,String> param = new HashMap();
-		param.put("cityCode", citys.get(0).getCityCode());
-		List<AddressCodeVO> gus = dao.getGus(param);
-		
-		param = new HashMap();
-		param.put("cityCode", citys.get(0).getCityCode());
-		param.put("gunCode", gus.get(0).getGunCode());
-		List<AddressCodeVO> dongs = dao.getDongs(param);
-		
-		modelAndView.addObject("cities", citys );
-		modelAndView.addObject("gus",gus );
-		modelAndView.addObject("dongs",dongs );
+//		List<AddressCodeVO> citys = dao.getCitys();
+//		Map<String,String> param = new HashMap();
+//		param.put("cityCode", citys.get(0).getCityCode());
+//		List<AddressCodeVO> gus = dao.getGus(param);
+//		
+//		param = new HashMap();
+//		param.put("cityCode", citys.get(0).getCityCode());
+//		param.put("gunCode", gus.get(0).getGunCode());
+//		List<AddressCodeVO> dongs = dao.getDongs(param);
+//		
+//		modelAndView.addObject("cities", citys );
+//		modelAndView.addObject("gus",gus );
+//		modelAndView.addObject("dongs",dongs );
 		modelAndView.setViewName("group/page");
 		return modelAndView;
 	}
@@ -82,15 +86,16 @@ public class GroupController extends MotherController{
 			Map<String,Object> condition = new HashMap();
 			condition.put("name", inputform.getRepresentiveName());
 			condition.put("phone", inputform.getRepresentiveCode());
-			List<MemberVO> l = memVoRepository.findAll(SpecificationMmemberVO.withCondition(condition));
-			System.out.println("MEMBER SHOW!!!" + l.toString());
-			if(l.size() == 0) {
-				result.put("exist", false);
-			}else {
-				inputform.setRegDt(new Date());
-				vo = groupVORepository.save(inputform);
-				result.put("exist", true);
-			}
+			vo = groupVORepository.save(inputform);
+//			List<MemberVO> l = memVoRepository.findAll(SpecificationMmemberVO.withCondition(condition));
+//			System.out.println("MEMBER SHOW!!!" + l.toString());
+//			if(l.size() == 0) {
+//				result.put("exist", false);
+//			}else {
+//				inputform.setRegDt(new Date());
+//				vo = groupVORepository.save(inputform);
+//				result.put("exist", true);
+//			}
 			
 		}else {
 			result.put("already", true);	
@@ -118,9 +123,69 @@ public class GroupController extends MotherController{
 //		PageRequest p = PageRequest.of(vo.getStart(), vo.getLength() == 0 ? 10 : vo.getLength());
 //		Page<GroupVO> page = groupVORepository.findAll(SpecificationGroupVO.withCondition(condition), p);
 //		LOGGER.debug("##page  enter"+page.getContent().size());
-		//modelAndView.addObject("page", page);
+		modelAndView.addObject("path", req.getContextPath());
+		System.out.println("list.do :::" + req.getContextPath());
 		modelAndView.setViewName("group/list");
 		return modelAndView;
+	}
+	
+	
+	@RequestMapping(value = "/admin/group/memberlist.do", method = { RequestMethod.GET})
+	public ModelAndView admingroupmemberlist(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
+			,GroupVO vo
+			) {		
+		
+		LOGGER.debug("##admingroupmemberlist enter");
+		String groupKey = req.getParameter("groupKey");
+		LOGGER.debug("##admingroupmemberlist enter::"+groupKey);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String endDate = dateFormat.format(new Date());
+		LocalDate date = LocalDate.now();
+		date = date.minusDays(7);
+		Date convertDate =   Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		String startDate = dateFormat.format(convertDate);
+		modelAndView.addObject("startDate", startDate);
+		modelAndView.addObject("endDate", endDate);
+		modelAndView.addObject("groupKey", groupKey);
+		
+		modelAndView.setViewName("group/memberlist");
+		return modelAndView;
+	}
+	
+	
+	@RequestMapping(value = "/admin/group/memberlisttable.do", method = { RequestMethod.POST})
+	@ResponseBody
+	public Map admingroupmemberlisttable(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
+			,GroupVO vo
+			) throws ParseException {		
+		
+		LOGGER.debug("##admingroupmemberlisttable enter" +vo.toString() );
+		
+		Map resultMap = new HashMap<String, Object>();
+		Pageable p = getPageable(req,  vo.getStart(), vo.getLength());
+		
+		Map<String, String[]> m = req.getParameterMap();
+//		System.out.println(m.get("vo"));
+		
+//		String[] columSize = m.get("vo[groupName]");
+//		System.out.println(columSize[0]);
+//		columSize = m.get("vo[name]");
+//		System.out.println(columSize[0]);
+//		columSize = m.get("vo[startDate]");
+//		System.out.println(columSize[0]);
+//		System.out.println(req.getParameter("vo"));
+		
+		
+		Map<String,Object> condition = searchConvert(m);
+		
+		
+		Page<MemberVO> page = memVoRepository.findAll(SpecificationMmemberVO.withCondition(condition), p);
+		
+		resultMap.put("recordsFiltered",page.getTotalElements());
+		resultMap.put("recordsTotal",page.getContent().size());
+		resultMap.put("data", page.getContent());
+		
+		return resultMap;
 	}
 	
 	
@@ -140,133 +205,10 @@ public class GroupController extends MotherController{
 		resultMap.put("recordsFiltered",page.getTotalElements());
 		resultMap.put("recordsTotal",page.getContent().size());
 		resultMap.put("data", page.getContent());
+		resultMap.put("pageNumber", p.getPageNumber());
 		
 		return resultMap;
 	}
-	//finall
-//	@RequestMapping(value = "/admin/group/listtable.do", method = { RequestMethod.POST})
-//	@ResponseBody
-//	public Map admingrouplist2(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
-//			, GroupVO vo ) throws JsonProcessingException {		
-//		
-//		
-////		int draw = Integer.parseInt(req.getParameter("draw"));
-////		int start = Integer.parseInt(req.getParameter("start"));
-////		int length = Integer.parseInt(req.getParameter("length"));
-////		
-//		LOGGER.debug("##admingrouplist enter" +vo.toString() );
-//		LOGGER.debug("##admingrouplist enter" +vo);
-//		
-//		Map resultMap = new HashMap<String, Object>();
-//		
-//		Map<String, String[]> m = req.getParameterMap();
-//		LOGGER.debug("##admingrouplist drawdrawdraw : {}",m);
-//		
-//		String[] columSize = m.get("columnsize");
-//		int columSizeInt = Integer.valueOf(columSize[0]);
-//		
-//		String colmunNames[] = new String[columSizeInt];
-//		for(int i=0; i<columSizeInt;i++) {
-//			String[]  tem = m.get("columns["+i+"][data]");
-//			colmunNames[i] = tem[0]; //컬럼 이름  및 순서 가져옴
-//		}
-//
-//		String[]  orderTarget = m.get("order[0][column]");
-//		String[]  orderDirectionTarget = m.get("order[0][dir]");
-//		int orderTargetIndex= Integer.valueOf(orderTarget[0]);
-//		String targetColumnName = colmunNames[orderTargetIndex];
-//		System.out.println("final target column name :: "+targetColumnName);
-//		
-//		String orderDirectionTargetstr = orderDirectionTarget[0];
-//		int editPage = vo.getStart() / vo.getLength(); 
-//		Map<String,Object> condition = new HashMap();//전체 검색
-//		Pageable p = PageRequest.of(editPage, vo.getLength() == 0 ? 3 : vo.getLength());
-//		if(orderDirectionTargetstr.contentEquals("asc")) {
-//			p = PageRequest.of(editPage, vo.getLength() == 0 ? 3 : vo.getLength(),  Sort.Direction.ASC,targetColumnName);
-//		}else {
-//			p = PageRequest.of(editPage, vo.getLength() == 0 ? 3 : vo.getLength(), Direction.DESC,targetColumnName);
-//		}
-//		
-//		
-//		Page<GroupVO> page = groupVORepository.findAll(SpecificationGroupVO.withCondition(condition), p);
-//		
-//		
-//		LOGGER.debug("##vo.getLength() enter"+ vo.getLength());
-//		LOGGER.debug("##vo.getStart()  enter"+vo.getStart());
-//		LOGGER.debug("##page  enter"+page.getContent().size());
-//		
-//		
-////		resultMap.put("draw",1);
-////		resultMap.put("recordsTotal",page.getTotalElements());
-////		resultMap.put("recordsFiltered",page.getContent().size());
-////		
-//		resultMap.put("recordsFiltered",page.getTotalElements());
-//		resultMap.put("recordsTotal",page.getContent().size());
-//		
-//		resultMap.put("data", page.getContent());
-//		
-//		return resultMap;
-////		return modelAndView;
-//	}
-//	@PostMapping("/admin/group/listtable.do")
-//	public ResponseEntity<?> admingrouplist2(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session) throws JsonProcessingException {		
-//		
-//		
-//		int draw = Integer.parseInt(req.getParameter("draw"));
-//		int start = Integer.parseInt(req.getParameter("start"));
-//		int length = Integer.parseInt(req.getParameter("length"));
-//		
-//		LOGGER.debug("##admingrouplist enter");
-//		
-//		
-//		/*  Below is the example of datatables data we should return
-//		*  [
-//		*    { "col1" : "1", "col2" : "test1" },
-//		*    { "col1" : "2", "col2" : "test2" }
-//		*  ]
-//		*/
-//		
-//		Map<String,Object> condition = new HashMap();//전체 검색
-//		PageRequest p = PageRequest.of(0, 10);
-//		Page<GroupVO> page = groupVORepository.findAll(SpecificationGroupVO.withCondition(condition), p);
-//		
-//		List<GroupVO> list = new ArrayList();
-//		list = page.getContent();
-//		JsonArray array = new JsonArray(list.size());
-//		Gson gson = new Gson();
-//		ObjectMapper mapper = new ObjectMapper();
-//		res.setContentType("application/json");
-//		StringBuilder sb = new StringBuilder();
-//		sb.append("{");
-//		
-//		sb.append("\"draw\":");
-//		sb.append(draw);
-//		sb.append(",");
-//		
-//		sb.append("\"recordsTotal\":");
-//		sb.append(page.getTotalElements());
-//		sb.append(",");
-//		
-//		sb.append("\"recordsFiltered\":");
-//		sb.append(page.getContent().size());
-//		sb.append(",");
-//		
-//		sb.append("\"length\":");
-//		sb.append(page.getTotalElements());
-//		sb.append(",");
-//		
-//		sb.append("\"start\":");
-//		sb.append(page.getPageable().getPageNumber());
-//		sb.append(",");
-//		
-//		sb.append("\"data\":");
-//		sb.append(mapper.writeValueAsString(list));
-//		
-//		sb.append("}");
-//		
-//		return ResponseEntity.ok(sb.toString());
-////		return modelAndView;
-//	}
 	
 	
 	@RequestMapping(value = "/admin/group/getcity", method = { RequestMethod.GET,RequestMethod.POST })
@@ -312,6 +254,83 @@ public class GroupController extends MotherController{
 		Map<String, Object> result =  new HashMap();
 		result.put("dongs",dongs );
 		
+		return result;
+	}
+	
+	public Map<String,Object> searchConvert(Map<String, String[]> m) throws ParseException {
+		
+		Map<String,Object> result = new HashMap();
+
+		String[] param = m.get("vo[groupName]");
+		if(param[0].equals("0")) {
+			result.put("groupName","");
+		}else {
+			result.put("groupName",param[0]);	
+		}
+		
+		param = m.get("vo[groupKey]");
+		result.put("groupKey",param[0]);
+		
+		param = m.get("vo[phone]");
+		result.put("phone",param[0]);
+		
+		param = m.get("vo[name]");
+		result.put("name",param[0]);
+		
+		param = m.get("vo[dangwon]");
+		if(param[0].equals("0")) {
+			result.put("dangwon","");
+		}else {
+			result.put("dangwon",param[0]);	
+		}
+		param = m.get("vo[name]");
+		result.put("name",param[0]);
+		
+		param = m.get("vo[cityN]");
+		result.put("cityN",param[0]);
+		
+		param = m.get("vo[gunN]");
+		result.put("gunN",param[0]);
+		
+		param = m.get("vo[dongN]");
+		result.put("dongN",param[0]);
+		
+		param = m.get("vo[detailAddress]");
+		result.put("detailAddress",param[0]);
+		
+		param = m.get("vo[level]");
+		if(param[0].equals("0")) {
+			result.put("level","");
+		}else {
+			result.put("level",param[0]);	
+		}
+		
+		param = m.get("vo[recommandName]");
+		result.put("recommandName",param[0]);
+		
+		param = m.get("vo[church]");
+		result.put("church",param[0]);
+		
+		param = m.get("vo[churchRank]");
+		if(param[0].equals("0")) {
+			result.put("churchRank","");
+		}else {
+			result.put("churchRank",param[0]);	
+		}
+		param = m.get("vo[startDate]");
+		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		result.put("regDt","yes");
+		
+		result.put("startDate", dateformat.parse(param[0]));
+		
+		param = m.get("vo[endDate]");
+		dateformat = new SimpleDateFormat("yyyy-MM-dd");
+		Date tDate = dateformat.parse(param[0]);
+		LocalDate l = tDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		l = l.plusDays(1);
+		result.put("endDate",Date.from(l.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		System.out.println(result);
 		return result;
 	}
 	

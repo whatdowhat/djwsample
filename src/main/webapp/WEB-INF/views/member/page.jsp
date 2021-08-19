@@ -130,7 +130,7 @@
                                         <div class="mb-3 row">
                                             <label for="example-tel-input" class="col-md-2 col-form-label">직책</label>
                                             <div class="col-md-10">
-                                                <input class="form-control" type="text"  id="rank">
+                                                <input class="form-control" type="text"  id="mrank">
                                             </div>
                                         </div>
                                         
@@ -167,6 +167,7 @@
                                             <label class="col-md-2 col-form-label">교회직분</label>
                                             <div class="col-md-4">
                                                 <select class="form-select" id="churchRank">
+													<option value="기타">기타</option>
 													<option value="청년">청년</option>
 													<option value="청년">청년</option>
 													<option value="집사">집사</option>
@@ -178,7 +179,6 @@
 													<option value="목사">목사</option>
 													<option value="사모">사모</option>
 													<option value="선교사">선교사</option>
-													<option value="기타">기타</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -277,7 +277,7 @@ function make(){
 	
 	inputform.groupJikham = $("#groupJikham").val(); //단체직함
 	
-	inputform.rank = $("#rank").val();
+	inputform.mrank = $("#mrank").val();
 	inputform.level = $("#level option:selected").val();
 	inputform.dangwon = $("#dangwon option:selected").val();
 	inputform.church = $("#church").val();

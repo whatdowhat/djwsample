@@ -1,5 +1,9 @@
 package com.whatdo.keep.controller.member;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,13 +42,13 @@ public class MemberController extends MotherController{
 	private static Logger LOGGER = LoggerFactory.getLogger(MemberController.class);
 	
 	@RequestMapping(value = "/admin/member/page.do", method = { RequestMethod.GET,RequestMethod.POST })
-	public ModelAndView grouppage(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session){
+	public ModelAndView adminmemberpage(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session){
 		
 		
-		LOGGER.debug("##grouppage enter");
+		LOGGER.debug("##adminmemberpage enter");
 		
 		List<GroupVO> groups = groupVORepository.findAll();
-		
+//		
 		List<AddressCodeVO> citys = dao.getCitys();
 		Map<String,String> param = new HashMap();
 		param.put("cityCode", citys.get(0).getCityCode());
@@ -54,7 +58,7 @@ public class MemberController extends MotherController{
 		param.put("cityCode", citys.get(0).getCityCode());
 		param.put("gunCode", gus.get(0).getGunCode());
 		List<AddressCodeVO> dongs = dao.getDongs(param);
-		
+//		
 		modelAndView.addObject("groups", groups );
 		modelAndView.addObject("cities", citys );
 		modelAndView.addObject("gus",gus );
@@ -68,7 +72,19 @@ public class MemberController extends MotherController{
 			
 			) {		
 		
+		
 		LOGGER.debug("##adminmemberlist enter");
+		
+		List<GroupVO> groupList = groupVORepository.findAll();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String endDate = dateFormat.format(new Date());
+		LocalDate date = LocalDate.now();
+		date = date.minusDays(7);
+		Date convertDate =   Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		String startDate = dateFormat.format(convertDate);
+		modelAndView.addObject("groups", groupList);
+		modelAndView.addObject("startDate", startDate);
+		modelAndView.addObject("endDate", endDate);
 		modelAndView.setViewName("member/list");
 		return modelAndView;
 	}
@@ -77,13 +93,28 @@ public class MemberController extends MotherController{
 	@RequestMapping(value = "/admin/member/listtable.do", method = { RequestMethod.POST})
 	@ResponseBody
 	public Map adminmemberlisttable(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
-			, MemberVO vo ) throws JsonProcessingException {		
+			, MemberVO vo ) throws JsonProcessingException, ParseException {		
 		
 		LOGGER.debug("##admingrouplist enter" +vo.toString() );
 		
 		Map resultMap = new HashMap<String, Object>();
 		Pageable p = getPageable(req,  vo.getStart(), vo.getLength());
-		Map<String,Object> condition = new HashMap();//전체 검색
+		
+		Map<String, String[]> m = req.getParameterMap();
+//		System.out.println(m.get("vo"));
+		
+//		String[] columSize = m.get("vo[groupName]");
+//		System.out.println(columSize[0]);
+//		columSize = m.get("vo[name]");
+//		System.out.println(columSize[0]);
+//		columSize = m.get("vo[startDate]");
+//		System.out.println(columSize[0]);
+//		System.out.println(req.getParameter("vo"));
+		
+		
+		Map<String,Object> condition = searchConvert(m);
+		
+		
 		Page<MemberVO> page = memVoRepository.findAll(SpecificationMmemberVO.withCondition(condition), p);
 		
 		resultMap.put("recordsFiltered",page.getTotalElements());
@@ -101,6 +132,7 @@ public class MemberController extends MotherController{
 		LOGGER.debug("##admingroupcommit enter");
 		LOGGER.debug("##data {}",inputform);
 		inputform.setRegDt(new Date());
+		inputform.setDetailAddress(inputform.getCityN()+" "+inputform.getGunN()+" "+inputform.getDongN()+" "+inputform.getDetailAddress());
 		MemberVO vo = memVoRepository.save(inputform);
 		Map<String, Object> result =  new HashMap();
 		result.put("already", false);
@@ -152,6 +184,82 @@ public class MemberController extends MotherController{
 		List<AddressCodeVO> dongs = dao.getDongs(param);
 		Map<String, Object> result =  new HashMap();
 		result.put("dongs",dongs );
+		
+		return result;
+	}
+	
+	public Map<String,Object> searchConvert(Map<String, String[]> m) throws ParseException {
+		
+		Map<String,Object> result = new HashMap();
+
+		String[] param = m.get("vo[groupName]");
+		if(param[0].equals("0")) {
+			result.put("groupName","");
+		}else {
+			result.put("groupName",param[0]);	
+		}
+		
+		param = m.get("vo[phone]");
+		result.put("phone",param[0]);
+		
+		param = m.get("vo[name]");
+		result.put("name",param[0]);
+		
+		param = m.get("vo[dangwon]");
+		if(param[0].equals("0")) {
+			result.put("dangwon","");
+		}else {
+			result.put("dangwon",param[0]);	
+		}
+		param = m.get("vo[name]");
+		result.put("name",param[0]);
+		
+		param = m.get("vo[cityN]");
+		result.put("cityN",param[0]);
+		
+		param = m.get("vo[gunN]");
+		result.put("gunN",param[0]);
+		
+		param = m.get("vo[dongN]");
+		result.put("dongN",param[0]);
+		
+		param = m.get("vo[detailAddress]");
+		result.put("detailAddress",param[0]);
+		
+		param = m.get("vo[level]");
+		if(param[0].equals("0")) {
+			result.put("level","");
+		}else {
+			result.put("level",param[0]);	
+		}
+		
+		param = m.get("vo[recommandName]");
+		result.put("recommandName",param[0]);
+		
+		param = m.get("vo[church]");
+		result.put("church",param[0]);
+		
+		param = m.get("vo[churchRank]");
+		if(param[0].equals("0")) {
+			result.put("churchRank","");
+		}else {
+			result.put("churchRank",param[0]);	
+		}
+		param = m.get("vo[startDate]");
+		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		result.put("regDt","yes");
+		
+		result.put("startDate", dateformat.parse(param[0]));
+		
+		param = m.get("vo[endDate]");
+		dateformat = new SimpleDateFormat("yyyy-MM-dd");
+		Date tDate = dateformat.parse(param[0]);
+		LocalDate l = tDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		l = l.plusDays(1);
+		result.put("endDate",Date.from(l.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		
+		System.out.println(result);
 		
 		return result;
 	}

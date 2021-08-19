@@ -1,6 +1,7 @@
 package com.whatdo.keep.controller.member;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -51,23 +52,106 @@ public class SpecificationMmemberVO {
 	            		predicate.add(builder.equal(root.get(key), conditino.get(key)));
 	            	}
 	                
-	            }else if("name".equals(key)){
+	            }else if("church".equals(key)){
 	            	if(conditino.get(key).equals("")){
 	            		
 	            	}else{
-	            		predicate.add(builder.equal(root.get(key), conditino.get(key)));
+	            		predicate.add(builder.like(root.get(key), "%"+conditino.get(key)+"%"));
 	            	}
 	                
-	            }else if("phone".equals(key)){
+		        }else if("churchRank".equals(key)){
 	            	if(conditino.get(key).equals("")){
 	            		
 	            	}else{
+	            		predicate.add(builder.like(root.get(key), "%"+conditino.get(key)+"%"));
+	            	}
+	                
+		        }else if("groupJikham".equals(key)){
+	            	if(conditino.get(key).equals("")){
+	            		
+	            	}else{
+	            		predicate.add(builder.like(root.get(key), "%"+conditino.get(key)+"%"));
+	            	}
+	                
+		        }else if("recommandName".equals(key)){
+	            	if(conditino.get(key).equals("")){
+	            		
+	            	}else{
+	            		predicate.add(builder.like(root.get(key), "%"+conditino.get(key)+"%"));
+	            	}
+	                
+		        }else if("cityN".equals(key)){
+	            	if(conditino.get(key).equals("")){
+	            		
+	            	}else{
+	            		predicate.add(builder.like(root.get(key), "%"+conditino.get(key)+"%"));
+	            	}
+	                
+		        }else if("gunN".equals(key)){
+	            	if(conditino.get(key).equals("")){
+	            		
+	            	}else{
+	            		predicate.add(builder.like(root.get(key), "%"+conditino.get(key)+"%"));
+	            	}
+	                
+		        }else if("dongN".equals(key)){
+	            	if(conditino.get(key).equals("")){
+	            		
+	            	}else{
+	            		predicate.add(builder.like(root.get(key), "%"+conditino.get(key)+"%"));
+	            	}
+	                
+		        }else if("name".equals(key)){
+	            	if(conditino.get(key).equals("")){
+	            		
+	            	}else{
+	            		predicate.add(builder.like(root.get(key), "%"+conditino.get(key)+"%"));
+	            	}
+	                
+		        }else if("level".equals(key)){
+	            	if(conditino.get(key).equals("")){
+	            		
+	            	}else{
+	            		predicate.add(builder.like(root.get(key), "%"+conditino.get(key)+"%"));
+	            	}
+	                
+		        }else if("phone".equals(key)){
+	            	if(conditino.get(key).equals("")){
+	            		
+	            	}else{
+	            		predicate.add(builder.like(root.get(key), "%"+conditino.get(key)+"%"));
+	            	}
+	                
+		        }else if("groupName".equals(key)){
+	            	if(conditino.get(key).equals("")){
+	            		
+	            	}else{
+	            		predicate.add(builder.like(root.get(key), "%"+conditino.get(key)+"%"));
+	            	}
+	                
+		        }else if("groupKey".equals(key)){
+	            	if(conditino.get(key).equals("")){
+	            		System.out.println("spect:: 공백 ");
+	            	}else{
+	            		System.out.println("spect::  "+conditino.get(key));
 	            		predicate.add(builder.equal(root.get(key), conditino.get(key)));
 	            	}
 	                
-		        }
-	            
-	            else{ // 'name', 'partner' 이외의 모든 조건 파라미터에 대해 equal 검색
+		        }else if("dangwon".equals(key)){
+	            	if(conditino.get(key).equals("")){
+	            		
+	            	}else{
+	            		predicate.add(builder.like(root.get(key), "%"+conditino.get(key)+"%"));
+	            	}
+	                
+		        }else if("regDt".equals(key)){ // 'partner' 조건은 partner객체 안에 있는 keword데이터를 2차 가공하여 검색
+	            	
+		            	if(conditino.get(key).equals("")){
+		            	}else{
+		            		predicate.add(builder.between(root.get("regDt"),(Date)conditino.get("startDate"), (Date)conditino.get("endDate")));
+		            	}
+		                
+			        }else{ // 'name', 'partner' 이외의 모든 조건 파라미터에 대해 equal 검색
 	            }
 	        }
 	        return predicate;
