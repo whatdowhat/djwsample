@@ -78,24 +78,23 @@ public class GroupController extends MotherController{
 		LOGGER.debug("##admingroupcommit enter");
 		LOGGER.debug("##data {}",inputform);
 		GroupVO vo;
-		
 		vo = groupVORepository.findByGroupKey(inputform.getGroupKey());
 		Map<String, Object> result =  new HashMap();
 		if(vo == null) {
 			result.put("already", false);
+			System.out.println("MEMBER SHOW!!!2" +inputform);
 			Map<String,Object> condition = new HashMap();
 			condition.put("name", inputform.getRepresentiveName());
-			condition.put("phone", inputform.getRepresentiveCode());
+			condition.put("phone", inputform.getPhone());
 			vo = groupVORepository.save(inputform);
-//			List<MemberVO> l = memVoRepository.findAll(SpecificationMmemberVO.withCondition(condition));
-//			System.out.println("MEMBER SHOW!!!" + l.toString());
-//			if(l.size() == 0) {
-//				result.put("exist", false);
-//			}else {
-//				inputform.setRegDt(new Date());
-//				vo = groupVORepository.save(inputform);
-//				result.put("exist", true);
-//			}
+			List<MemberVO> l = memVoRepository.findAll(SpecificationMmemberVO.withCondition(condition));
+			if(l.size() == 0) {
+				result.put("exist", false);
+			}else {
+				inputform.setRegDt(new Date());
+				vo = groupVORepository.save(inputform);
+				result.put("exist", true);
+			}
 			
 		}else {
 			result.put("already", true);	

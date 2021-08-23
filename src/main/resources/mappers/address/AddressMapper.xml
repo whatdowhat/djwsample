@@ -110,5 +110,33 @@
         order by dongN asc
    
 	</select>
+	
+		<select id="cityVal"  parameterType="java.util.HashMap"  resultType="String">
+		SELECT 
+			case WHEN count(a.cityCode) >= 1 THEN a.cityCode 
+				 WHEN count(a.cityCode) = 0 THEN '0'
+				 END
+			FROM address_code AS a 
+        	where 1=1 
+			and a.cityN = #{cityN}
+		</select>
+		<select id="gunVal"  parameterType="java.util.HashMap"  resultType="String">
+		SELECT 
+			case WHEN count(a.gunCode) >= 1 THEN a.gunCode 
+				 WHEN count(a.gunCode) = 0 THEN '0'
+				 END 
+	        FROM address_code AS a 
+        	where 1=1 
+			and a.gunN = #{gunN}
+		</select>
+		<select id="dongVal"  parameterType="java.util.HashMap"  resultType="String">
+		SELECT 
+			case WHEN count(a.dongCode) >= 1 THEN a.dongCode 
+				 WHEN count(a.dongCode) = 0 THEN '0'
+				 END 
+	        FROM address_code AS a 
+        	where 1=1 
+			and  a.dongN = #{dongN}
+		</select>
 
 </mapper>

@@ -36,5 +36,20 @@ public class AddressCodeDAOImpl implements AddressCodeDAO{
 		return sqlsession.selectList( NAMESPACE+"getDongs",param);
 	}
 
+	@Override
+	public String cityVal(Map<String, String> param) {
+		return sqlsession.selectOne( NAMESPACE+"cityVal",param);
+	}
+
+	@Override
+	public String gunVal(Map<String, String> param) {
+		return sqlsession.selectOne( NAMESPACE+"gunVal",param);
+	}
+
+	@Override
+	public String dongVal(Map<String, String> param) {
+		return sqlsession.selectOne( NAMESPACE+"dongVal",param);
+	}
+
 
 }

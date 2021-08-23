@@ -9,6 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +24,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MemberVO extends InputForm {
 
 	
@@ -111,5 +115,44 @@ public class MemberVO extends InputForm {
 	private Date regDt;
 	@Column(name = "editDt")
 	private Date editDt;
+	
+	@Transient
+	private boolean validationYn;
+	@Transient
+	private boolean groupKeyval;
+	@Transient
+	private boolean groupJikhamval;
+	@Transient
+	private boolean nameval;
+	@Transient
+	private boolean yyyymmddval;
+	@Transient
+	private boolean phoneval;
+	@Transient
+	private boolean sexval;
+	@Transient
+	private boolean cityCodeval;
+	@Transient
+	private boolean gunCodeval;
+	@Transient
+	private boolean dongCodeval;
+	@Transient
+	private boolean detailAddressval;
+	@Transient
+	private boolean mrankval;
+	@Transient
+	private boolean levelval;
+	@Transient
+	private boolean dangwonval;
+	@Transient
+	private boolean churchval;
+	@Transient
+	private boolean churchRankval;
+	@Transient
+	private boolean recommandNameval;
+	@Transient
+	private boolean recommandPhoneval;
+	@Transient
+	private boolean adminAuthval;
 	
 }

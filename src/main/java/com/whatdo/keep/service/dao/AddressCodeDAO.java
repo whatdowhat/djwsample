@@ -14,6 +14,11 @@ public interface AddressCodeDAO {
 	List<AddressCodeVO> getGus(Map<String,String> param);
 	List<AddressCodeVO> getDongs(Map<String,String> param);
 	
+	
+	String cityVal(Map<String,String> param);
+	String gunVal(Map<String,String> param);
+	String dongVal(Map<String,String> param);
+	
 
 	
 }

@@ -1,6 +1,7 @@
 package ser;
 
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +39,21 @@ public class FileMakeTest {
 	public static void writeFile(byte[] imageByte) throws Exception {
 
 		
+		String path = "C:\\eGovFrameDev-3.10.0-64bit\\eclipse\\sampleFile";
+		File file = new File(path+ File.separator + "sample.xlsx");
+		System.out.println(file);
+		
+		System.out.println(file.exists());
+		System.out.println(file.isFile());
 		
 		
-		try(FileOutputStream fos = new FileOutputStream("c://test.png")){
-			System.out.println("write file");
-			fos.write(imageByte);
-			System.out.println("write file end");
-		}
+		
+		
+//		try(FileOutputStream fos = new FileOutputStream("c://test.png")){
+//			System.out.println("write file");
+//			fos.write(imageByte);
+//			System.out.println("write file end");
+//		}
 //		
 		
 	}

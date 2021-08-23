@@ -48,47 +48,30 @@
                                     <div class="card-body">
                                         <div class="mb-3 row">
 
-                                        <div class="mb-3 row">
-                                            <label class="col-md-2 col-form-label">단체코드</label>
-                                            <div class="col-md-4">
-                                                <select class="form-select" id="groupKey">
-													<c:forEach var="item" items="${groups}" varStatus="status"> 
-																<option value="${item.groupKey}:${item.name}">${item.groupKey}:${item.name}</option>
-													</c:forEach>
-                                                </select>
-                                            </div>
+	                                        <div class="mb-3 row">
+	                                            <label class="col-md-1 col-form-label">단체명</label>
+	                                            <div class="col-md-5">
+	                                                <select class="form-select" id="groupKey">
+	                                                <option value="0">소속단체없음.</option>
+														<c:forEach var="item" items="${groups}" varStatus="status"> 
+																	<option value="${item.groupKey}:${item.name}">${item.groupKey}:${item.name}</option>
+														</c:forEach>
+	                                                </select>
+	                                            </div>
+  												<label for="example-search-input" class="col-md-1 col-form-label">단체직함</label>
+	                                            <div class="col-md-5">
+	                                                <input class="form-control" type="search"  id="groupJikham">
+	                                            </div>
+											</div>
                                         </div>
                                         
                                         <div class="mb-3 row">
-                                            <label for="example-search-input" class="col-md-2 col-form-label">단체직함</label>
-                                            <div class="col-md-10">
-                                                <input class="form-control" type="search"  id="groupJikham">
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="mb-3 row">
-                                            <label for="example-search-input" class="col-md-2 col-form-label">이름</label>
-                                            <div class="col-md-10">
+                                            <label for="example-search-input" class="col-md-1 col-form-label">이름</label>
+                                            <div class="col-md-5">
                                                 <input class="form-control" type="search"  id="name">
                                             </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="example-email-input" class="col-md-2 col-form-label">생년월일</label>
-                                            <div class="col-md-10">
-                                                <!-- <input class="form-control" type="email"  id="example-email-input"> -->
-                                                <input id="yyyymmdd" class="form-control input-mask" data-inputmask="'alias': 'datetime'" data-inputmask-inputformat="yyyy/mm/dd" inputmode="numeric">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="example-email-input" class="col-md-2 col-form-label">연락처</label>
-                                            <div class="col-md-10">
-                                                <!-- <input class="form-control" type="email"  id="example-email-input"> -->
-                                                <input id="phone" class="form-control input-mask" data-inputmask="'alias': 'datetime'" data-inputmask-inputformat="yyyy/mm/dd" inputmode="numeric">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label class="col-md-2 col-form-label">성별</label>
-                                            <div class="col-md-4">
+                                            <label class="col-md-1 col-form-label">성별</label>
+                                            <div class="col-md-5">
                                                 <select class="form-select" id="sex">
 													<option value="남자">남자</option>
 													<option value="여자">여자</option>
@@ -96,47 +79,58 @@
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
-                                            <label class="col-md-2 col-form-label">주소</label>
-                                            <div class="col-md-4">
+											<label for="example-email-input" class="col-md-1 col-form-label">연락처</label>
+                                            <div class="col-md-5">
+                                                <!-- <input class="form-control" type="email"  id="example-email-input"> -->
+                                                <input id="phone" class="form-control input-mask" data-inputmask="'alias': 'datetime'" data-inputmask-inputformat="yyyy/mm/dd" inputmode="numeric">
+                                            </div>
+                                            <label for="example-email-input" class="col-md-1 col-form-label">생년월일</label>
+                                            <div class="col-md-5">
+                                                <!-- <input class="form-control" type="email"  id="example-email-input"> -->
+                                                <input id="yyyymmdd" class="form-control input-mask" data-inputmask="'alias': 'datetime'" data-inputmask-inputformat="yyyy/mm/dd" inputmode="numeric">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row">
+                                            <label class="col-md-1 col-form-label">주소</label>
+                                            <div class="col-md-3">
                                                 <select class="form-select" onchange="clickCity(this)" id="city">
 													<c:forEach var="item" items="${cities}" varStatus="status"> 
 																<option value="${item.cityCode}">${item.cityN}</option>
 													</c:forEach>
                                                 </select>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <select class="form-select" onchange="clickGun(this)" id="gun">
-													<c:forEach var="item" items="${gus}" varStatus="status"> 
-																<option value="${item.gunCode}">${item.gunN}</option>
-													</c:forEach>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <select class="form-select" id="dong">
-													<c:forEach var="item" items="${dongs}" varStatus="status"> 
-																<option value="${item.dongCode}">${item.dongN}</option>
-													</c:forEach>
-                                                </select>
-                                            </div>
+ 											</div>
+	                                        <div class="col-md-4">
+	                                                <select class="form-select" onchange="clickGun(this)" id="gun">
+														<c:forEach var="item" items="${gus}" varStatus="status"> 
+																	<option value="${item.gunCode}">${item.gunN}</option>
+														</c:forEach>
+	                                                </select>
+	                                            </div>
+	                                        <div class="col-md-4">
+	                                                <select class="form-select" id="dong">
+														<c:forEach var="item" items="${dongs}" varStatus="status"> 
+																	<option value="${item.dongCode}">${item.dongN}</option>
+														</c:forEach>
+	                                                </select>
+	                                        </div>
+                                           
+
                                         </div>
                                         <div class="mb-3 row">
-                                            <label for="example-tel-input" class="col-md-2 col-form-label">상세주소</label>
-                                            <div class="col-md-10">
+                                            <label for="example-tel-input" class="col-md-1 col-form-label">상세주소</label>
+                                            <div class="col-md-11">
                                                 <input class="form-control" type="text"  id="detailAddress">
                                             </div>
                                         </div>
                                         
 
                                         <div class="mb-3 row">
-                                            <label for="example-tel-input" class="col-md-2 col-form-label">직책</label>
-                                            <div class="col-md-10">
+                                            <label for="example-tel-input" class="col-md-1 col-form-label">직책</label>
+                                            <div class="col-md-3">
                                                 <input class="form-control" type="text"  id="mrank">
                                             </div>
-                                        </div>
-                                        
-                                        <div class="mb-3 row">
-                                            <label class="col-md-2 col-form-label">등급</label>
-                                            <div class="col-md-4">
+ 											<label class="col-md-1 col-form-label">등급</label>
+                                            <div class="col-md-3">
                                                 <select class="form-select" id="level">
 													<option value="읍면동">읍면동</option>
 													<option value="시군구">시군구</option>
@@ -144,11 +138,8 @@
 													
                                                 </select>
                                             </div>
-                                        </div>
-                                        
-                                        <div class="mb-3 row">
-                                            <label class="col-md-2 col-form-label">당원</label>
-                                            <div class="col-md-4">
+ 											<label class="col-md-1 col-form-label">당원</label>
+                                            <div class="col-md-3">
                                                 <select class="form-select" id="dangwon">
 													<option value="일반">일반</option>
 													<option value="책임">책임</option>
@@ -156,16 +147,14 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="mb-3 row">
-                                            <label for="example-tel-input" class="col-md-2 col-form-label">교회</label>
-                                            <div class="col-md-10">
-                                                <input class="form-control" type="text"  id="church">
-                                            </div>
-                                        </div>
                                         
                                         <div class="mb-3 row">
-                                            <label class="col-md-2 col-form-label">교회직분</label>
-                                            <div class="col-md-4">
+                                            <label for="example-tel-input" class="col-md-1 col-form-label">교회</label>
+                                            <div class="col-md-5">
+                                                <input class="form-control" type="text"  id="church">
+                                            </div>
+ 											<label class="col-md-1 col-form-label">교회직분</label>
+                                            <div class="col-md-5">
                                                 <select class="form-select" id="churchRank">
 													<option value="기타">기타</option>
 													<option value="청년">청년</option>
@@ -185,21 +174,19 @@
                                         
                                         
                                         <div class="mb-3 row">
-                                            <label for="example-tel-input" class="col-md-2 col-form-label">추천인 이름</label>
-                                            <div class="col-md-10">
+                                            <label for="example-tel-input" class="col-md-1 col-form-label">추천인 이름</label>
+                                            <div class="col-md-5">
                                                 <input class="form-control" type="text" value="" id="recommandName">
                                             </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label for="example-tel-input" class="col-md-2 col-form-label">추천인 연락처</label>
-                                            <div class="col-md-10">
+                                            <label for="example-tel-input" class="col-md-1 col-form-label">추천인 연락처</label>
+                                            <div class="col-md-5">
                                                 <input class="form-control" type="text" value="" id="recommandPhone">
                                             </div>
                                         </div>
                                         
                                         <div class="mb-3 row">
-                                            <label class="col-md-2 col-form-label">관리권한</label>
-                                            <div class="col-md-4">
+                                            <label class="col-md-1 col-form-label">관리권한</label>
+                                            <div class="col-md-5">
                                                 <select class="form-select" id="adminAuth">
 													<option value="01">비허용</option>
 													<option value="02">허용</option>

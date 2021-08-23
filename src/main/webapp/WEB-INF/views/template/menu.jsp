@@ -88,6 +88,7 @@
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="/admin/member/list.do">당원정보</a></li>
                         <li><a href="/admin/member/page.do">당원등록</a></li>
+                        <li><a href="/admin/member/excelPage.do">엑셀등록</a></li>
                         
                     </ul>
                 </li>

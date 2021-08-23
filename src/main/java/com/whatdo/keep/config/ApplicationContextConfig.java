@@ -1,6 +1,7 @@
 package com.whatdo.keep.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -28,6 +29,9 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -75,7 +79,8 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 	@Value("${config.fileuploadUrl}")
 	private String fileuploadUrl;
 	
-	
+	@Value("${config.sampleFilePath}")
+	private String sampleFilePath;
 	
 	@Autowired
 	Environment env;
@@ -153,7 +158,7 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 //		containerEntityManagerFactoryBean.setPackagesToScan("com.whatdo.keep.config.* com.whatdo.keep.repository.* com.whatdo.keep.vo.*");
 		containerEntityManagerFactoryBean.setPackagesToScan("com.whatdo.keep.*");
 		Properties props = new Properties();
-		System.out.println("jpa dialect :: "+dialect);
+//		System.out.println("jpa dialect :: "+dialect);
 //		props.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
 		props.setProperty("hibernate.dialect", dialect);
 		
@@ -238,15 +243,39 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 //		CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
 //		commonsMultipartResolver.setDefaultEncoding("utf-8");
 //		commonsMultipartResolver.setMaxInMemorySize(fileuploadMax);
-//		File dirPath = new File(fileuploadUrl);
+//		System.out.println("commonsMultipartResolver!!! created!");
+////		File dirPath = new File(fileuploadUrl);
+////		
+////		if(!dirPath.exists()) {
+////			dirPath.mkdir();
+////		}//if
+////		
 //		
-//		if(!dirPath.exists()) {
-//			dirPath.mkdir();
-//		}//if
-//		
+//		StandardServletMultipartResolver d;
 //		return commonsMultipartResolver;
 //		
 //	}
+	
+	@Bean
+	public MultipartResolver multipartResolver() throws IOException{
+		CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
+		commonsMultipartResolver.setDefaultEncoding("utf-8");
+		commonsMultipartResolver.setMaxInMemorySize(fileuploadMax);
+		System.out.println("commonsMultipartResolver!!! created!");
+		File dirPath = new File(sampleFilePath);
+		
+//		
+		if(!dirPath.exists()) {
+			System.out.println(dirPath.getCanonicalPath());
+			dirPath.mkdir();
+		}else {
+			System.out.println("alread !!"+dirPath.getCanonicalPath());
+		}
+//		
+		
+		StandardServletMultipartResolver d;
+		return commonsMultipartResolver;
+	}
 	
 	
 //	@Bean(name="httpServletRequest")

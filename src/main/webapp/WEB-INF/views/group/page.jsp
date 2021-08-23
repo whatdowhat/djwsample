@@ -200,7 +200,9 @@ function commit(inputform){
 		    });
 		}
 		
-/* 		if(result.exist){
+		return;
+		
+		if(result.exist){
 			Swal.fire({
 		        title: "성공",
 		        text: "",
@@ -212,7 +214,7 @@ function commit(inputform){
 		        text: "단체 대표 정보가 존재하지 않습니다.",
 		        icon: "error"
 		    });
-		} */
+		}
 				
 		
 		

@@ -16,62 +16,36 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.whatdo.keep.vo.AddressAPIVO;
+import com.whatdo.keep.vo.MemberVO;
 
 
 public class AddressTest {
 
 
 	@Test
-	public void test() {
+	public void test() throws JsonProcessingException {
 
-		List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
-	    converters.add(new FormHttpMessageConverter());
-	    converters.add(new StringHttpMessageConverter());
-	 
-	    RestTemplate restTemplate = new RestTemplate();
-	    restTemplate.setMessageConverters(converters);
-	 
-	    // parameter 세팅
-	    MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
 	    
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-	    
-	    HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-	    
-	    final String addressKey = "devU01TX0FVVEgyMDIxMDgxNDEzMDc1NTExMTUyMzA=";
-	    
-	    map.add("confmKey", addressKey);
-	    map.add("currentPage", "1");
-	    map.add("countPerPage", "10");
-	    map.add("keyword", "광장동");
-	    map.add("resultType", "json");
-	    
-	 
-	    // REST API 호출
-	    String result =  restTemplate.postForObject("https://www.juso.go.kr/addrlink/addrLinkApi.do", request, String.class);
-        Gson gson = new Gson();
-        Map<String,Map> rr = gson.fromJson(result, Map.class);
-	    Map<String,Object> m = rr.get("results");
+		  MemberVO data = new MemberVO();
+
+	      data.setName( "test");
+	      data.setChurch("test2");
+	      data.setPhone("Test3");
+	      
 	    ObjectMapper mapper = new ObjectMapper();
-	    AddressAPIVO vo =  mapper.convertValue(m.get("common"), AddressAPIVO.class);
-	    Map<String,Object> m2 = rr.get("results");
-	    List<Map<String,Object>> jusoList = (List<Map<String, Object>>) m2.get("juso");
-	    List<AddressAPIVO> addressList = new ArrayList<AddressAPIVO>();
-	    for(int i =0; i<jusoList.size();i++) 
-	    {
-	    	AddressAPIVO tem_vo =  mapper.convertValue(jusoList.get(i), AddressAPIVO.class);
-	    	addressList.add(tem_vo);
-	    }
-	    System.out.println(addressList.size());
+	    JsonArray array = new JsonArray();
+	    array.add(mapper.writeValueAsString(data));
+	    array.add(mapper.writeValueAsString(data));
 	    
-	    for(int i =0; i<addressList.size();i++) 
-	    {
-	    	System.out.println(addressList.get(i));
-	    }
+	    System.out.println(array);
+	    
 	    
 	}
 
