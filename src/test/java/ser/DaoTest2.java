@@ -1,6 +1,10 @@
 package ser;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +17,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.google.gson.Gson;
+import com.whatdo.keep.service.dao.AddressCodeDAO;
 import com.whatdo.keep.service.dao.TimeDAO;
 import com.whatdo.keep.util.FileDownload;
 import com.whatdo.keep.vo.AddressCodeVO;
+import com.whatdo.keep.vo.ChartDataVO;
 import com.whatdo.keep.vo.Customer;
 import com.whatdo.keep.vo.Historylog;
 
@@ -37,12 +44,12 @@ public class DaoTest2 {
 	private SqlSession sqlSession;
 	
 	
+	
 	@Autowired(required=false)
 	private TimeDAO timeDAO;
 	
-	
-	@Autowired(required=false)
-	private AddressCodeVO dao;
+	@Autowired
+	private AddressCodeDAO dao;
 	
 	
 	@Value("${config.sampleFilePath}")
@@ -55,29 +62,29 @@ public class DaoTest2 {
 	public void test() {
 
 
-		Map<String, Object> param = new HashMap<String, Object>();
-		//param.put("cityCode",11 );
-
-		//param.put("cityCode",11 );
-		param.put("dongN","광장동도" );
 		
+		//yyyy-mm-dd
+		Map param = new HashMap<String, Object>();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String endDate = dateFormat.format(new Date());
+		LocalDate date = LocalDate.now();
+		date = date.minusDays(6);
+		Date convertDate =   Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		String startDate = dateFormat.format(convertDate);
+		param.put("startDate", startDate);
+		param.put("endDate", endDate);
 		
-//		Integer resultCount = sqlSession.selectOne("mapper.address.dongVal",param);
-//		System.out.println(resultCount);
+		Integer total = dao.getenterdangwonAll(param);
+		Integer dangwonCount00 = dao.getenterdangwon00(param);
+		Integer dangwonCount01 = dao.getenterdangwon01(param);
+		List<ChartDataVO> chartDate = dao.getenterchart01(param);
+		Gson gson = new Gson();
+				Gson gson1 = new Gson();
+				String gson1String = gson1.toJson(chartDate);
+				System.out.println(gson1String);
 		
-        String path = File.separator + sampleFilePath + File.separator + sampleFileName; 
-        File file = new File(path);
-        System.out.println("path:::"+path);
-        
-        
-		
-//		System.out.println(sqlSessionFactory.openSession().selectOne("mapper.sample.getTime","test").toString());
-//		sqlSessionFactory.openSession().close();
-//		
-//		sqlSessionFact
-		
-//		System.out.println(sqlSession.selectOne("mapper.sample.getTime").toString());
-//		System.out.println("####################");
+		System.out.println("##adminmemberchartmember enter>>" +chartDate.size());
+//		modelAndView.addObject("chartDate", chartDate);
 		
 	}
 

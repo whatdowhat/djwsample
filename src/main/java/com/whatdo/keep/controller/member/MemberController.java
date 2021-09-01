@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,11 +47,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.whatdo.keep.controller.MotherController;
 import com.whatdo.keep.service.dao.AddressCodeDAO;
 import com.whatdo.keep.util.FileDownload;
 import com.whatdo.keep.vo.AddressCodeVO;
+import com.whatdo.keep.vo.ChartDataVO;
 import com.whatdo.keep.vo.FileuploadVO;
 import com.whatdo.keep.vo.GroupVO;
 import com.whatdo.keep.vo.MemberVO;
@@ -89,6 +93,9 @@ public class MemberController extends MotherController{
 		param.put("gunCode", gus.get(0).getGunCode());
 		List<AddressCodeVO> dongs = dao.getDongs(param);
 //		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String endDate = dateFormat.format(new Date());
+		modelAndView.addObject("endDate", endDate);
 		modelAndView.addObject("groups", groups );
 		modelAndView.addObject("cities", citys );
 		modelAndView.addObject("gus",gus );
@@ -97,11 +104,144 @@ public class MemberController extends MotherController{
 		return modelAndView;
 	}
 	
+	@RequestMapping(value = "/admin/member/chart/member.do", method = { RequestMethod.GET,RequestMethod.POST })
+	public ModelAndView adminmemberchartmember(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session){
+		
+		
+		LOGGER.debug("##adminmemberchartmember enter");
+		
+		Map param = new HashMap<String, Object>();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String endDate = dateFormat.format(new Date());
+		LocalDate date = LocalDate.now();
+		date = date.minusDays(7);
+		Date convertDate =   Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		String startDate = dateFormat.format(convertDate);
+		param.put("startDate", startDate);
+		LOGGER.debug("##endDate endDate"+endDate);
+		param.put("endDate", endDate);
+		
+		Integer total = dao.gettotaldangwon(param);
+		Integer dangwonCount = dao.getenterdangwonAll(param);
+		Integer dangwonCount00 = dao.getenterdangwon00(param);
+		Integer dangwonCount01 = dao.getenterdangwon01(param);
+		
+		
+		List<ChartDataVO> chartDate = dao.getenterchart01(param);
+		List<ChartDataVO> chartDate2 = dao.getenterchart02(param);
+		
+		
+		List<AddressCodeVO> citys = dao.getCitysChart(param);
+		Map<String,String> paramS = new HashMap();
+		modelAndView.addObject("cities", citys );
+		
+		System.out.println("##adminmemberchartmember enter>>" +chartDate.size());
+		Gson gson = new Gson();
+		String gson1String = gson.toJson(chartDate);
+		modelAndView.addObject("chartDate", gson1String);
+		
+		gson1String = gson.toJson(chartDate2);
+		modelAndView.addObject("chartDate2", gson1String);
+		
+		modelAndView.addObject("total", total);
+		modelAndView.addObject("dangwonCount", dangwonCount);
+		modelAndView.addObject("dangwonCount00", dangwonCount00);
+		modelAndView.addObject("dangwonCount01", dangwonCount01);
+		
+		modelAndView.addObject("startDate", startDate);
+		modelAndView.addObject("endDate", endDate);
+		
+		modelAndView.setViewName("member/chart_member");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/admin/member/chart/member/ajax.do", method = { RequestMethod.GET,RequestMethod.POST })
+	public ModelAndView adminmemberchartmemberajax(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
+			,AddressCodeVO inputform	) throws InterruptedException{
+		
+		
+		LOGGER.debug("##adminmemberchartmemberajax enter");
+		LOGGER.debug("##adminmemberchartmemberajax enter inputform:: "+inputform);
+		Map param = new HashMap<String, Object>();
+//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//		String endDate = dateFormat.format(new Date());
+//		LocalDate date = LocalDate.now();
+//		date = date.minusDays(7);
+//		Date convertDate =   Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//		String startDate = dateFormat.format(convertDate);
+		if(inputform.getCityCode().equals("00")|| inputform.getCityCode().equals("0")) {
+			
+		}else {
+			param.put("cityCode", inputform.getCityCode());	
+		}
+		
+		param.put("startDate", inputform.getStartDate());
+		param.put("endDate", inputform.getEndDate());
+		List<ChartDataVO> chartDate = dao.getenterchart01(param);
+		List<ChartDataVO> chartDate2 = dao.getenterchart02(param);
+		
+		
+		List<AddressCodeVO> citys = dao.getCitysChart(param);
+		Map<String,String> paramS = new HashMap();
+		modelAndView.addObject("cities", citys );
+		
+		
+		
+		
+		Gson gson = new Gson();
+		String gson1String = gson.toJson(chartDate);
+		modelAndView.addObject("chartDate", gson1String);
+		
+		gson1String = gson.toJson(chartDate2);
+		modelAndView.addObject("chartDate2", gson1String);
+		
+		Integer total = dao.gettotaldangwon(param);
+		Integer dangwonCount = dao.getenterdangwonAll(param);
+		Integer dangwonCount00 = dao.getenterdangwon00(param);
+		Integer dangwonCount01 = dao.getenterdangwon01(param);
+		
+		System.out.println("total::"+total);
+		System.out.println("total::"+dangwonCount);
+		System.out.println("total::"+dangwonCount00);
+		System.out.println("total::"+dangwonCount01);
+		
+		modelAndView.addObject("total", total);
+		modelAndView.addObject("dangwonCount", dangwonCount);
+		modelAndView.addObject("dangwonCount00", dangwonCount00);
+		modelAndView.addObject("dangwonCount01", dangwonCount01);
+		
+		modelAndView.addObject("startDate", inputform.getStartDate());
+		modelAndView.addObject("endDate", inputform.getEndDate());
+		
+		modelAndView.setViewName("member/ajax/chart_target");
+		
+		return modelAndView;
+	}
+	
 	@RequestMapping(value = "/admin/member/excelPage.do", method = { RequestMethod.GET,RequestMethod.POST })
 	public ModelAndView adminmemberexcelPage(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session){
 		
 		
 		LOGGER.debug("##adminmemberexcelPage enter");
+		LOGGER.debug("##login enter");
+		
+		List<AddressCodeVO> citys = dao.getCitys();
+		
+		Map<String,String> param = new HashMap();
+		param.put("cityCode", citys.get(0).getCityCode());
+		List<AddressCodeVO> gus = dao.getGus(param);
+		
+		param = new HashMap();
+		param.put("cityCode", citys.get(0).getCityCode());
+		param.put("gunCode", gus.get(0).getGunCode());
+		List<AddressCodeVO> dongs = dao.getDongs(param);
+		
+		LOGGER.debug("##cities {} "+ citys);
+		
+		modelAndView.addObject("cities", citys );
+		modelAndView.addObject("gus",gus );
+		modelAndView.addObject("dongs",dongs );
+		modelAndView.setViewName("main/page");
 		
 		
 		modelAndView.setViewName("member/excelPage");
@@ -204,17 +344,12 @@ public class MemberController extends MotherController{
 		      MemberVO data = new MemberVO();
 
 				try {
-					data.setGroupName(row.getCell(0).getStringCellValue());
+					data.setEndDate(row.getCell(0).getStringCellValue());
 				} catch (Exception e) {
-					data.setGroupName("");
+					data.setEndDate("");
 				}
 				try {
-					data.setGroupJikham(row.getCell(1).getStringCellValue());
-				} catch (Exception e) {
-					data.setGroupJikham("");
-				}
-				try {
-					data.setName(row.getCell(2).getStringCellValue());
+					data.setName(row.getCell(1).getStringCellValue());
 				} catch (Exception e) {
 					data.setName("");
 				}
@@ -229,67 +364,78 @@ public class MemberController extends MotherController{
 					data.setPhone("");
 				}
 				try {
-					data.setSex(row.getCell(5).getStringCellValue());
+					data.setSex(row.getCell(2).getStringCellValue());
 				} catch (Exception e) {
 					data.setSex("");
 				}
 				try {
-					data.setCityN(row.getCell(6).getStringCellValue());
+					data.setCityN(row.getCell(5).getStringCellValue());
 				} catch (Exception e) {
 					data.setCityN("");
 				}
 				try {
-					data.setGunN(row.getCell(7).getStringCellValue());
+					data.setGunN(row.getCell(6).getStringCellValue());
 				} catch (Exception e) {
 					data.setGunN("");
 				}
 				try {
-					data.setDongN(row.getCell(8).getStringCellValue());
+					data.setDongN(row.getCell(7).getStringCellValue());
 				} catch (Exception e) {
 					data.setDongN("");
 				}
 				try {
-					data.setDetailAddress(row.getCell(9).getStringCellValue());
+					data.setDetailAddress(row.getCell(8).getStringCellValue());
 				} catch (Exception e) {
 					data.setDetailAddress("");
 				}
 				try {
-					data.setMrank(row.getCell(10).getStringCellValue());
+					
+					data.setMrank(row.getCell(9).getStringCellValue());
 				} catch (Exception e) {
 					data.setMrank("");
 				}
 				try {
-					data.setLevel(row.getCell(11).getStringCellValue());
+					data.setLevel(row.getCell(10).getStringCellValue());
 				} catch (Exception e) {
 					data.setLevel("");
 				}
 				try {
-					data.setDangwon(row.getCell(12).getStringCellValue());
+					data.setDangwon(row.getCell(11).getStringCellValue());
 				} catch (Exception e) {
 					data.setDangwon("");
 				}
 				try {
-					data.setChurch(row.getCell(13).getStringCellValue());
+					data.setChurch(row.getCell(12).getStringCellValue());
 				} catch (Exception e) {
 					data.setChurch("");
 				}
 				try {
-					data.setChurchRank(row.getCell(14).getStringCellValue());
+					data.setChurchRank(row.getCell(13).getStringCellValue());
 				} catch (Exception e) {
 					data.setChurchRank("");
 				}
 				try {
-					data.setRecommandName(row.getCell(15).getStringCellValue());
+					data.setGroupName(row.getCell(14).getStringCellValue());
+				} catch (Exception e) {
+					data.setGroupName("");
+				}
+				try {
+					data.setGroupJikham(row.getCell(15).getStringCellValue());
+				} catch (Exception e) {
+					data.setGroupJikham("");
+				}
+				try {
+					data.setRecommandName(row.getCell(16).getStringCellValue());
 				} catch (Exception e) {
 					data.setRecommandName("");
 				}
 				try {
-					data.setRecommandPhone(row.getCell(16).getStringCellValue());
+					data.setRecommandPhone(row.getCell(17).getStringCellValue());
 				} catch (Exception e) {
 					data.setRecommandPhone("");
 				}
 				try {
-					data.setAdminAuth(row.getCell(17).getStringCellValue());
+					data.setAdminAuth(row.getCell(18).getStringCellValue());
 				} catch (Exception e) {
 					data.setAdminAuth("");
 				}
@@ -327,6 +473,7 @@ public class MemberController extends MotherController{
 		    return resultMap;
 	}
 	
+	
 	@RequestMapping(value = "/admin/member/list.do", method = { RequestMethod.GET})
 	public ModelAndView adminmemberlist(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
 			
@@ -334,7 +481,6 @@ public class MemberController extends MotherController{
 		
 		
 		LOGGER.debug("##adminmemberlist enter");
-		
 		List<GroupVO> groupList = groupVORepository.findAll();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String endDate = dateFormat.format(new Date());
@@ -345,7 +491,7 @@ public class MemberController extends MotherController{
 		modelAndView.addObject("groups", groupList);
 		modelAndView.addObject("startDate", startDate);
 		modelAndView.addObject("endDate", endDate);
-		modelAndView.setViewName("member/list");
+		modelAndView.setViewName("main/list");
 		return modelAndView;
 	}
 	
@@ -357,8 +503,12 @@ public class MemberController extends MotherController{
 		
 		LOGGER.debug("##admingrouplist enter" +vo.toString() );
 		
+		System.out.println("pagavle::"+ vo.getStart());
+		System.out.println("pagavle::"+vo.getLength());
+		
 		Map resultMap = new HashMap<String, Object>();
 		Pageable p = getPageable(req,  vo.getStart(), vo.getLength());
+		
 		
 		Map<String, String[]> m = req.getParameterMap();
 //		System.out.println(m.get("vo"));
@@ -388,11 +538,16 @@ public class MemberController extends MotherController{
 	@RequestMapping(value = "/admin/member/commit", method = { RequestMethod.GET,RequestMethod.POST })
 	@ResponseBody
 	public Map admingroupcommit(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
-			,MemberVO inputform	) throws InterruptedException{
+			,MemberVO inputform	) throws InterruptedException, ParseException{
 		
 		LOGGER.debug("##admingroupcommit enter");
 		LOGGER.debug("##data {}",inputform);
-		inputform.setRegDt(new Date());
+		
+		
+		LocalDate l = LocalDate.parse(inputform.getEndDate());
+		Date regd = Date.from(l.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		inputform.setRegDt(regd);
+		
 		inputform.setDetailAddress(inputform.getCityN()+" "+inputform.getGunN()+" "+inputform.getDongN()+" "+inputform.getDetailAddress());
 		MemberVO vo = memVoRepository.save(inputform);
 		Map<String, Object> result =  new HashMap();
@@ -516,23 +671,31 @@ public class MemberController extends MotherController{
 		param = m.get("vo[endDate]");
 		dateformat = new SimpleDateFormat("yyyy-MM-dd");
 		Date tDate = dateformat.parse(param[0]);
+		
 		LocalDate l = tDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		l = l.plusDays(1);
 		result.put("endDate",Date.from(l.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 		
-		System.out.println(result);
+		System.out.println("convert search condition::"+result);
 		
 		return result;
 	}
 	
 	public List<MemberVO> afterValidationList(List<MemberVO> dataList){
 		
-		//18개 항목 validation
+		//19개 항목 validation
 		for(int i=0; i<dataList.size();i++) {
 			
-			
-			
-			
+			if(dataList.get(i).getEndDate() == null ||dataList.get(i).getGroupJikham().equals("")) {
+				
+			}else {
+				Pattern pattern =  Pattern.compile("^(19|20)\\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$");
+				Matcher matcher = pattern.matcher(dataList.get(i).getEndDate());
+				if(matcher.find()) {
+					dataList.get(i).setEndDateval(true);	
+				}
+				
+			}
 			GroupVO group =  groupVORepository.findByName(dataList.get(i).getGroupName());
 			if(group!=null) {
 				dataList.get(i).setGroupKeyval(true);
@@ -707,6 +870,7 @@ public class MemberController extends MotherController{
 					&& dataList.get(i).isRecommandNameval()
 					&& dataList.get(i).isRecommandPhoneval()
 					&& dataList.get(i).isAdminAuthval()
+					&& dataList.get(i).isEndDateval()
 			) {
 				dataList.get(i).setValidationYn(true);
 			}

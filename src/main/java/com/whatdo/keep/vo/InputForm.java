@@ -30,4 +30,8 @@ public class InputForm {
 	int length;
 	@Transient
 	int start;
+	
+	
+	String startDate;
+	String endDate;
 }

@@ -7,6 +7,21 @@
 		order by cityN asc
 	</select> -->
 	
+	
+		<select id="getenterdangwon00d"  parameterType="java.util.HashMap"  resultType="Integer">
+			SELECT ifnull(count(seq),0) FROM web_member
+			where 1=1
+			and regDt is not null
+			and dangwon = '일반'
+		</select>
+		
+		<select id="getenterdangwon01d"  parameterType="java.util.HashMap"  resultType="Integer">
+			SELECT  ifnull(count(DATE_FORMAT(regDt, '%Y-%m-%d')),0)    FROM web_member
+			where 1=1
+			and regDt is not null
+			and dangwon = '책임'
+		</select>
+	
 	<select id="getCitys" resultType="AddressCodeVO">
 		SELECT a.cityCode  , a.gunCode , a.dongCode, a.cityN , a.gunN , a.dongN , IFNULL(tem.cityCount,0) as cityCount
        
@@ -27,8 +42,9 @@
         where 1=1 
 
         
-		GROUP BY a.cityCode 
-        order by cityN asc
+		GROUP BY a.cityCode
+		order by FIELD(cityN,'서울특별시') desc , cityN asc 
+        <!-- order by cityN asc -->
    
 	</select>
 	
@@ -138,5 +154,252 @@
         	where 1=1 
 			and  a.dongN = #{dongN}
 		</select>
+
+
+	<!-- chart 쿼리 -->
+	
+		<select id="gettotaldangwon"  parameterType="java.util.HashMap"  resultType="Integer">
+			SELECT ifnull(count(seq),0) FROM web_member
+			where 1=1
+			and regDt is not null
+		</select>
+
+		<select id="getenterdangwonAll"  parameterType="java.util.HashMap"  resultType="Integer">
+			SELECT ifnull(count(seq),0) FROM web_member
+			where 1=1
+			and regDt is not null
+			<![CDATA[
+			and regDt >= #{startDate}
+			and regDt < #{endDate}
+			]]>
+		</select>
+
+		<select id="getenterdangwon00"  parameterType="java.util.HashMap"  resultType="Integer">
+			SELECT ifnull(count(seq),0) FROM web_member
+			where 1=1
+			and regDt is not null
+			and dangwon = '일반'
+			<![CDATA[
+			and regDt >= #{startDate}
+			and regDt < #{endDate}
+			]]>
+		</select>
+		
+		<select id="getenterdangwon01"  parameterType="java.util.HashMap"  resultType="Integer">
+			SELECT  ifnull(count(DATE_FORMAT(regDt, '%Y-%m-%d')),0)    FROM web_member
+			where 1=1
+			and regDt is not null
+			and dangwon = '책임'
+			<![CDATA[
+			and regDt >= #{startDate}
+			and regDt <= #{endDate}
+			]]>
+		</select>
+
+
+		<select id="getenterchart01"  parameterType="java.util.HashMap"  resultType="ChartDataVO">
+		select A.selectedDate, IFNULL(D.targetCount,0) selectedDateCount , IFNULL(F.targetCount,0) selectedDateCountC , IFNULL(E.targetCount,0) selectedDateCountN from (
+			
+			select selectedDate  from 
+			(select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selectedDate from
+			 (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+			 (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+			 (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+			 (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+			 (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+				where 1=1
+				<![CDATA[
+				and v.selectedDate >= #{startDate}
+				and v.selectedDate <= #{endDate}
+				]]>
+				
+			) A left join 
+			(
+				SELECT DATE_FORMAT(regDt, '%Y-%m-%d') as targetDate , count(DATE_FORMAT(regDt, '%Y-%m-%d') )  as targetCount  FROM web_member
+				where 1=1
+				
+				<if test="cityCode != null">
+				and cityCode = #{cityCode}
+				</if>
+				and regDt is not null
+				<![CDATA[
+				and regDt >= #{startDate}
+				and regDt <= #{endDate}
+				]]>
+				
+				group by DATE_FORMAT(regDt, '%Y-%m-%d') asc
+			)	D
+			ON A.selectedDate = D.targetDate
+            
+            left join 
+			(
+				SELECT DATE_FORMAT(regDt, '%Y-%m-%d') as targetDate , count(DATE_FORMAT(regDt, '%Y-%m-%d') )  as targetCount  FROM web_member
+				where 1=1
+				<if test="cityCode != null">
+				and cityCode = #{cityCode}
+				</if>
+				and dangwon = '일반'
+				and regDt is not null
+				<![CDATA[
+				and regDt >= #{startDate}
+				and regDt <= #{endDate}
+				]]>
+				
+				group by DATE_FORMAT(regDt, '%Y-%m-%d') asc
+			)	F
+			ON A.selectedDate = F.targetDate
+            
+                        left join 
+			(
+				SELECT DATE_FORMAT(regDt, '%Y-%m-%d') as targetDate , count(DATE_FORMAT(regDt, '%Y-%m-%d') )  as targetCount  FROM web_member
+				where 1=1
+				<if test="cityCode != null">
+				and cityCode = #{cityCode}
+				</if>
+				and dangwon = '책임'
+				and regDt is not null
+				<![CDATA[
+					and regDt >= #{startDate}
+					and regDt <= #{endDate}
+				]]>
+				
+				group by DATE_FORMAT(regDt, '%Y-%m-%d') asc
+			)	E
+			ON A.selectedDate = E.targetDate
+            
+			order by A.selectedDate asc
+		</select>
+
+		<select id="getenterchart02"  parameterType="java.util.HashMap"  resultType="ChartDataVO">
+			select
+
+			ifnull(sum(if(date_format(now(),'%Y') - substring(yyyymmdd,1,4) between 20 and 29 , 1, 0)),0) as age_20,
+			ifnull(sum(if(date_format(now(),'%Y') - substring(yyyymmdd,1,4) between 30 and 39 , 1, 0)),0) as age_30,
+			ifnull(sum(if(date_format(now(),'%Y') - substring(yyyymmdd,1,4) between 40 and 49 , 1, 0)),0) as age_40,
+			ifnull(sum(if(date_format(now(),'%Y') - substring(yyyymmdd,1,4) between 50 and 59 , 1, 0)),0) as age_50,
+			ifnull(sum(if(date_format(now(),'%Y') - substring(yyyymmdd,1,4) between 60 and 69 , 1, 0)),0) as age_60
+			
+			from web_member
+			
+			where 1=1
+				<if test="cityCode != null">
+				and cityCode = #{cityCode}
+				</if>
+			
+			and regDt is not null
+			<![CDATA[
+			and regDt >= #{startDate}
+			and regDt <= #{endDate}
+			]]>
+		</select>
+
+
+
+
+
+		<select id="getCitysChart" parameterType="java.util.HashMap"  resultType="AddressCodeVO">
+		
+		
+			SELECT '00' cityCode  ,'00'  gunCode ,'00' dongCode,'전체' cityN ,'00' gunN ,'00' dongN , count(seq) as cityCount			
+            from web_member tem
+			where 1=1
+                    and regDt is not null
+					<![CDATA[
+					and regDt >= #{startDate}
+					and regDt <= #{endDate}
+					]]>
+					
+            UNION ALL
+		
+		 	SELECT FINAL.* FROM (
+		 	
+				SELECT a.cityCode  , a.gunCode , a.dongCode, a.cityN , a.gunN , a.dongN , IFNULL(tem.cityCount,0) as cityCount
+		       
+		        FROM address_code AS a 
+		        LEFT JOIN  
+		        
+		        (
+		        		select tem.* from (
+						select count(a.cityCode) as cityCount ,a.cityCode 
+						from web_member AS a 
+						where 1=1
+						and regDt is not null
+						<![CDATA[
+						and regDt >= #{startDate}
+						and regDt <= #{endDate}
+						]]>
+						group by a.cityCode
+						) as tem
+		        ) as tem
+		        
+		        
+				ON a.cityCode = tem.cityCode
+		
+		        where 1=1 
+		
+	
+		        
+				GROUP BY a.cityCode 
+		        order by cityN asc
+	        
+	        ) FINAL
+	   
+		</select>
+
+
+	<!-- 선구별  -->
+	
+	<select id="getCitys_district" resultType="AddressCodeVO">
+		SELECT 
+		    cityCode, cityN
+		FROM
+		    address_code
+		WHERE
+		    1 = 1
+		GROUP BY cityCode
+		ORDER BY FIELD(cityN, '서울특별시') DESC , cityN ASC
+	</select>
+
+	<select id="getGuns_district" resultType="AddressCodeVO">
+		SELECT districtName, districtCode, sum(districtCount) districtCount FROM (
+			SELECT 
+				z1.*, z2.district_name districtName ,z2.code districtCode,
+                (
+					select count(seq) from web_member m1 
+					where 1=1 
+                    and m1.cityCode = #{cityCode}
+                    and m1.gunCode = z1.gunCode
+                    and m1.dongCode = z1.dongCode
+                    
+				) districtCount
+                
+			FROM
+				(SELECT 
+					cityCode, cityN, gunCode, gunN,  dongCode, dongN, district_code
+				FROM
+					koreacrpgp.address_code
+				WHERE
+					1 = 1 AND 
+					cityCode = #{cityCode}
+				GROUP BY cityCode , cityN , gunCode , gunN , dongCode, dongN, district_code) z1
+					LEFT JOIN
+				district_code z2 ON z1.district_code = z2.code
+                
+	
+	) final
+	group by districtName, districtCode
+
+	</select>
+
+	<select id="getdistrict_district" resultType="AddressCodeVO">
+		SELECT 
+		    z1.code districtCode,
+		    z1.district_name districtName,
+		    z1.etc etc
+		FROM
+		   district_code z1
+	</select>
+
+
 
 </mapper>

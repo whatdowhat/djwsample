@@ -46,24 +46,11 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="mb-3 row">
+	                                    <div class="mb-3 row">
+										 <label for="example-date-input" class="col-md-5">가입날짜</label>
+						                 <input class="form-control" type="date" value="${endDate}" id="endDate" >
+	                                    </div>
 
-	                                        <div class="mb-3 row">
-	                                            <label class="col-md-1 col-form-label">단체명</label>
-	                                            <div class="col-md-5">
-	                                                <select class="form-select" id="groupKey">
-	                                                <option value="0">소속단체없음.</option>
-														<c:forEach var="item" items="${groups}" varStatus="status"> 
-																	<option value="${item.groupKey}:${item.name}">${item.groupKey}:${item.name}</option>
-														</c:forEach>
-	                                                </select>
-	                                            </div>
-  												<label for="example-search-input" class="col-md-1 col-form-label">단체직함</label>
-	                                            <div class="col-md-5">
-	                                                <input class="form-control" type="search"  id="groupJikham">
-	                                            </div>
-											</div>
-                                        </div>
                                         
                                         <div class="mb-3 row">
                                             <label for="example-search-input" class="col-md-1 col-form-label">이름</label>
@@ -79,16 +66,19 @@
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
-											<label for="example-email-input" class="col-md-1 col-form-label">연락처</label>
-                                            <div class="col-md-5">
-                                                <!-- <input class="form-control" type="email"  id="example-email-input"> -->
-                                                <input id="phone" class="form-control input-mask" data-inputmask="'alias': 'datetime'" data-inputmask-inputformat="yyyy/mm/dd" inputmode="numeric">
-                                            </div>
+                                        
                                             <label for="example-email-input" class="col-md-1 col-form-label">생년월일</label>
                                             <div class="col-md-5">
                                                 <!-- <input class="form-control" type="email"  id="example-email-input"> -->
                                                 <input id="yyyymmdd" class="form-control input-mask" data-inputmask="'alias': 'datetime'" data-inputmask-inputformat="yyyy/mm/dd" inputmode="numeric">
                                             </div>
+                                            
+											<label for="example-email-input" class="col-md-1 col-form-label">연락처</label>
+                                            <div class="col-md-5">
+                                                <!-- <input class="form-control" type="email"  id="example-email-input"> -->
+                                                <input id="phone" class="form-control input-mask" data-inputmask="'alias': 'datetime'" data-inputmask-inputformat="yyyy/mm/dd" inputmode="numeric">
+                                            </div>
+
                                         </div>
                                         <div class="mb-3 row">
                                             <label class="col-md-1 col-form-label">주소</label>
@@ -172,6 +162,24 @@
                                             </div>
                                         </div>
                                         
+                                        <div class="mb-3 row">
+
+	                                        <div class="mb-3 row">
+	                                            <label class="col-md-1 col-form-label">단체명</label>
+	                                            <div class="col-md-5">
+	                                                <select class="form-select" id="groupKey">
+	                                                <option value="0">소속단체없음.</option>
+														<c:forEach var="item" items="${groups}" varStatus="status"> 
+																	<option value="${item.groupKey}:${item.name}">${item.groupKey}:${item.name}</option>
+														</c:forEach>
+	                                                </select>
+	                                            </div>
+  												<label for="example-search-input" class="col-md-1 col-form-label">단체직함</label>
+	                                            <div class="col-md-5">
+	                                                <input class="form-control" type="search"  id="groupJikham">
+	                                            </div>
+											</div>
+                                        </div>
                                         
                                         <div class="mb-3 row">
                                             <label for="example-tel-input" class="col-md-1 col-form-label">추천인 이름</label>
@@ -244,6 +252,8 @@ function make(){
 	
 	inputform.groupKey = groups[0];
 	inputform.groupName = groups[1];
+	
+	inputform.endDate = $("#endDate").val();
 	
 	inputform.name = $("#name").val();
 	inputform.yyyymmdd = $("#yyyymmdd").val();

@@ -123,6 +123,11 @@
 
         <!-- JAVASCRIPT -->
         <!-- 메뉴 작동을 위한 js -->
+        <!-- JAVASCRIPT -->
+        <!-- Plugin Js-->
+        <script src="/resources/assets/libs/apexcharts/apexcharts.min.js"></script>
+        <!-- demo js-->
+        <script src="/resources/assets/js/pages/apex.init.js"></script>
         <script src="/resources/assets/js/app.js"></script>
 
     

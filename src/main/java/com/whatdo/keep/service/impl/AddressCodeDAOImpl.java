@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.whatdo.keep.service.dao.AddressCodeDAO;
 import com.whatdo.keep.vo.AddressCodeVO;
+import com.whatdo.keep.vo.ChartDataVO;
 
 @Repository
 public class AddressCodeDAOImpl implements AddressCodeDAO{
@@ -49,6 +50,72 @@ public class AddressCodeDAOImpl implements AddressCodeDAO{
 	@Override
 	public String dongVal(Map<String, String> param) {
 		return sqlsession.selectOne( NAMESPACE+"dongVal",param);
+	}
+
+	@Override
+	public Integer getenterdangwonAll(Map<String, String> param) {
+		return sqlsession.selectOne( NAMESPACE+"getenterdangwonAll",param);
+	}
+
+
+	@Override
+	public Integer getenterdangwon00(Map<String, String> param) {
+		return sqlsession.selectOne( NAMESPACE+"getenterdangwon00",param);
+	}
+
+
+	@Override
+	public Integer getenterdangwon01(Map<String, String> param) {
+		return sqlsession.selectOne( NAMESPACE+"getenterdangwon01",param);
+	}
+
+	@Override
+	public List<ChartDataVO> getenterchart01(Map<String, String> param) {
+		return sqlsession.selectList( NAMESPACE+"getenterchart01",param);
+	}
+	
+	@Override
+	public List<ChartDataVO> getenterchart02(Map<String, String> param) {
+		return sqlsession.selectList( NAMESPACE+"getenterchart02",param);
+	}
+
+	@Override
+	public List<AddressCodeVO> getCitysChart(Map<String,String> param) {
+		return sqlsession.selectList( NAMESPACE+"getCitysChart",param);
+	}
+
+
+	@Override
+	public Integer gettotaldangwon(Map param) {
+		return sqlsession.selectOne( NAMESPACE+"gettotaldangwon",param);
+	}
+	
+	@Override
+	public Integer getenterdangwon00d(Map<String, String> param) {
+		return sqlsession.selectOne( NAMESPACE+"getenterdangwon00d",param);
+	}
+
+
+	@Override
+	public Integer getenterdangwon01d(Map<String, String> param) {
+		return sqlsession.selectOne( NAMESPACE+"getenterdangwon01d",param);
+	}
+
+
+	@Override
+	public List<AddressCodeVO> getdistrict_district() {
+		return sqlsession.selectList( NAMESPACE+"getdistrict_district");
+	}
+	
+	@Override
+	public List<AddressCodeVO> getCitys_district() {
+		return sqlsession.selectList( NAMESPACE+"getCitys_district");
+	}
+
+
+	@Override
+	public List<AddressCodeVO> getGuns_district(Map<String, String> param) {
+		return sqlsession.selectList( NAMESPACE+"getGuns_district",param);
 	}
 
 

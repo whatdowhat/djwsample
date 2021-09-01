@@ -18,9 +18,14 @@ public class AddressCodeVO extends InputForm {
 	String cityN;
 	String gunN;
 	String dongN;
+	Integer districtCode;
+	String districtName;
+	String etc;
 	
 	Integer cityCount;
 	Integer gunCount;
 	Integer dongCount;
+	Integer districtCount;
+
 	
 }

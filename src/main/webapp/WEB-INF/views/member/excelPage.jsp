@@ -82,8 +82,7 @@
 		                                            <thead>
 		                                            <tr>
 		                                                <th>#</th>
-		                                                <th>단체</th>
-		                                                <th>단체직함</th>
+		                                                <th>가입날짜</th>
 		                                                <th>이름</th>
 		                                                <th>생년월일</th>
 		                                                <th>연락처</th>
@@ -97,6 +96,8 @@
 		                                                <th>당원</th>
 		                                                <th>교회</th>
 		                                                <th>교회직분</th>
+		                                                <th>단체</th>
+		                                                <th>단체직함</th>
 		                                                <th>추천인 이름</th>
 		                                                <th>추천인 연락처</th>
 		                                                <th>관리권한</th>
@@ -216,15 +217,8 @@ function upload(){
 						        	{"data" : "name",render:function(a, b, c,d){
 						        		return d.row + d.settings._iDisplayStart +1;
 						        	}},        	
-						        	{"data" : "groupName",render:function(data, type, row ){
-						        		if(row.groupKeyval !=true){
-						        			return '<p style="color: red">'+data+'</p>';	
-						        		}else{
-						        			return data;	
-						        		}
-						        	}},
-						        	{"data" : "groupJikham",render:function(data, type, row ){
-						        		if(row.groupJikhamval !=true){
+						        	{"data" : "endDate",render:function(data, type, row ){
+						        		if(row.endDateval !=true){
 						        			return '<p style="color: red">'+data+'</p>';	
 						        		}else{
 						        			return data;	
@@ -316,6 +310,20 @@ function upload(){
 						        	}},
 						        	{"data" : "churchRank",render:function(data, type, row ){
 						        		if(row.churchRankval !=true){
+						        			return '<p style="color: red">'+data+'</p>';	
+						        		}else{
+						        			return data;	
+						        		}
+						        	}},
+						        	{"data" : "groupName",render:function(data, type, row ){
+						        		if(row.groupKeyval !=true){
+						        			return '<p style="color: red">'+data+'</p>';	
+						        		}else{
+						        			return data;	
+						        		}
+						        	}},
+						        	{"data" : "groupJikham",render:function(data, type, row ){
+						        		if(row.groupJikhamval !=true){
 						        			return '<p style="color: red">'+data+'</p>';	
 						        		}else{
 						        			return data;	

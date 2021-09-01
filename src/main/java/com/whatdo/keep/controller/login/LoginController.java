@@ -1,8 +1,14 @@
 package com.whatdo.keep.controller.login;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,16 +17,22 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.whatdo.keep.controller.MotherController;
+import com.whatdo.keep.controller.member.SpecificationMmemberVO;
 import com.whatdo.keep.service.dao.AddressCodeDAO;
 import com.whatdo.keep.vo.AddressCodeVO;
 import com.whatdo.keep.vo.ChildTestVO;
+import com.whatdo.keep.vo.GroupVO;
+import com.whatdo.keep.vo.MemberVO;
 import com.whatdo.keep.vo.SystemCommonVO;
 
 
@@ -76,9 +88,24 @@ public class LoginController extends MotherController{
 		
 		LOGGER.debug("##cities {} "+ citys);
 		
+		Integer total = dao.gettotaldangwon(param);
+		
+		Integer groupCount = (int) groupVORepository.count();
+		Integer dangwonCount00 = dao.getenterdangwon00d(param);
+		Integer dangwonCount01 = dao.getenterdangwon01d(param);
+		
+		modelAndView.addObject("total", total);
+		modelAndView.addObject("groupCount", groupCount);
+		modelAndView.addObject("dangwonCount00", dangwonCount00);
+		modelAndView.addObject("dangwonCount01", dangwonCount01);
+		
+		
 		modelAndView.addObject("cities", citys );
+		modelAndView.addObject("cityCode", citys.get(0).getCityCode() );
 		modelAndView.addObject("gus",gus );
+		modelAndView.addObject("gunCode", gus.get(0).getGunCode() );
 		modelAndView.addObject("dongs",dongs );
+		modelAndView.addObject("dongCode", dongs.get(0).getDongCode() );
 		modelAndView.setViewName("main/page");
 		
 		return modelAndView;
@@ -105,6 +132,11 @@ public class LoginController extends MotherController{
 		modelAndView.addObject("cities", citys );
 		modelAndView.addObject("gus",gus );
 		modelAndView.addObject("dongs",dongs );
+		
+		modelAndView.addObject("cityCode", inputform.getCityCode());
+		modelAndView.addObject("gunCode", gus.get(0).getGunCode() );
+		modelAndView.addObject("dongCode", dongs.get(0).getDongCode() );
+		modelAndView.setViewName("main/page");
 		modelAndView.setViewName("main/ajax/target");
 		
 		return modelAndView;
@@ -127,6 +159,10 @@ public class LoginController extends MotherController{
 		param.put("cityCode", inputform.getCityCode());
 		param.put("gunCode", inputform.getGunCode());
 		List<AddressCodeVO> dongs = dao.getDongs(param);
+
+		modelAndView.addObject("cityCode", inputform.getCityCode());
+		modelAndView.addObject("gunCode", inputform.getGunCode() );
+		modelAndView.addObject("dongCode", dongs.get(0).getDongCode() );
 		
 		modelAndView.addObject("cities", citys );
 		modelAndView.addObject("gus",gus );
@@ -135,6 +171,136 @@ public class LoginController extends MotherController{
 		
 		return modelAndView;
 	}
+	
+	
+	
+	@RequestMapping(value = "/admin/main/member.do", method = { RequestMethod.GET})
+	public ModelAndView memberlist(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
+			) {		
+		
+		LOGGER.debug("##adminmemberlistfrommain enter");
+		String cityCode = Optional.ofNullable(req.getParameter("cityCode")).orElse("");
+		String gunCode = Optional.ofNullable(req.getParameter("gunCode")).orElse("");
+		String dongCode = Optional.ofNullable(req.getParameter("dongCode")).orElse("");
+		
+		modelAndView.addObject("cityCode", cityCode);
+		modelAndView.addObject("gunCode", gunCode);
+		modelAndView.addObject("dongCode", dongCode);
+		
+		modelAndView.setViewName("main/member");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/admin/main/memberlist.do", method = { RequestMethod.POST})
+	@ResponseBody
+	public Map adminmemberlisttable(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
+			, MemberVO vo ) throws JsonProcessingException, ParseException {		
+		
+		LOGGER.debug("##admingrouplist enter" +vo.toString() );
+		
+		System.out.println("pagavle::"+ vo.getStart());
+		System.out.println("pagavle::"+vo.getLength());
+		
+		Map resultMap = new HashMap<String, Object>();
+		Pageable p = getPageable(req,  vo.getStart(), vo.getLength());
+		
+		
+		Map<String, String[]> m = req.getParameterMap();
+		
+		Map<String,Object> condition = searchConvert(m);
+		Page<MemberVO> page = memVoRepository.findAll(SpecificationMmemberVO.withCondition(condition), p);
+		
+		resultMap.put("recordsFiltered",page.getTotalElements());
+		resultMap.put("recordsTotal",page.getContent().size());
+		resultMap.put("data", page.getContent());
+		
+		return resultMap;
+	}
+	
+	
+	public Map<String,Object> searchConvert(Map<String, String[]> m) throws ParseException {
+		
+		Map<String,Object> result = new HashMap();
+
+//		String[] param = m.get("vo[groupName]");
+//		if(param[0].equals("0")) {
+//			result.put("groupName","");
+//		}else {
+//			result.put("groupName",param[0]);	
+//		}
+//		
+		String[] param = m.get("vo[cityCode]");
+		result.put("cityCode",param[0]);
+		
+		param = m.get("vo[gunCode]");
+		result.put("gunCode",param[0]);
+		
+		param = m.get("vo[dongCode]");
+		result.put("dongCode",param[0]);
+//		
+//		param = m.get("vo[name]");
+//		result.put("name",param[0]);
+//		
+//		param = m.get("vo[dangwon]");
+//		if(param[0].equals("0")) {
+//			result.put("dangwon","");
+//		}else {
+//			result.put("dangwon",param[0]);	
+//		}
+//		param = m.get("vo[name]");
+//		result.put("name",param[0]);
+//		
+//		param = m.get("vo[cityN]");
+//		result.put("cityN",param[0]);
+//		
+//		param = m.get("vo[gunN]");
+//		result.put("gunN",param[0]);
+//		
+//		param = m.get("vo[dongN]");
+//		result.put("dongN",param[0]);
+//		
+//		param = m.get("vo[detailAddress]");
+//		result.put("detailAddress",param[0]);
+//		
+//		param = m.get("vo[level]");
+//		if(param[0].equals("0")) {
+//			result.put("level","");
+//		}else {
+//			result.put("level",param[0]);	
+//		}
+//		
+//		param = m.get("vo[recommandName]");
+//		result.put("recommandName",param[0]);
+//		
+//		param = m.get("vo[church]");
+//		result.put("church",param[0]);
+//		
+//		param = m.get("vo[churchRank]");
+//		if(param[0].equals("0")) {
+//			result.put("churchRank","");
+//		}else {
+//			result.put("churchRank",param[0]);	
+//		}
+//		param = m.get("vo[startDate]");
+//		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+		
+//		result.put("regDt","yes");
+//		
+//		result.put("startDate", dateformat.parse(param[0]));
+//		
+//		param = m.get("vo[endDate]");
+//		dateformat = new SimpleDateFormat("yyyy-MM-dd");
+//		Date tDate = dateformat.parse(param[0]);
+//		
+//		LocalDate l = tDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//		l = l.plusDays(1);
+//		result.put("endDate",Date.from(l.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		
+		System.out.println("convert search condition::"+result);
+		
+		return result;
+	}
+	
 	
 //	@RequestMapping(value = "/admin/getcity", method = { RequestMethod.GET,RequestMethod.POST })
 //	@ResponseBody

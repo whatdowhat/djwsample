@@ -1,5 +1,6 @@
 package com.whatdo.keep.vo;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -23,7 +24,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+//@ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MemberVO extends InputForm {
 
@@ -116,6 +117,11 @@ public class MemberVO extends InputForm {
 	@Column(name = "editDt")
 	private Date editDt;
 	
+	
+	@Transient
+	private String endDate;
+	@Transient
+	private boolean endDateval;
 	@Transient
 	private boolean validationYn;
 	@Transient
@@ -154,5 +160,28 @@ public class MemberVO extends InputForm {
 	private boolean recommandPhoneval;
 	@Transient
 	private boolean adminAuthval;
+	@Override
+	public String toString() {
+		return "MemberVO [seq=" + seq + ", adminAuth=" + adminAuth + ", mrank=" + mrank + ", dangwon=" + dangwon
+				+ ", church=" + church + ", churchRank=" + churchRank + ", captain=" + captain + ", level=" + level
+				+ ", groupJikham=" + groupJikham + ", phone=" + phone + ", signPad=" + signPad + ", sex=" + sex
+				+ ", recommandName=" + recommandName + ", recommandPhone=" + recommandPhone + ", signData="
+				+ Arrays.toString(signData) + ", groupKey=" + groupKey + ", groupName=" + groupName + ", name=" + name
+				+ ", representiveRankName=" + representiveRankName + ", representiveName=" + representiveName
+				+ ", representiveCode=" + representiveCode + ", yyyymmdd=" + yyyymmdd + ", sojeji=" + sojeji
+				+ ", detailAddress=" + detailAddress + ", cityCode=" + cityCode + ", gunCode=" + gunCode + ", dongCode="
+				+ dongCode + ", cityN=" + cityN + ", gunN=" + gunN + ", dongN=" + dongN + ", regDt=" + regDt
+				+ ", editDt=" + editDt + ", endDate=" + endDate + ", endDateval=" + endDateval + ", validationYn="
+				+ validationYn + ", groupKeyval=" + groupKeyval + ", groupJikhamval=" + groupJikhamval + ", nameval="
+				+ nameval + ", yyyymmddval=" + yyyymmddval + ", phoneval=" + phoneval + ", sexval=" + sexval
+				+ ", cityCodeval=" + cityCodeval + ", gunCodeval=" + gunCodeval + ", dongCodeval=" + dongCodeval
+				+ ", detailAddressval=" + detailAddressval + ", mrankval=" + mrankval + ", levelval=" + levelval
+				+ ", dangwonval=" + dangwonval + ", churchval=" + churchval + ", churchRankval=" + churchRankval
+				+ ", recommandNameval=" + recommandNameval + ", recommandPhoneval=" + recommandPhoneval
+				+ ", adminAuthval=" + adminAuthval + ", input1=" + input1 + ", input2=" + input2 + ", list=" + list
+				+ ", map=" + map + ", length=" + length + ", start=" + start + ", startDate=" + startDate + "]";
+	}
+	
+	
 	
 }

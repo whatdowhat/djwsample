@@ -159,8 +159,10 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 		containerEntityManagerFactoryBean.setPackagesToScan("com.whatdo.keep.*");
 		Properties props = new Properties();
 //		System.out.println("jpa dialect :: "+dialect);
+		
+		props.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
 //		props.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-		props.setProperty("hibernate.dialect", dialect);
+//		props.setProperty("hibernate.dialect", dialect);
 		
 		
 		props.setProperty("hibernate.SQL", "debug");

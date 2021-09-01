@@ -39,6 +39,9 @@
         <script src="/resources/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
         <!-- form mask init -->
         
+
+        
+        
 <!-- ========== Left Sidebar Start ========== -->
 <div class="vertical-menu">
 
@@ -57,29 +60,19 @@
                     </a>
                 </li>
 
-                <!-- <li>
-                    <a href="calendar.html" class=" waves-effect">
+				<li>
+                    <a href="/admin/member/chart/member.do" class="waves-effect">
                         <i class="mdi mdi-calendar-outline"></i>
-                        <span>Calendar</span>
+                        <span>당원추이현황</span>
                     </a>
-                </li> -->
-
-                <!-- <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="mdi mdi-email-outline"></i>
-                        <span>당원관리</span>
+                </li>
+				<li>
+                    <a href="/admin/district/chart/member.do" class="waves-effect">
+                        <i class="mdi mdi-calendar-outline"></i>
+                        <span>선거구별현황</span>
                     </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="email-inbox.html">당원 정보</a></li>
-                    </ul>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="email-inbox.html">개별당원 등록</a></li>
-                    </ul>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="email-inbox.html">엑셀등록</a></li>
-                    </ul>
-                </li> -->
-
+                </li>
+                
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="mdi mdi-gradient"></i>
@@ -92,6 +85,8 @@
                         
                     </ul>
                 </li>
+
+
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">

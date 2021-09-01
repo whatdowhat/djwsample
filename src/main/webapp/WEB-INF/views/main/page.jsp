@@ -25,6 +25,21 @@
 	margin-top: 10px;
 }
 
+    div.left {
+    	float: left;
+        box-sizing: border-box;
+        border: 1px solid #000;
+        background: #ff0;
+    }
+    div.right {
+        float: right;
+        box-sizing: border-box;
+    	border: 1px solid #000;        
+        background: #0ff;
+    }
+
+
+
 </style>
 	
 
@@ -65,13 +80,15 @@
                                                 <div class="row">
                                                     <div class="col-lg-3">
                                                         <div class="border p-3 text-center rounded mb-4">
+                                                        <!-- <iframe id="iframe" width="1024" height="500" src="/admin/member/page.do"></iframe> -->
+                                                        
                                                             <a href="#">
                                                                 <div class="my-3">
                                                                     <i class="dripicons-question h2 text-primary"></i>
                                                                 </div>
                                                                 <h5 class="font-size-15 mb-3">당원 현황</h5>
                                                                  <br>
-                                                                123,123
+                                                                 <fmt:formatNumber value="${total }" pattern="#,###" />
                                                             </a>
                                                         </div>
                                                     </div>
@@ -83,7 +100,8 @@
                                                                 </div>
                                                                 <h5 class="font-size-15 mb-3">단체현황</h5>
                                                                  <br>
-                                                                123,123
+                                                                 <fmt:formatNumber value="${groupCount }" pattern="#,###" />
+                                                                
                                                             </a>
                                                         </div>
                                                     </div>
@@ -95,7 +113,8 @@
                                                                 </div>
                                                                 <h5 class="font-size-15 mb-3">책임당원</h5>
                                                                  <br>
-                                                               1
+                                                                 <fmt:formatNumber value="${dangwonCount01 }" pattern="#,###" />
+                                                              
                                                             </a>
                                                         </div>
                                                     </div>
@@ -107,7 +126,7 @@
                                                                 </div>
                                                                 <h5 class="font-size-15 mb-3">일반당원</h5>
                                                                 <br>
-                                                                123,123
+                                                                <fmt:formatNumber value="${dangwonCount00 }" pattern="#,###" />
                                                             </a>
                                                         </div>
                                                     </div>
@@ -128,11 +147,39 @@
                                             
                                                 <div class="row justify-content-center">
 													<ul class="nav nav-pills nav-justified" role="tablist">
+														<c:forEach var="item" items="${cities}" varStatus="status">
+																<c:if test="${cityCode == item.cityCode}">
+																	<button type="button" class="btn btn-danger waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickCity(${item.cityCode})">${item.cityN}<br>${item.cityCount}</button>
+																</c:if>
+																<c:if test="${cityCode != item.cityCode}">
+																	<button type="button" class="btn btn-danger waves-effect waves-light" style="margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickCity(${item.cityCode})">${item.cityN}<br>${item.cityCount}</button>
+																</c:if>
+																
+																<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},'','')">확인</button>
+														</c:forEach>
+			                                        </ul> 
+                                                </div>
+                                                <!-- end row -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+  						<div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                                <div class="row justify-content-center">
+													<ul class="nav nav-pills nav-justified" role="tablist">
 			                                           
-														<c:forEach var="item" items="${cities}" varStatus="status"> 
-														
-																	<button type="button" class="btn btn-danger waves-effect waves-light city" onclick="clickCity(${item.cityCode})">${item.cityN}(${item.cityCount})</button>
-				 												
+														<c:forEach var="item" items="${gus}" varStatus="status">
+															<c:if test="${gunCode == item.gunCode}">
+																<button type="button" class="btn btn-info waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickGun(${item.cityCode},${item.gunCode})">${item.gunN}<br>${item.gunCount}</button>
+															</c:if>
+															<c:if test="${gunCode != item.gunCode}">
+																<button type="button" class="btn btn-info waves-effect waves-light" style="margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickGun(${item.cityCode},${item.gunCode})">${item.gunN}<br>${item.gunCount}</button>
+															</c:if> 
+																
+																<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},${item.gunCode},'')">확인</button>
 														</c:forEach>
 			                                        </ul>
                                                 </div>
@@ -147,31 +194,13 @@
                                     <div class="card-body">
                                                 <div class="row justify-content-center">
 													<ul class="nav nav-pills nav-justified" role="tablist">
-			                                           
-														<c:forEach var="item" items="${gus}" varStatus="status"> 
-														
-																	<button type="button" class="btn btn-info waves-effect waves-light gu" onclick="clickGun(${item.cityCode},${item.gunCode})">${item.gunN}(${item.gunCount})</button>
-				 												
-														</c:forEach>
-			                                        </ul>
-                                                </div>
-                                                <!-- end row -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                                    
-  						<div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                                <div class="row justify-content-center">
-													<ul class="nav nav-pills nav-justified" role="tablist">
-			                                           
 														<c:forEach var="item" items="${dongs}" varStatus="status"> 
-														
-																	<button type="button" class="btn btn-light waves-effect dong" onclick="clickDong(${item.cityCode},${item.gunCode},${item.dongCode})">${item.dongN}(${item.dongCount})</button>
-				 												
+															<c:if test="${dongCode == item.dongCode}">
+																<button type="button" class="btn btn-light waves-effect dong" style="border-width:20px; border-color:yellow; "  onclick="goMember(${item.cityCode},${item.gunCode},${item.dongCode})">${item.dongN}<br>${item.dongCount}</button>
+															</c:if>
+															<c:if test="${dongCode != item.dongCode}">
+																<button type="button" class="btn btn-light waves-effect dong" onclick="clickDong(${item.cityCode},${item.gunCode},${item.dongCode})">${item.dongN}<br>${item.dongCount}</button>
+															</c:if> 
 														</c:forEach>
 			                                        </ul>
                                                 </div>
@@ -243,7 +272,7 @@ function clickGun(cityCode,gunCode){
 function clickDong(cityCode,gunCode,dongCode){
 
 	
-	alert(cityCode + '-' + gunCode + '-'+ dongCode);
+	//alert(cityCode + '-' + gunCode + '-'+ dongCode);
 	/* 
 	var myform = $('#SPECIFICATION');
 	fromJSP = $('#fromJSP2').val(JSON.stringify(fromJSP));
@@ -254,8 +283,23 @@ function clickDong(cityCode,gunCode,dongCode){
 	
 	location.href="admin/member/list.do?cityCode="+cityCode+"&gunCode="+gunCode+"&dongCode="+dongCode+"&page=0";
 	
+}
+
+
+function goMember(cityCode,gunCode,dongCode){
+
+	//alert(cityCode + '-' + gunCode + '-'+ dongCode);
+	/* 
+	var myform = $('#SPECIFICATION');
+	fromJSP = $('#fromJSP2').val(JSON.stringify(fromJSP));
+	myform.append(fromJSP);
+	var checkedList = $('#checkedList').val(global_checked_list);
+	myform.append(checkedList);
+	myform.submit(); */
+	location.href="admin/main/member.do?cityCode="+cityCode+"&gunCode="+gunCode+"&dongCode="+dongCode+"&page=0";
 
 }
+
 
 </script>
     
