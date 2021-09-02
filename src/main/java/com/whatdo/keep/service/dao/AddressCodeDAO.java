@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.whatdo.keep.vo.AddressCodeVO;
 import com.whatdo.keep.vo.ChartDataVO;
+import com.whatdo.keep.vo.MemberVO;
 
 @Service
 public interface AddressCodeDAO {
@@ -37,6 +38,8 @@ public interface AddressCodeDAO {
 	List<AddressCodeVO> getdistrict_district();
 	List<AddressCodeVO> getCitys_district();
 	List<AddressCodeVO> getGuns_district(Map<String, String> param);
+	List<MemberVO> getmember_fromdistrict(Map<String, Object> param);
+	Integer getmember_fromdistrict_count(Map<String, Object> param);
 	
 	
 }

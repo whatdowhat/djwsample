@@ -45,6 +45,14 @@ public class SpecificationMmemberVO {
 	            	}
 			               
 
+	            }else if("districtCode".equals(key)){  
+	            	if(conditino.get(key).equals("")){
+//	            		predicate.ad
+	            	}else{
+	            		predicate.add(builder.equal(root.get(key), conditino.get(key)));	
+	            	}
+			               
+
 	            }else if("dongCode".equals(key)){
 	            	if(conditino.get(key).equals("")){
 	            		

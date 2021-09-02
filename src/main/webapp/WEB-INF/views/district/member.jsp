@@ -31,7 +31,7 @@
 									
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">당원관리</a></li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">선거구별현황</a></li>
                                             <li class="breadcrumb-item active">당원현황</li>
                                         </ol>
                                     </div>
@@ -42,9 +42,8 @@
                         <!-- end page title -->
                         <div class="row">
                         
-                        
 
-                            <div class="col-xl-12">
+<%--                             <div class="col-xl-12">
                                 <div class="card">
                                     <div class="card-body">
                                     
@@ -190,7 +189,7 @@
                                     
                                     </div>
 								</div>
-							</div>
+							</div> --%>
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
@@ -244,35 +243,15 @@ $(document).ready(function() {
 	
 var inputform = {};
 	
-	inputform.name = $("#name").val();
-	inputform.yyyymmdd = $("#yyyymmdd").val();
-	inputform.phone = $("#phone").val();
 
-	inputform.cityN = $("#cityN").val();
-	inputform.gunN = $("#gunN").val();
-	inputform.dongN = $("#dongN").val();
-
-	inputform.dangwon = $("#dangwon").val();
-	inputform.recommandName = $("#recommandName").val();
-	inputform.recommandPhone = $("#recommandPhone").val();
-	
-	inputform.groupName = $("#groupName").val();
-	inputform.detailAddress = $("#detailAddress").val();
-	inputform.level = $("#level").val();
-	
-	
-	inputform.church = $("#church").val();
-	inputform.churchRank = $("#churchRank").val();
-
-	inputform.startDate = $("#startDate").val();
-	inputform.endDate = $("#endDate").val();
-
+	inputform.cityCode = '${cityCode}';
+	inputform.districtCode = '${districtCode}';
 	
 	console.dir(inputform);
 	
 	
 	
-    var url = "/admin/member/listtable.do";
+    var url = "/admin/district/memberlist.do";
     $.fn.dataTable.ext.errMode = 'none';
     $('#datatable').DataTable({
     	paging : true,

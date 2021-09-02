@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.whatdo.keep.service.dao.AddressCodeDAO;
 import com.whatdo.keep.vo.AddressCodeVO;
 import com.whatdo.keep.vo.ChartDataVO;
+import com.whatdo.keep.vo.MemberVO;
 
 @Repository
 public class AddressCodeDAOImpl implements AddressCodeDAO{
@@ -116,6 +117,18 @@ public class AddressCodeDAOImpl implements AddressCodeDAO{
 	@Override
 	public List<AddressCodeVO> getGuns_district(Map<String, String> param) {
 		return sqlsession.selectList( NAMESPACE+"getGuns_district",param);
+	}
+
+
+	@Override
+	public List<MemberVO> getmember_fromdistrict(Map<String, Object> param) {
+		return sqlsession.selectList( NAMESPACE+"getmember_fromdistrict",param);
+	}
+
+
+	@Override
+	public Integer getmember_fromdistrict_count(Map<String, Object> param) {
+		return sqlsession.selectOne(NAMESPACE+"getmember_fromdistrict_count",param);
 	}
 
 

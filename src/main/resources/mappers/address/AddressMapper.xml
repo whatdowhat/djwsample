@@ -361,7 +361,7 @@
 	</select>
 
 	<select id="getGuns_district" resultType="AddressCodeVO">
-		SELECT districtName, districtCode, sum(districtCount) districtCount FROM (
+		SELECT districtName, districtCode, sum(districtCount) districtCount,cityCode FROM (
 			SELECT 
 				z1.*, z2.district_name districtName ,z2.code districtCode,
                 (
@@ -400,6 +400,46 @@
 		   district_code z1
 	</select>
 
+	<select id="getmember_fromdistrict_count"  resultType="Integer">
+		
+		SELECT count(seq) FROM koreacrpgp.web_member
+		where 1=1
+		and cityCode = #{cityCode}
+		
+		<if test="districtCode != '' ">
+		and gunCode = (select gunCode from address_code
+						where 1=1 
+						and district_code = #{districtCode}
+						group by gunCode)
+		</if>
+		<if test="districtCode == '' ">
+		
+		</if>
+		
+		
+	</select>
+
+	<select id="getmember_fromdistrict" resultType="MemberVO">
+		
+		SELECT * FROM koreacrpgp.web_member
+		where 1=1
+		and cityCode = #{cityCode}
+		
+		<if test="districtCode != '' ">
+		and gunCode = (select gunCode from address_code
+						where 1=1 
+						and district_code = #{districtCode}
+						group by gunCode)
+		</if>
+		<if test="districtCode == '' ">
+		
+		</if>
+		limit #{startP} , #{endP}
+		
+		
+	</select>
+
+				
 
 
 </mapper>

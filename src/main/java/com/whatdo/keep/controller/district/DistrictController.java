@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -93,6 +94,7 @@ public class DistrictController extends MotherController{
 		Integer districtTotal = dao.getdistrict_district().size(); //선거구 숫자
 		List<AddressCodeVO> citys = dao.getCitys();//시
 		param = new HashMap<String, Object>();
+		
 		param.put("cityCode", citys.get(0).getCityCode());
 		List<AddressCodeVO> districts =  dao.getGuns_district(param);
 		
@@ -112,74 +114,112 @@ public class DistrictController extends MotherController{
 		modelAndView.addObject("citys", citys);
 		modelAndView.addObject("districts", districts);
 		
-//		modelAndView.addObject("startDate", startDate);
-//		modelAndView.addObject("endDate", endDate);
+		modelAndView.addObject("cityCode", citys.get(0).getCityCode());
+		modelAndView.addObject("districCode", districts.get(0).getDistrictCode());
 		
-		modelAndView.setViewName("district/chart_member");
+		modelAndView.setViewName("district/main");
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/admin/district/chart/member/ajax.do", method = { RequestMethod.GET,RequestMethod.POST })
-	public ModelAndView admidistrictchartmemberajax(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
+	@RequestMapping(value = "/admin/district/getcity", method = { RequestMethod.GET,RequestMethod.POST })
+	public ModelAndView districtgetcity(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
 			,AddressCodeVO inputform	) throws InterruptedException{
 		
 		
-		LOGGER.debug("##admidistrictchartmemberajax enter");
-		LOGGER.debug("##admidistrictchartmemberajax enter inputform:: "+inputform);
-		Map param = new HashMap<String, Object>();
-//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//		String endDate = dateFormat.format(new Date());
-//		LocalDate date = LocalDate.now();
-//		date = date.minusDays(7);
-//		Date convertDate =   Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
-//		String startDate = dateFormat.format(convertDate);
-		if(inputform.getCityCode().equals("00")|| inputform.getCityCode().equals("0")) {
-			
-		}else {
-			param.put("cityCode", inputform.getCityCode());	
-		}
+		LOGGER.debug("##getcity enter");
+		LOGGER.debug("## !!!!!!!!!{} ", inputform);
+		List<AddressCodeVO> citys = dao.getCitys();
 		
-		param.put("startDate", inputform.getStartDate());
-		param.put("endDate", inputform.getEndDate());
-		List<ChartDataVO> chartDate = dao.getenterchart01(param);
-		List<ChartDataVO> chartDate2 = dao.getenterchart02(param);
+		Map<String,String> param = new HashMap();
+		param.put("cityCode", inputform.getCityCode());
+		List<AddressCodeVO> districts =  dao.getGuns_district(param);
+		System.out.println(districts.size());
 		
+		modelAndView.addObject("citys", citys);
+		modelAndView.addObject("districts", districts);
 		
-		List<AddressCodeVO> citys = dao.getCitysChart(param);
-		Map<String,String> paramS = new HashMap();
-		modelAndView.addObject("cities", citys );
-		
-		
-		
-		
-		Gson gson = new Gson();
-		String gson1String = gson.toJson(chartDate);
-		modelAndView.addObject("chartDate", gson1String);
-		
-		gson1String = gson.toJson(chartDate2);
-		modelAndView.addObject("chartDate2", gson1String);
-		
-		Integer total = dao.gettotaldangwon(param);
-		Integer dangwonCount = dao.getenterdangwonAll(param);
-		Integer dangwonCount00 = dao.getenterdangwon00(param);
-		Integer dangwonCount01 = dao.getenterdangwon01(param);
-		
-		System.out.println("total::"+total);
-		System.out.println("total::"+dangwonCount);
-		System.out.println("total::"+dangwonCount00);
-		System.out.println("total::"+dangwonCount01);
-		
-		modelAndView.addObject("total", total);
-		modelAndView.addObject("dangwonCount", dangwonCount);
-		modelAndView.addObject("dangwonCount00", dangwonCount00);
-		modelAndView.addObject("dangwonCount01", dangwonCount01);
-		
-		modelAndView.addObject("startDate", inputform.getStartDate());
-		modelAndView.addObject("endDate", inputform.getEndDate());
-		
-		modelAndView.setViewName("member/ajax/chart_target");
+		modelAndView.addObject("cityCode", inputform.getCityCode());
+		modelAndView.addObject("districCode", districts.get(0).getDistrictCode());
+		modelAndView.setViewName("district/ajax/target");
 		
 		return modelAndView;
+	}
+	
+	
+	
+	@RequestMapping(value = "/admin/district/member.do", method = { RequestMethod.GET})
+	public ModelAndView memberlist(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
+			) {		
+		
+		LOGGER.debug("##admindistrictlistfrommain enter");
+		String cityCode = Optional.ofNullable(req.getParameter("cityCode")).orElse("");
+		String districtCode = Optional.ofNullable(req.getParameter("districtCode")).orElse("");
+		
+		modelAndView.addObject("cityCode", cityCode);
+		modelAndView.addObject("districtCode",districtCode);
+		
+		modelAndView.setViewName("district/member");
+		return modelAndView;
+	}
+	
+	
+	
+	@RequestMapping(value = "/admin/district/memberlist.do", method = { RequestMethod.POST})
+	@ResponseBody
+	public Map adminmemberlisttable(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
+			, MemberVO vo ) throws JsonProcessingException, ParseException {		
+		
+		LOGGER.debug("##admingrouplist enter" +vo.toString() );
+		
+		System.out.println("pagavle::"+ vo.getStart());
+		System.out.println("pagavle::"+vo.getLength());
+		
+		Map resultMap = new HashMap<String, Object>();
+		Pageable p = getPageable(req,  vo.getStart(), vo.getLength());
+		
+		
+		Map<String, String[]> m = req.getParameterMap();
+		
+		Map<String,Object> condition = searchConvert(m);
+		Map<String,Object> param = new HashMap<String, Object>();
+//		param.put("cityCode", String.valueOf(condition.get("cityCode")));
+		param.put("cityCode", condition.get("cityCode"));
+//		param.put("districtCode",String.valueOf(condition.get("districtCode")));
+		param.put("districtCode",condition.get("districtCode"));
+		Integer total =  dao.getmember_fromdistrict_count(param);
+//		String 
+//		query+=" limit " + pageable.getPageNumber() * pageable.getPageSize() + "," + pageable.getPageSize();
+		
+//		Page<MemberVO> page = memVoRepository.findAll(SpecificationMmemberVO.withCondition(condition), p);
+		
+		param.put("startP",vo.getStart());
+		param.put("endP",vo.getLength());
+		LOGGER.debug("##param data ::" +param.toString() );
+		List<MemberVO> page =	dao.getmember_fromdistrict(param);
+		
+		resultMap.put("recordsFiltered",total);
+		resultMap.put("recordsTotal",page.size());
+		resultMap.put("data", page);
+		
+		return resultMap;
+	}
+	
+	
+	
+	public Map<String,Object> searchConvert(Map<String, String[]> m) throws ParseException {
+		
+		Map<String,Object> result = new HashMap();
+
+//		
+		String[] param = m.get("vo[cityCode]");
+		result.put("cityCode",param[0]);
+		
+		param = m.get("vo[districtCode]");
+		result.put("districtCode",param[0]);
+//		
+		System.out.println("convert search condition::"+result);
+		
+		return result;
 	}
 	
 }

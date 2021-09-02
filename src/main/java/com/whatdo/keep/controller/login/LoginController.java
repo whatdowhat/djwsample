@@ -136,7 +136,7 @@ public class LoginController extends MotherController{
 		modelAndView.addObject("cityCode", inputform.getCityCode());
 		modelAndView.addObject("gunCode", gus.get(0).getGunCode() );
 		modelAndView.addObject("dongCode", dongs.get(0).getDongCode() );
-		modelAndView.setViewName("main/page");
+//		modelAndView.setViewName("main/page");
 		modelAndView.setViewName("main/ajax/target");
 		
 		return modelAndView;

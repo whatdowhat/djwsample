@@ -491,7 +491,7 @@ public class MemberController extends MotherController{
 		modelAndView.addObject("groups", groupList);
 		modelAndView.addObject("startDate", startDate);
 		modelAndView.addObject("endDate", endDate);
-		modelAndView.setViewName("main/list");
+		modelAndView.setViewName("member/list");
 		return modelAndView;
 	}
 	

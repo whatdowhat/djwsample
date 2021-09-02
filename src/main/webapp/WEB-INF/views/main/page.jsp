@@ -281,7 +281,7 @@ function clickDong(cityCode,gunCode,dongCode){
 	myform.append(checkedList);
 	myform.submit(); */
 	
-	location.href="admin/member/list.do?cityCode="+cityCode+"&gunCode="+gunCode+"&dongCode="+dongCode+"&page=0";
+	location.href="/admin/member/list.do?cityCode="+cityCode+"&gunCode="+gunCode+"&dongCode="+dongCode+"&page=0";
 	
 }
 
@@ -296,7 +296,7 @@ function goMember(cityCode,gunCode,dongCode){
 	var checkedList = $('#checkedList').val(global_checked_list);
 	myform.append(checkedList);
 	myform.submit(); */
-	location.href="admin/main/member.do?cityCode="+cityCode+"&gunCode="+gunCode+"&dongCode="+dongCode+"&page=0";
+	location.href="/admin/main/member.do?cityCode="+cityCode+"&gunCode="+gunCode+"&dongCode="+dongCode+"&page=0";
 
 }
 
