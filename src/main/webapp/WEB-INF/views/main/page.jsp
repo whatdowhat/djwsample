@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!doctype html>
 <html lang="en">
 <style>
@@ -80,8 +80,33 @@
                                                 <div class="row">
                                                     <div class="col-lg-3">
                                                         <div class="border p-3 text-center rounded mb-4">
+                                                        <sec:authorize access="hasRole('ROLE_읍면동')">
+														    USER 읍면동
+														</sec:authorize> 
+                                                        <sec:authorize access="hasRole('ROLE_시군동')">
+														    USER 시군동
+														</sec:authorize> 
+														<sec:authorize access="hasAuthority('ROLE_admin')">
+														  관리자 페이지
+														</sec:authorize>
                                                         <!-- <iframe id="iframe" width="1024" height="500" src="/admin/member/page.do"></iframe> -->
-                                                        
+                                                        <%-- <h1>TYPE: </h1><sec:authentication property="principal"/>
+														<sec:authorize access="!isAuthenticated()">
+														  Login
+														</sec:authorize>
+														<sec:authorize access="isAuthenticated()">
+														  Login 2
+														</sec:authorize>
+														<sec:authorize access="hasRole('USER')">
+														    USER Users
+														</sec:authorize> --%>
+														<%-- <sec:authorize access="hasAuthority('ROLE_ADMIN')">
+														    Manage Users
+														</sec:authorize>
+														<sec:authorize access="hasAuthority('USER')">
+														    USER Users
+														</sec:authorize>
+											 --%>
                                                             <a href="#">
                                                                 <div class="my-3">
                                                                     <i class="dripicons-question h2 text-primary"></i>
@@ -148,14 +173,43 @@
                                                 <div class="row justify-content-center">
 													<ul class="nav nav-pills nav-justified" role="tablist">
 														<c:forEach var="item" items="${cities}" varStatus="status">
-																<c:if test="${cityCode == item.cityCode}">
-																	<button type="button" class="btn btn-danger waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickCity(${item.cityCode})">${item.cityN}<br>${item.cityCount}</button>
-																</c:if>
-																<c:if test="${cityCode != item.cityCode}">
-																	<button type="button" class="btn btn-danger waves-effect waves-light" style="margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickCity(${item.cityCode})">${item.cityN}<br>${item.cityCount}</button>
-																</c:if>
 																
-																<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},'','')">확인</button>
+																 <sec:authorize access="hasRole('ROLE_ADMIN')">
+																	<c:if test="${cityCode == item.cityCode}">
+																		<button type="button" class="btn btn-danger waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickCity(${item.cityCode})">${item.cityN}<br>${item.cityCount}</button>
+																	</c:if>
+																	<c:if test="${cityCode != item.cityCode}">
+																		<button type="button" class="btn btn-danger waves-effect waves-light" style="margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickCity(${item.cityCode})">${item.cityN}<br>${item.cityCount}</button>
+																	</c:if>
+																	<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},'','')">확인</button>
+																															    		
+																</sec:authorize> 
+																 <sec:authorize access="hasRole('ROLE_USER') && hasRole('ROLE_전국')">
+																	<c:if test="${cityCode == item.cityCode}">
+																		<button type="button" class="btn btn-danger waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickCity(${item.cityCode})">${item.cityN}<br>${item.cityCount}</button>
+																		<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},'','')">확인</button>
+																	</c:if>
+																</sec:authorize>	
+																 <sec:authorize access="hasRole('ROLE_USER') && hasRole('ROLE_시군구')">
+																	<c:if test="${cityCode == item.cityCode}">
+																		<button type="button" class="btn btn-danger waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickCity(${item.cityCode})">${item.cityN}<br>${item.cityCount}</button>
+																		<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},'','')">확인</button>
+																	</c:if>
+																</sec:authorize>	
+																 <sec:authorize access="hasRole('ROLE_USER') && hasRole('ROLE_읍면동')">
+																	<c:if test="${cityCode == item.cityCode}">
+																		<button type="button" class="btn btn-danger waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickCity(${item.cityCode})">${item.cityN}<br>${item.cityCount}</button>
+																		<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},'','')">확인</button>
+																	</c:if>
+																</sec:authorize>
+																<sec:authorize access="hasRole('ROLE_USER') && !hasRole('ROLE_전국') && !hasRole('ROLE_시군구') && !hasRole('ROLE_읍면동')">
+																	<c:if test="${cityCode == item.cityCode}">
+																		<button type="button" class="btn btn-danger waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickCity(${item.cityCode})">${item.cityN}<br>${item.cityCount}</button>
+																		<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},'','')">확인</button>
+																	</c:if>
+																</sec:authorize>																
+
+
 														</c:forEach>
 			                                        </ul> 
                                                 </div>
@@ -171,15 +225,45 @@
                                                 <div class="row justify-content-center">
 													<ul class="nav nav-pills nav-justified" role="tablist">
 			                                           
+
 														<c:forEach var="item" items="${gus}" varStatus="status">
-															<c:if test="${gunCode == item.gunCode}">
-																<button type="button" class="btn btn-info waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickGun(${item.cityCode},${item.gunCode})">${item.gunN}<br>${item.gunCount}</button>
-															</c:if>
-															<c:if test="${gunCode != item.gunCode}">
-																<button type="button" class="btn btn-info waves-effect waves-light" style="margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickGun(${item.cityCode},${item.gunCode})">${item.gunN}<br>${item.gunCount}</button>
-															</c:if> 
-																
-																<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},${item.gunCode},'')">확인</button>
+																<sec:authorize access="hasRole('ROLE_ADMIN')">
+																	<c:if test="${gunCode == item.gunCode}">
+																		<button type="button" class="btn btn-info waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickGun(${item.cityCode},${item.gunCode})">${item.gunN}<br>${item.gunCount}</button>
+																	</c:if>
+																	<c:if test="${gunCode != item.gunCode}">
+																		<button type="button" class="btn btn-info waves-effect waves-light" style="margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickGun(${item.cityCode},${item.gunCode})">${item.gunN}<br>${item.gunCount}</button>
+																	</c:if> 
+																		<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},${item.gunCode},'')">확인</button>
+																</sec:authorize> 
+																 <sec:authorize access="hasRole('ROLE_USER') && hasRole('ROLE_전국')">
+																	<c:if test="${gunCode == item.gunCode}">
+																		<button type="button" class="btn btn-info waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickGun(${item.cityCode},${item.gunCode})">${item.gunN}<br>${item.gunCount}</button>
+																	</c:if>
+																	<c:if test="${gunCode != item.gunCode}">
+																		<button type="button" class="btn btn-info waves-effect waves-light" style="margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickGun(${item.cityCode},${item.gunCode})">${item.gunN}<br>${item.gunCount}</button>
+																	</c:if> 
+																		<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},${item.gunCode},'')">확인</button>
+																</sec:authorize>	
+																 <sec:authorize access="hasRole('ROLE_USER') && hasRole('ROLE_시군구')">
+																	<c:if test="${gunCode == item.gunCode}">
+																		<button type="button" class="btn btn-info waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickGun(${item.cityCode},${item.gunCode})">${item.gunN}<br>${item.gunCount}</button>
+																		<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},${item.gunCode},'')">확인</button>
+																	</c:if>
+																</sec:authorize>	
+																 <sec:authorize access="hasRole('ROLE_USER') && hasRole('ROLE_읍면동')">
+																	<c:if test="${gunCode == item.gunCode}">
+																		<button type="button" class="btn btn-info waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickGun(${item.cityCode},${item.gunCode})">${item.gunN}<br>${item.gunCount}</button>
+																		<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},${item.gunCode},'')">확인</button>
+																	</c:if>																 
+																</sec:authorize>
+																<sec:authorize access="hasRole('ROLE_USER') && !hasRole('ROLE_전국') && !hasRole('ROLE_시군구') && !hasRole('ROLE_읍면동')">
+																	<c:if test="${gunCode == item.gunCode}">
+																		<button type="button" class="btn btn-info waves-effect waves-light" style="border-width:20px; border-color:yellow; margin-bottom: 20px; border-bottom-right-radius: 0; border-top-right-radius: 0;" onclick="clickGun(${item.cityCode},${item.gunCode})">${item.gunN}<br>${item.gunCount}</button>
+																		<button type="button" class="btn btn-light" style="margin-right:20px; margin-bottom: 20px;  border-bottom-left-radius: 0; border-top-left-radius: 0; " onclick="goMember(${item.cityCode},${item.gunCode},'')">확인</button>
+																	</c:if>	
+																</sec:authorize>
+				                                           
 														</c:forEach>
 			                                        </ul>
                                                 </div>
@@ -195,12 +279,40 @@
                                                 <div class="row justify-content-center">
 													<ul class="nav nav-pills nav-justified" role="tablist">
 														<c:forEach var="item" items="${dongs}" varStatus="status"> 
-															<c:if test="${dongCode == item.dongCode}">
-																<button type="button" class="btn btn-light waves-effect dong" style="border-width:20px; border-color:yellow; "  onclick="goMember(${item.cityCode},${item.gunCode},${item.dongCode})">${item.dongN}<br>${item.dongCount}</button>
-															</c:if>
-															<c:if test="${dongCode != item.dongCode}">
-																<button type="button" class="btn btn-light waves-effect dong" onclick="clickDong(${item.cityCode},${item.gunCode},${item.dongCode})">${item.dongN}<br>${item.dongCount}</button>
-															</c:if> 
+
+																<sec:authorize access="hasRole('ROLE_ADMIN')">
+																	<c:if test="${dongCode == item.dongCode}">
+																		<button type="button" class="btn btn-light waves-effect dong"   onclick="goMember(${item.cityCode},${item.gunCode},${item.dongCode})">${item.dongN}<br>${item.dongCount}</button>
+																	</c:if>
+																	<c:if test="${dongCode != item.dongCode}">
+																		<button type="button" class="btn btn-light waves-effect dong" onclick="goMember(${item.cityCode},${item.gunCode},${item.dongCode})">${item.dongN}<br>${item.dongCount}</button>
+																	</c:if>
+																</sec:authorize> 
+																 <sec:authorize access="hasRole('ROLE_USER') && hasRole('ROLE_전국')">
+																	<c:if test="${dongCode == item.dongCode}">
+																		<button type="button" class="btn btn-light waves-effect dong"   onclick="goMember(${item.cityCode},${item.gunCode},${item.dongCode})">${item.dongN}<br>${item.dongCount}</button>
+																	</c:if>
+																	<c:if test="${dongCode != item.dongCode}">
+																		<button type="button" class="btn btn-light waves-effect dong" onclick="goMember(${item.cityCode},${item.gunCode},${item.dongCode})">${item.dongN}<br>${item.dongCount}</button>
+																	</c:if>																</sec:authorize>	
+																 <sec:authorize access="hasRole('ROLE_USER') && hasRole('ROLE_시군구')">
+																	<c:if test="${dongCode == item.dongCode}">
+																		<button type="button" class="btn btn-light waves-effect dong"   onclick="goMember(${item.cityCode},${item.gunCode},${item.dongCode})">${item.dongN}<br>${item.dongCount}</button>
+																	</c:if>
+																	<c:if test="${dongCode != item.dongCode}">
+																		<button type="button" class="btn btn-light waves-effect dong" onclick="goMember(${item.cityCode},${item.gunCode},${item.dongCode})">${item.dongN}<br>${item.dongCount}</button>
+																	</c:if>
+																</sec:authorize>	
+																 <sec:authorize access="hasRole('ROLE_USER') && hasRole('ROLE_읍면동')">
+																	<c:if test="${dongCode == item.dongCode}">
+																		<button type="button" class="btn btn-light waves-effect dong"   onclick="goMember(${item.cityCode},${item.gunCode},${item.dongCode})">${item.dongN}<br>${item.dongCount}</button>
+																	</c:if>
+																</sec:authorize>
+																<sec:authorize access="hasRole('ROLE_USER') && !hasRole('ROLE_전국') && !hasRole('ROLE_시군구') && !hasRole('ROLE_읍면동')">
+																	<c:if test="${dongCode == item.dongCode}">
+																		<button type="button" class="btn btn-light waves-effect dong"   onclick="goMember(${item.cityCode},${item.gunCode},${item.dongCode})">${item.dongN}<br>${item.dongCount}</button>
+																	</c:if>
+																</sec:authorize>
 														</c:forEach>
 			                                        </ul>
                                                 </div>
@@ -288,16 +400,12 @@ function clickDong(cityCode,gunCode,dongCode){
 
 function goMember(cityCode,gunCode,dongCode){
 
-	//alert(cityCode + '-' + gunCode + '-'+ dongCode);
-	/* 
-	var myform = $('#SPECIFICATION');
-	fromJSP = $('#fromJSP2').val(JSON.stringify(fromJSP));
-	myform.append(fromJSP);
-	var checkedList = $('#checkedList').val(global_checked_list);
-	myform.append(checkedList);
-	myform.submit(); */
-	location.href="/admin/main/member.do?cityCode="+cityCode+"&gunCode="+gunCode+"&dongCode="+dongCode+"&page=0";
-
+ 	var parm = new Array();
+	parm.push( ['cityCode', cityCode] );
+    parm.push( ['gunCode',  gunCode] );
+    parm.push( ['dongCode', dongCode] );
+    goPage("/admin/main/member.do",parm);
+    		
 }
 
 

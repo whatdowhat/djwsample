@@ -34,6 +34,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -97,25 +98,20 @@ public class DistrictController extends MotherController{
 		
 		param.put("cityCode", citys.get(0).getCityCode());
 		List<AddressCodeVO> districts =  dao.getGuns_district(param);
+		param.put("districtCode", districts.get(0).getDistrictCode());
+		List<AddressCodeVO> dongs =  dao.getDongs_district(param);
 		
-//		Map<String,String> paramS = new HashMap();
-//		modelAndView.addObject("cities", citys );
-		
-//		System.out.println("##adminmemberchartmember enter>>" +chartDate.size());
-//		Gson gson = new Gson();
-//		String gson1String = gson.toJson(chartDate);
-//		modelAndView.addObject("chartDate", gson1String);
-//		
-//		gson1String = gson.toJson(chartDate2);
-//		modelAndView.addObject("chartDate2", gson1String);
+		System.out.println("dongs count:"+dongs.size());
 		
 		modelAndView.addObject("total", total);
 		modelAndView.addObject("districtTotal", districtTotal);
 		modelAndView.addObject("citys", citys);
 		modelAndView.addObject("districts", districts);
+		modelAndView.addObject("dongs", dongs);
 		
 		modelAndView.addObject("cityCode", citys.get(0).getCityCode());
 		modelAndView.addObject("districCode", districts.get(0).getDistrictCode());
+		modelAndView.addObject("dongCode", dongs.get(0).getDongCode());
 		
 		modelAndView.setViewName("district/main");
 		return modelAndView;
@@ -133,13 +129,18 @@ public class DistrictController extends MotherController{
 		Map<String,String> param = new HashMap();
 		param.put("cityCode", inputform.getCityCode());
 		List<AddressCodeVO> districts =  dao.getGuns_district(param);
+		param.put("districtCode", String.valueOf(districts.get(0).getDistrictCode()));
+		List<AddressCodeVO> dongs =  dao.getDongs_district(param);
 		System.out.println(districts.size());
 		
 		modelAndView.addObject("citys", citys);
 		modelAndView.addObject("districts", districts);
+		modelAndView.addObject("dongs", dongs);
 		
+		System.out.println("dongs::" + dongs);
 		modelAndView.addObject("cityCode", inputform.getCityCode());
 		modelAndView.addObject("districCode", districts.get(0).getDistrictCode());
+		modelAndView.addObject("dongCode", dongs.get(0).getDongCode());
 		modelAndView.setViewName("district/ajax/target");
 		
 		return modelAndView;
@@ -147,16 +148,48 @@ public class DistrictController extends MotherController{
 	
 	
 	
-	@RequestMapping(value = "/admin/district/member.do", method = { RequestMethod.GET})
+	@RequestMapping(value = "/admin/district/getdongs", method = { RequestMethod.GET,RequestMethod.POST })
+	public ModelAndView districtgetdongs(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
+			,AddressCodeVO inputform	) throws InterruptedException{
+		
+		
+		LOGGER.debug("##getcity enter");
+		LOGGER.debug("## !!!!!!!!!{} ", inputform);
+		List<AddressCodeVO> citys = dao.getCitys();
+		
+		Map<String,String> param = new HashMap();
+		param.put("cityCode", inputform.getCityCode());
+		List<AddressCodeVO> districts =  dao.getGuns_district(param);
+		param.put("districtCode", String.valueOf(inputform.getDistrictCode()));
+		List<AddressCodeVO> dongs =  dao.getDongs_district(param);
+		System.out.println(districts.size());
+		
+		modelAndView.addObject("citys", citys);
+		modelAndView.addObject("districts", districts);
+		modelAndView.addObject("dongs", dongs);
+		
+		
+		modelAndView.addObject("cityCode", inputform.getCityCode());
+		modelAndView.addObject("districCode", inputform.getDistrictCode());
+		modelAndView.addObject("dongCode", dongs.get(0).getDongCode());
+		modelAndView.setViewName("district/ajax/target");
+		
+		return modelAndView;
+	}
+	
+//	@RequestMapping(value = "/admin/district/member.do", method = { RequestMethod.GET})
+	@PostMapping(value = "/admin/district/member.do")
 	public ModelAndView memberlist(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
 			) {		
 		
 		LOGGER.debug("##admindistrictlistfrommain enter");
 		String cityCode = Optional.ofNullable(req.getParameter("cityCode")).orElse("");
 		String districtCode = Optional.ofNullable(req.getParameter("districtCode")).orElse("");
+		String dongCode = Optional.ofNullable(req.getParameter("dongCode")).orElse("");
 		
 		modelAndView.addObject("cityCode", cityCode);
 		modelAndView.addObject("districtCode",districtCode);
+		modelAndView.addObject("dongCode",dongCode);
 		
 		modelAndView.setViewName("district/member");
 		return modelAndView;
@@ -181,12 +214,15 @@ public class DistrictController extends MotherController{
 		Map<String, String[]> m = req.getParameterMap();
 		
 		Map<String,Object> condition = searchConvert(m);
+		
 		Map<String,Object> param = new HashMap<String, Object>();
-//		param.put("cityCode", String.valueOf(condition.get("cityCode")));
 		param.put("cityCode", condition.get("cityCode"));
-//		param.put("districtCode",String.valueOf(condition.get("districtCode")));
 		param.put("districtCode",condition.get("districtCode"));
+		param.put("dongCode", condition.get("dongCode"));
+		
 		Integer total =  dao.getmember_fromdistrict_count(param);
+		System.out.println("condition::" + condition);
+		System.out.println("param::" + param);
 //		String 
 //		query+=" limit " + pageable.getPageNumber() * pageable.getPageSize() + "," + pageable.getPageSize();
 		
@@ -217,6 +253,9 @@ public class DistrictController extends MotherController{
 		param = m.get("vo[districtCode]");
 		result.put("districtCode",param[0]);
 //		
+		param = m.get("vo[dongCode]");
+		result.put("dongCode",param[0]);
+		
 		System.out.println("convert search condition::"+result);
 		
 		return result;

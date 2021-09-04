@@ -9,14 +9,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.whatdo.keep.vo.GroupVO;
+import com.whatdo.keep.vo.InnerMessage;
+import com.whatdo.keep.vo.InnerNotice;
 import com.whatdo.keep.vo.MemberVO;
 
 @Repository
-public interface MemberVORepository extends JpaRepository<MemberVO, Long>{
+public interface InnerNoticeVORepository extends JpaRepository<InnerNotice, Long>{
 
-	GroupVO findBySeq(Long seq);
-	Page<MemberVO> findAll(Specification<MemberVO> condition,Pageable pageable);
-	List<MemberVO> findAll(Specification<MemberVO> condition);
-	MemberVO findByPhone(String phone);
+	
+	Page<InnerNotice> findAll(Specification<InnerNotice> condition,Pageable pageable);
+	List<InnerNotice> findAll(Specification<InnerNotice> condition);
 	
 }

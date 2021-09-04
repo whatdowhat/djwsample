@@ -44,34 +44,42 @@
                                     <!-- end row -->
                                     <!-- <h4 class="font-size-18 text-muted mt-2 text-center">Welcome Back !</h4> -->
                                     <!-- <p class="mb-5 text-center">Sign in to continue to Upzet.</p> -->
-                                    <div class="form-horizontal" action="index.html">
-
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="mb-4">
-                                                    <label class="form-label" for="username">로그인 아이디</label>
-                                                    <input type="text" class="form-control" id="username" placeholder="Enter username">
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label class="form-label" for="userpassword">패스워드</label>
-                                                    <input type="password" class="form-control" id="userpassword" placeholder="Enter password">
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="customControlInline">
-                                                            <label class="form-label" class="form-check-label" for="customControlInline">로그인 아이디 기억하기</label>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                                <div class="d-grid mt-4">
-                                                    <button class="btn btn-primary waves-effect waves-light" onclick="login()">로그인</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
+                                    
+									<form:form class="form-signin" method="post" action="/login.do">
+			
+			                                    <div class="form-horizontal">
+			
+			                                        <div class="row">
+			                                            <div class="col-md-12">
+			                                                <div class="mb-4">
+			                                                    <label class="form-label" for="username">로그인 아이디</label>
+			                                                    <input type="text" class="form-control" name="id"  id="id" placeholder="Enter username">
+			                                                </div>
+			                                                <div class="mb-4">
+			                                                    <label class="form-label" for="userpassword">패스워드</label>
+			                                                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter password">
+			                                                </div>
+			
+			<!--                                                 <div class="row">
+			                                                    <div class="col">
+			                                                        <div class="form-check">
+			                                                            <input type="checkbox" class="form-check-input" id="customControlInline">
+			                                                            <label class="form-label" class="form-check-label" for="customControlInline">로그인 아이디 기억하기</label>
+			                                                        </div>
+			                                                    </div>
+			                                                    
+			                                                </div> -->
+			                                                <div class="d-grid mt-4">
+			                                                    <button class="btn btn-primary waves-effect waves-light" onclick="login()">로그인</button>
+			                                                </div>
+			                                            </div>
+			                                        </div>
+			                                    </div>
+			
+			
+									</form:form>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -95,8 +103,20 @@
     
 <script type="text/javascript">
 
+function functionname(event){
+	
+	$("#userpassword").val(event.value);
+}
+
+
+var errorMessage = '${errorMessage}';
 
 $(document).ready(function() {
+	if(errorMessage!=''){
+		alert(errorMessage);	
+	}else{
+		
+	}
 	
 });
 

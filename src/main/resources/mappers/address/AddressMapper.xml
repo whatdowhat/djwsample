@@ -48,6 +48,28 @@
    
 	</select>
 	
+	<select id="getCitys_user" parameterType="java.util.HashMap" resultType="AddressCodeVO">
+		SELECT a.cityCode  , a.gunCode , a.dongCode, a.cityN , a.gunN , a.dongN , IFNULL(tem.cityCount,0) as cityCount
+        FROM address_code AS a 
+        LEFT JOIN  
+        (
+        		select tem.* from (
+				select count(a.cityCode) as cityCount ,a.cityCode 
+				from web_member AS a 
+				group by a.cityCode
+				) as tem
+        ) as tem
+        
+		ON a.cityCode = tem.cityCode
+
+        where 1=1 
+		and tem.cityCode= #{cityCode}
+        
+		GROUP BY a.cityCode
+        <!-- order by cityN asc -->
+	</select>
+	
+	
 
 <!-- 	<select id="getGus"  parameterType="java.util.HashMap"  resultType="AddressCodeVO">
 		SELECT a.cityCode  , a.gunCode , a.dongCode, a.cityN , a.gunN , a.dongN FROM koreacrpgp.address_code AS a
@@ -86,6 +108,37 @@
    
 	</select>
 	
+		<select id="getGus_user"  parameterType="java.util.HashMap"  resultType="AddressCodeVO">
+		SELECT a.cityCode  , a.gunCode , a.dongCode, a.cityN , a.gunN , a.dongN , IFNULL(tem.gunCount,0) as gunCount
+       
+        FROM address_code AS a 
+        LEFT JOIN  
+        
+        (
+			select tem.* from (
+				select a.cityCode , a.gunCode ,a.gunN , count(a.gunCode) as gunCount
+				from web_member AS a 
+				group by a.cityCode ,a.gunCode
+				having 1=1
+				
+				 and a.cityCode = #{cityCode}
+		   
+			) as tem
+        ) as tem
+        
+
+		ON a.cityCode = tem.cityCode
+        and  a.gunCode = tem.gunCode
+
+        where 1=1 
+		and a.cityCode = #{cityCode}
+		and a.gunCode = #{gunCode}
+        
+		GROUP BY a.cityCode ,a.gunCode 
+        order by gunN asc
+   
+	</select>
+	
 <!-- 	<select id="getDongs"  parameterType="java.util.HashMap"  resultType="AddressCodeVO">
 		SELECT a.cityCode  , a.gunCode , a.dongCode, a.cityN , a.gunN , a.dongN FROM koreacrpgp.address_code AS a
 		GROUP BY a.cityCode , a.gunCode , a.dongCode
@@ -96,7 +149,6 @@
 
 	<select id="getDongs"  parameterType="java.util.HashMap"  resultType="AddressCodeVO">
 		SELECT a.cityCode  , a.gunCode , a.dongCode, a.cityN , a.gunN , a.dongN , IFNULL(tem.dongCount,0) as dongCount
-       
         FROM address_code AS a 
         LEFT JOIN  
         
@@ -124,9 +176,38 @@
          
 		GROUP BY a.cityCode , a.gunCode ,a.dongCode 
         order by dongN asc
-   
 	</select>
-	
+	<select id="getDongs_user"  parameterType="java.util.HashMap"  resultType="AddressCodeVO">
+		SELECT a.cityCode  , a.gunCode , a.dongCode, a.cityN , a.gunN , a.dongN , IFNULL(tem.dongCount,0) as dongCount
+        FROM address_code AS a 
+        LEFT JOIN  
+        
+        (
+			select tem.* from (
+				select a.cityCode , a.gunCode ,a.gunN , a.dongCode , count(a.dongCode) as dongCount
+				from web_member AS a 
+				group by a.cityCode ,a.gunCode ,a.dongCode
+				having 1=1
+				
+				 and a.cityCode = #{cityCode}
+                 and a.gunCode = #{gunCode}
+		   
+			) as tem
+        ) as tem
+        
+        
+		ON a.cityCode = tem.cityCode
+        and  a.gunCode = tem.gunCode
+        and  a.dongCode = tem.dongCode
+
+        where 1=1 
+		and a.cityCode = #{cityCode}
+		and a.gunCode = #{gunCode}
+		and a.dongCode = #{dongCode}
+         
+		GROUP BY a.cityCode , a.gunCode ,a.dongCode 
+        order by dongN asc
+	</select>
 		<select id="cityVal"  parameterType="java.util.HashMap"  resultType="String">
 		SELECT 
 			case WHEN count(a.cityCode) >= 1 THEN a.cityCode 
@@ -390,6 +471,35 @@
 	group by districtName, districtCode
 
 	</select>
+	
+	
+		<select id="getDongs_district" resultType="AddressCodeVO">
+			SELECT 
+				z1.*, z2.district_name districtName ,z2.code districtCode,
+                (
+					select count(seq) from web_member m1 
+					where 1=1 
+                    and m1.cityCode = #{cityCode}
+                    and m1.gunCode = z1.gunCode
+                    and m1.dongCode = z1.dongCode
+                    
+				) dongCount
+                
+			FROM
+				(SELECT 
+					cityCode, cityN, gunCode, gunN,  dongCode, dongN, district_code
+				FROM
+					koreacrpgp.address_code
+				WHERE
+					1 = 1 AND 
+					cityCode =  #{cityCode}
+                    and district_code = #{districtCode}
+				GROUP BY cityCode , cityN , gunCode , gunN , dongCode, dongN, district_code) z1
+					LEFT JOIN
+				district_code z2 ON z1.district_code = z2.code
+                
+
+	</select>
 
 	<select id="getdistrict_district" resultType="AddressCodeVO">
 		SELECT 
@@ -405,14 +515,18 @@
 		SELECT count(seq) FROM koreacrpgp.web_member
 		where 1=1
 		and cityCode = #{cityCode}
-		
+
 		<if test="districtCode != '' ">
-		and gunCode = (select gunCode from address_code
-						where 1=1 
-						and district_code = #{districtCode}
-						group by gunCode)
+			and districtCode =  #{districtCode}
 		</if>
 		<if test="districtCode == '' ">
+		
+		</if>
+
+		<if test="dongCode != '' ">
+			and dongCode = #{dongCode}
+		</if>
+		<if test="dongCode == '' ">
 		
 		</if>
 		
@@ -426,12 +540,16 @@
 		and cityCode = #{cityCode}
 		
 		<if test="districtCode != '' ">
-		and gunCode = (select gunCode from address_code
-						where 1=1 
-						and district_code = #{districtCode}
-						group by gunCode)
+			and districtCode =  #{districtCode}
 		</if>
 		<if test="districtCode == '' ">
+		
+		</if>
+
+		<if test="dongCode != '' ">
+			and dongCode = #{dongCode}
+		</if>
+		<if test="dongCode == '' ">
 		
 		</if>
 		limit #{startP} , #{endP}
@@ -439,7 +557,50 @@
 		
 	</select>
 
-				
+
+	<select id="search_districtCode" resultType="AddressCodeVO">
+	
+		select  code districtCode,district_name districtName  from district_code 
+		
+		where 1=1 
+		and code = (SELECT district_code FROM koreacrpgp.address_code
+			where 1=1 
+			and cityCode = #{cityCode}  
+			and gunCode  = #{gunCode}   
+			and dongCode = #{dongCode}  
+		)
+
+	</select>
+	
+	<!-- innser message -->
+	<select id="getMessages_count" parameterType="java.util.HashMap"  resultType="Integer">
+		
+		SELECT count(seq) FROM koreacrpgp.web_innermessage
+		where 1=1
+		
+		<if test="isAdmin == 'true' ">
+			<!-- and  (frommemberseq = '148' or tomemberseq = '148') -->
+		</if>
+		<if test="isAdmin == 'false' ">
+			and  (frommemberseq = #{memberseq} or tomemberseq = #{memberseq})
+		</if>
+	   
+	</select>
+	<select id="getMessages" parameterType="java.util.HashMap"  resultType="InnerMessage">
+		
+		SELECT * FROM koreacrpgp.web_innermessage
+		where 1=1
+		
+		<if test="isAdmin == 'true' ">
+			<!-- and  (frommemberseq = '148' or tomemberseq = '148') -->
+		</if>
+		<if test="isAdmin == 'false' ">
+			and  (frommemberseq = #{memberseq} or tomemberseq = #{memberseq})
+		</if>
+	   <!-- order by regDt desc -->
+	<!-- limit #{startP} , #{endP} -->	   
+	</select>
+
 
 
 </mapper>

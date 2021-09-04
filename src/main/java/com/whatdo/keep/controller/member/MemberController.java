@@ -3,6 +3,7 @@ package com.whatdo.keep.controller.member;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -49,6 +50,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.whatdo.keep.config.CryptoOnewayPasswrod;
 import com.whatdo.keep.controller.MotherController;
 import com.whatdo.keep.service.dao.AddressCodeDAO;
 import com.whatdo.keep.util.FileDownload;
@@ -56,6 +58,7 @@ import com.whatdo.keep.vo.AddressCodeVO;
 import com.whatdo.keep.vo.ChartDataVO;
 import com.whatdo.keep.vo.FileuploadVO;
 import com.whatdo.keep.vo.GroupVO;
+import com.whatdo.keep.vo.InnerMessage;
 import com.whatdo.keep.vo.MemberVO;
 
 
@@ -130,7 +133,7 @@ public class MemberController extends MotherController{
 		List<ChartDataVO> chartDate = dao.getenterchart01(param);
 		List<ChartDataVO> chartDate2 = dao.getenterchart02(param);
 		
-		
+		LOGGER.debug("##endDate adminmemberchartmember "+param);
 		List<AddressCodeVO> citys = dao.getCitysChart(param);
 		Map<String,String> paramS = new HashMap();
 		modelAndView.addObject("cities", citys );
@@ -279,6 +282,15 @@ public class MemberController extends MotherController{
     	    		
     	    	}else {
     	    		insertList.get(i).setRegDt(new Date());
+    	    		String password = "";
+    	    				try {
+    	    					password = CryptoOnewayPasswrod.encryptPassword(insertList.get(i).getPhone(),insertList.get(i).getPhone());
+    	    				} catch (Exception e) {
+    	    					// TODO Auto-generated catch block
+    	    					e.printStackTrace();
+    	    				}
+    	    		insertList.get(i).setPhonePassword(password);
+    	    		
     	    		memVoRepository.save(insertList.get(i));
     	    		outcount = outcount++;
     	    	}
@@ -288,6 +300,67 @@ public class MemberController extends MotherController{
     	    Map<String,Object> result = new HashMap<String, Object>();
     	    result.put("incomcount", incomcount);
     	    result.put("outcount", outcount);
+    	    return result;
+    	    
+    }
+    
+    
+    @RequestMapping(value = "/admin/send/message.do", method = RequestMethod.POST)
+    @ResponseBody
+    public Map sendmessagetxt(Model model, HttpServletRequest req, HttpServletResponse res,
+			HttpSession session,@RequestParam Map<Object, String> param,Principal principal) throws Exception {
+
+    	 String json = param.get("list").toString();
+    	    ObjectMapper mapper = new ObjectMapper();
+    	    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);	// 없는 필드로 인한 오류 무시
+    	    
+    	    List<MemberVO> insertList = null;
+    	    try{
+    	    	insertList = mapper.readValue(json, new TypeReference<ArrayList<MemberVO>>(){});
+    	    }catch(Exception e){
+    	    	e.printStackTrace();
+    	    }
+    	    
+    	    Map<String,Object> condition = new HashMap<String, Object>();
+    	    System.out.println(insertList);
+    	    System.out.println("insertList :: "+insertList);
+    	    
+    	    
+    	    int innerC = insertList.size();
+    	    int outC = 0;
+    	    
+    		Map<String,String> auth =  getAuthentics();
+    		boolean isAdmin = auth.get("ROLE_ADMIN") !=null ? true : false;
+    		boolean user = auth.get("ROLE_USER") !=null ? true : false;
+    	    MemberVO memberVO = memVoRepository.findByPhone(principal.getName());
+    	    for(int i=0; i<insertList.size();i++) {
+    	    	
+    	    	InnerMessage vo = new InnerMessage();
+    	    	if(isAdmin) {
+    	    		vo.setFrommemberseq(new Long(0));
+    	    		vo.setFrommemberPhone("00000000000");
+    	    		vo.setFrommemberName("ADMIN");
+    	    	}else {
+    	    		vo.setFrommemberseq(memberVO.getSeq());
+    	    		vo.setFrommemberPhone(memberVO.getPhone());
+    	    		vo.setFrommemberName(memberVO.getName());
+    	    	}
+    	    	
+    	    	
+    	    	vo.setTomemberName(insertList.get(i).getName());
+    	    	vo.setTomemberPhone(insertList.get(i).getPhone());
+    	    	vo.setTomemberseq(insertList.get(i).getSeq());
+    	    	vo.setMessageTxt(insertList.get(i).getMessageTxt());
+    	    	vo.setMessageTitle(insertList.get(i).getMessageTitle());
+    	    	
+    	    	vo.setRegDt(new Date());
+    	    	vo = innerMessageVORepository.save(vo);
+    	    	if(vo!=null) outC++;
+    	    }
+    	    
+    	   
+    	    Map<String,Object> result = new HashMap<String, Object>();
+    	    result.put("result", innerC == outC);
     	    return result;
     	    
     }
@@ -547,6 +620,23 @@ public class MemberController extends MotherController{
 		LocalDate l = LocalDate.parse(inputform.getEndDate());
 		Date regd = Date.from(l.atStartOfDay(ZoneId.systemDefault()).toInstant());
 		inputform.setRegDt(regd);
+		
+		Map<String,String> param = new HashMap();
+		param.put("cityCode", inputform.getCityCode());
+		param.put("gunCode", inputform.getGunCode());
+		param.put("dongCode", inputform.getDongCode());
+		AddressCodeVO getvo = dao.search_districtCode(param);
+		
+		inputform.setDistrictCode(getvo.getDistrictCode());
+		inputform.setDistrictName(getvo.getDistrictName());
+		String password = "";
+				try {
+					password = CryptoOnewayPasswrod.encryptPassword(inputform.getPhone(),inputform.getPhone());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		inputform.setPhonePassword(password);
 		
 		inputform.setDetailAddress(inputform.getCityN()+" "+inputform.getGunN()+" "+inputform.getDongN()+" "+inputform.getDetailAddress());
 		MemberVO vo = memVoRepository.save(inputform);

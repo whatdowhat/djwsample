@@ -12,8 +12,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,16 +27,17 @@ import com.google.gson.JsonElement;
 import com.whatdo.keep.config.ApplicationContextConfig;
 import com.whatdo.keep.controller.group.SpecificationGroupVO;
 import com.whatdo.keep.repository.GroupVORepository;
+import com.whatdo.keep.repository.MemberVORepository;
 import com.whatdo.keep.repository.SystemCommonVORepository;
 import com.whatdo.keep.repository.TestVORepository;
 import com.whatdo.keep.vo.GroupVO;
+import com.whatdo.keep.vo.MemberVO;
 
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes=ApplicationContextConfig.class)
-@PropertySource(value = {"classpath:config.properties", "classpath:web.properties"})
-public class JPATest2 {
+public class JPATest3 {
 
 	@Autowired
 	private TestVORepository testVORepository;
@@ -46,42 +45,25 @@ public class JPATest2 {
 	@Autowired
 	private SystemCommonVORepository systemCommonVORepository;
 
-	private static Logger LOGGER = LoggerFactory.getLogger(JPATest2.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(JPATest3.class);
 
-	@Value("${config.fileuploadUrl}")
-	private String fileuploadUrl;
 
-	@Value("${web.administrator}")
-	private String administrator;
-	
 	@Autowired
 	private GroupVORepository groupVORepository;
+	
+	@Autowired
+	private MemberVORepository membervor;
 	
 	@Test
 	public void test() throws JsonProcessingException {
 
 		
-		System.out.println(fileuploadUrl);
-		System.out.println(administrator);
 		
-//		Map<String,Object> condition = new HashMap();//전체 검색
-//		PageRequest p = PageRequest.of(0, 100);
-//		Page<GroupVO> page = groupVORepository.findAll(SpecificationGroupVO.withCondition(condition), p);
-//	      
-//		System.out.println("$$$$$" + page.getContent().size());		
-//		
-//		List<GroupVO> list = new ArrayList();
-//		list = page.getContent();
-//		JsonArray array = new JsonArray(list.size());
-//		Gson gson = new Gson();
-//		ObjectMapper mapper = new ObjectMapper();
-//		for(int i =0; i<list.size();i++) {
-//			
-//			String tem =  mapper.writeValueAsString(list.get(i));
-//			array.add(tem);
-//			System.out.println(tem);
-//		}
-//		System.out.println(array);
+		MemberVO result =  membervor.findByPhone("01033323332");
+		System.out.println(result);
+		
+		
+		
 		
 	}
 

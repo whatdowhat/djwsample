@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.whatdo.keep.service.dao.AddressCodeDAO;
 import com.whatdo.keep.vo.AddressCodeVO;
 import com.whatdo.keep.vo.ChartDataVO;
+import com.whatdo.keep.vo.InnerMessage;
 import com.whatdo.keep.vo.MemberVO;
 
 @Repository
@@ -119,6 +120,11 @@ public class AddressCodeDAOImpl implements AddressCodeDAO{
 		return sqlsession.selectList( NAMESPACE+"getGuns_district",param);
 	}
 
+	@Override
+	public List<AddressCodeVO> getDongs_district(Map<String, String> param) {
+		return sqlsession.selectList( NAMESPACE+"getDongs_district",param);
+	}
+
 
 	@Override
 	public List<MemberVO> getmember_fromdistrict(Map<String, Object> param) {
@@ -129,6 +135,41 @@ public class AddressCodeDAOImpl implements AddressCodeDAO{
 	@Override
 	public Integer getmember_fromdistrict_count(Map<String, Object> param) {
 		return sqlsession.selectOne(NAMESPACE+"getmember_fromdistrict_count",param);
+	}
+
+
+	@Override
+	public AddressCodeVO search_districtCode(Map<String, String> param) {
+		return sqlsession.selectOne(NAMESPACE+"search_districtCode",param);
+	}
+
+
+	@Override
+	public List<AddressCodeVO> getCitys_user(Map<String, String> param) {
+		return sqlsession.selectList( NAMESPACE+"getCitys_user",param);
+	}
+
+
+	@Override
+	public List<AddressCodeVO> getGus_user(Map<String, String> param) {
+		return sqlsession.selectList( NAMESPACE+"getGus_user",param);
+	}
+
+
+	@Override
+	public List<AddressCodeVO> getDongs_user(Map<String, String> param) {
+		return sqlsession.selectList( NAMESPACE+"getDongs_user",param);
+	}
+
+
+	@Override
+	public List<InnerMessage> getMessages(Map<String, Object> param) {
+		return sqlsession.selectList( NAMESPACE+"getMessages",param);
+	}
+
+	@Override
+	public Integer getMessages_count(Map<String, Object> param) {
+		return sqlsession.selectOne( NAMESPACE+"getMessages_count",param);
 	}
 
 

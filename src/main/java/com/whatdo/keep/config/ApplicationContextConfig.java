@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
@@ -42,11 +43,13 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 //@ComponentScan(basePackages = "com.whatdo.keep.*") //서버기동용
+//@PropertySource(value = {"classpath:config.properties", "classpath:web.properties"})
 @ComponentScan(basePackages = "com.whatdo.keep.config.* com.whatdo.keep.repository.* com.whatdo.keep.vo.*") //junit test용
 @EnableJpaRepositories(basePackages = "com.whatdo.keep.*")
 @Configuration
 @EnableWebMvc
 @EnableSpringDataWebSupport
+@ImportResource({"/WEB-INF/config/dispatcher-servlet.xml", "WEB-INF/config/spring/context-*.xml"})
 @PropertySource(value = {"classpath:config.properties", "classpath:web.properties"})
 public class ApplicationContextConfig implements WebMvcConfigurer {
 
@@ -83,7 +86,7 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 	private String sampleFilePath;
 	
 	@Autowired
-	Environment env;
+	Environment environment;
 	
 	
 	@Autowired
@@ -95,6 +98,11 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 	@Autowired
 	HttpSession httpSession;
 	
+	
+	@Bean
+	public ApplicationContextProvider applicationContextProvider() {
+		 return new ApplicationContextProvider();
+	}
 	
 	
 //	@Bean
@@ -171,7 +179,10 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 		props.setProperty("hibernate.hbm2ddl.auto", "update");
 		props.setProperty("hibernate.use_sql_comments", "true");
 		props.setProperty("logging.level.org.hibernate.type.descriptor.sql", "trace");
-		
+		props.setProperty("tracespring.jpa.show-sql", "true");
+		props.setProperty("spring.jpa.properties.hibernate.format_sql", "true");
+		props.setProperty("spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation", "true");
+				
 		containerEntityManagerFactoryBean.setJpaProperties(props);
 		return containerEntityManagerFactoryBean;
 	}

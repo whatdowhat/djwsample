@@ -28,7 +28,7 @@
                             <div class="col-12">
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                                     <h4 class="mb-sm-0">당원현황</h4>
-									
+
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">당원관리</a></li>
@@ -49,7 +49,6 @@
                                     <div class="card-body">
                                     
 										<p class="card-title-desc">검색조건을 입력하지 않는 경우 전체 찾기 입니다.</p>
-        
                                         <div id="accordion">
                                             <div class="card mb-0">
                                                 <div class="card-header" id="headingTwo">
@@ -197,9 +196,10 @@
                                         <div class="table-responsive">
 	                                        <div style="margin-bottom: 10px">
 	                                        <!-- table start -->
-		                                        <table id="datatable"    class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+		                                        <table id="datatable"    class="table table-bordered dt-responsive nowrap display select" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 		                                            <thead>
 		                                            <tr>
+		                                             	<th><input type="checkbox" name="selectBoxTargetAll" id="selectBoxTargetAll" value="all" onclick="selectAll()"></th>
 		                                                <th>#</th>
 		                                                <th>당원(일반/책임)</th>
 		                                                <th>이름</th>
@@ -234,13 +234,15 @@
         	<jsp:include page="../template/footer.jsp"></jsp:include>
 
         </div>
-        
-
     </body>
 <script type="text/javascript">
 
+
 $(document).ready(function() {
     
+	
+
+	
 	
 var inputform = {};
 	
@@ -275,6 +277,7 @@ var inputform = {};
     var url = "/admin/member/listtable.do";
     $.fn.dataTable.ext.errMode = 'none';
     $('#datatable').DataTable({
+    	
     	paging : true,
     	info: true,
     	searching: false,
@@ -284,7 +287,12 @@ var inputform = {};
     	"processing" : true,
     	"destroy" : true,
     	"lengthChange" : true,
-        "columns" : [ 
+        "columns" : [
+        	{"data" : "checked",     	render: function (data, type, full, meta){
+        		$("#selectBoxTargetAll").prop("checked",false);
+     	       return '<input type="checkbox" name="selectBoxTarget" id="selectBoxTarget"  value="'+full.seq+','+full.name+','+full.phone+'">'
+        	}},
+        	
         	{"data" : "seq",render:function(a,b,c,d){
         		return d.row + d.settings._iDisplayStart +1;
         	}},        	
@@ -303,8 +311,6 @@ var inputform = {};
         	{"data" : "recommandPhone"},
         	/* {"data" : "regDt"}, */
         	{"data" : "regDt",render:function(a,b,c,d){
-        		
-        		
         		if(c.regDt != '' && c.regDt != undefined){
         			//var d = new Date(c.yyyymmdd);
         			return formatDate(c.regDt);
@@ -316,6 +322,15 @@ var inputform = {};
         		
         	}},  
        	],
+       	'columnDefs': [{
+       	   'targets': 0,
+       	   'searchable':false,
+       	   'orderable':false,
+       	   'className': 'dt-body-center',
+       	   'render': function (data, type, full, meta){
+       	       return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+       	   }
+       	}],
         "ajax" : {
         	type : "POST",
             url : url,
@@ -331,10 +346,10 @@ var inputform = {};
 });
 
 
+
 function search(){
 	
 	var inputform = {};
-	
 	inputform.name = $("#name").val();
 	inputform.yyyymmdd = $("#yyyymmdd").val();
 	inputform.phone = $("#phone").val();
@@ -357,9 +372,6 @@ function search(){
 
 	inputform.startDate = $("#startDate").val();
 	inputform.endDate = $("#endDate").val();
-
-	
-	console.dir(inputform);
 	
     var url = "/admin/member/listtable.do";
     $('#datatable').DataTable({
@@ -373,6 +385,10 @@ function search(){
     	"destroy" : true,
     	"lengthChange" : true,
         "columns" : [ 
+        	{"data" : "checked",     	render: function (data, type, full, meta){
+        		$("#selectBoxTargetAll").prop("checked",false);
+     	       return '<input type="checkbox" name="selectBoxTarget" id="selectBoxTarget"  value="'+full.seq+','+full.name+','+full.phone+'">'
+        	}},
         	{"data" : "seq",render:function(a,b,c,d){
         		return d.row + d.settings._iDisplayStart +1;
         	}},        	
@@ -392,7 +408,6 @@ function search(){
         	/* {"data" : "regDt"}, */
         	{"data" : "regDt",render:function(a,b,c,d){
         		
-        		
         		if(c.regDt != '' && c.regDt != undefined){
         			//var d = new Date(c.yyyymmdd);
         			return formatDate(c.regDt);
@@ -404,6 +419,15 @@ function search(){
         		
         	}},  
        	],
+       	'columnDefs': [{
+        	   'targets': 0,
+        	   'searchable':false,
+        	   'orderable':false,
+        	   'className': 'dt-body-center',
+        	   'render': function (data, type, full, meta){
+        	       return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+        	   }
+        	}],
         "ajax" : {
         	type : "POST",
             url : url,

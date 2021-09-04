@@ -1,7 +1,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"  isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<c:set var="path" value="${requestScope['javax.servlet.forward.servlet_path']}" /> 
 
 
 <!doctype html>
@@ -39,8 +40,8 @@
                 <div class="navbar-header">
                     <div class="d-flex">
                         <!-- LOGO -->
-                        <div class="navbar-brand-box text-center">
-                            <a href="#" class="logo logo-dark">
+                        <div class="navbar-brand-box text-center"> 
+                            <a href="/admin/loginAfter.do" class="logo logo-dark">
                                 <span class="logo-sm">
                                     <img src="/resources/assets/images/logo-sm.png" alt="logo-sm-dark" height="22">
                                 </span>
@@ -49,7 +50,7 @@
                                 </span>
                             </a>
 
-                            <a href="#" class="logo logo-light">
+                            <a href="/admin/loginAfter.do" class="logo logo-light">
                                 <span class="logo-sm">
                                     <img src="/resources/assets/images/logo-sm.png" alt="logo-sm-light" height="22">
                                 </span>
@@ -57,6 +58,8 @@
                                     <img src="/resources/assets/images/logo-light.png" alt="logo-light" height="24">
                                 </span>
                             </a>
+<!--                            		 <br>
+                           		  노출할 이미지 또는 텍스트를 주세요. -->		
                         </div>
 
                         <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect" id="vertical-menu-btn">
@@ -87,7 +90,72 @@
                                 </form>
                             </div>
                         </div>
+						
+						<div class="dropdown d-inline-block">
+						
+                            <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                
+                                <sec:authorize access="hasAuthority('ROLE_ADMIN')">
+                                
+                                </sec:authorize>
+					            <sec:authorize access="hasAuthority('ROLE_USER')">
+	                                <c:if test="${member.noticeChecked}">
+	                        		
+	                        		</c:if>
+	                        		<c:if test="${!member.noticeChecked}">
+	                        			<span class="noti-dot"></span> <!-- 알람 표시 -->
+	                        		</c:if>
+                                </sec:authorize>
+                                <i class="ri-notification-3-line"></i>
+                        		                
+                                
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown" style="">
+                                <div class="p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h6 class="m-0"> 공지사항 </h6>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="/admin/notice/innernotice.do" class="small"> 바로가기</a>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <div data-simplebar="init" style="max-height: 230px;"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" style="height: auto; overflow: hidden;"><div class="simplebar-content" style="padding: 0px;">
+                                    
+                                    
+                                 <sec:authorize access="hasAuthority('ROLE_ADMIN')">
+                                
+                                </sec:authorize>
+ 								<sec:authorize access="hasAuthority('ROLE_USER')">
+	                                <c:forEach var="item" items="${notices}" varStatus="status">
+											
+									<a href="/admin/notice/innernotice.do" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar-xs">
+                                                    <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                                        <i class="ri-shopping-cart-line"></i>
+                                                    </span>
+                                                </div>
+                                            </div>                                
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">${item.noticeTitle }</h6>
+                                                <div class="font-size-12 text-muted">
+                                                    <p class="mb-1">${item.noticeText}</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> ${item.regDt}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+															
+									</c:forEach>
+                                </sec:authorize>
+
+                                </div></div></div></div><div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: hidden;"><div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none; height: 135px;"></div></div></div>
+                            </div>
+                        </div>
 
                         <div class="dropdown d-none d-lg-inline-block ms-1">
                             <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
@@ -98,17 +166,30 @@
                         <div class="dropdown d-inline-block user-dropdown">
                             <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						
+	                   <c:if test="${path  eq '/admin/member/list.do' }">
+	                                <button type="button" class="btn btn-primary" style="margin-left: auto;" onclick="snedMessage()">쪽지 보내기</button>
+ 									<!-- <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#myModal">메세지 보내기</button> -->
+	                                
+	                   </c:if> 
+	                   <c:if test="${path  eq '/admin/message/innerMessage.do' }">
+	                                <button type="button" class="btn btn-primary" style="margin-left: auto;" onclick="snedMessage()">쪽지 보내기</button>
+ 									<!-- <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#myModal">메세지 보내기</button> -->
+	                                
+	                   </c:if> 	           
+	                   <c:if test="${path  eq '/admin/main/member.do' }">
+	                                <button type="button" class="btn btn-primary" style="margin-left: auto;" onclick="snedMessage()">쪽지 보내기</button>
+ 									<!-- <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#myModal">메세지 보내기</button> -->
+	                                
+	                   </c:if> 	           	                   
+	                           
+	                   
                                 <span class="d-none d-xl-inline-block ms-1">더보기</span>
                                 <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <!-- item-->
-                                <a class="dropdown-item" href="#"><i class="ri-user-line align-middle me-1"></i> Profile</a>
-                                <a class="dropdown-item" href="#"><i class="ri-wallet-2-line align-middle me-1"></i> My Wallet</a>
-                                <a class="dropdown-item d-block" href="#"><span class="badge bg-success float-end mt-1">11</span><i class="ri-settings-2-line align-middle me-1"></i> Settings</a>
-                                <a class="dropdown-item" href="#"><i class="ri-lock-unlock-line align-middle me-1"></i> Lock screen</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-danger" href="#"><i class="ri-shut-down-line align-middle me-1 text-danger"></i> Logout</a>
+                                
+                                <a class="dropdown-item text-danger" href="/logout.do"><i class="ri-shut-down-line align-middle me-1 text-danger"></i> Logout</a>
                             </div>
                         </div>
 
@@ -133,6 +214,16 @@
     
 <script type="text/javascript">
 
+var errorMessage = '${errorMessage}';
+
+$(document).ready(function() {
+	if(errorMessage!=''){
+		alert(errorMessage);	
+	}else{
+		
+	}
+	
+});
 
 </script>
     

@@ -62,6 +62,9 @@ public class MemberVO extends InputForm {
 	@Column(name = "phone")
 	private String phone;
 	
+	@Column(name = "phonePassword")
+	private String phonePassword;
+	
 	@Column(name = "signPad")
 	private String signPad;
 	
@@ -112,6 +115,13 @@ public class MemberVO extends InputForm {
 	@Column(name = "dongN")
 	private String dongN;
 	
+	@Column(name = "districtCode")
+	private Integer districtCode;
+	
+	@Column(name = "districtName")
+	private String districtName;
+	
+	
 	@Column(name = "regDt")
 	private Date regDt;
 	@Column(name = "editDt")
@@ -160,6 +170,17 @@ public class MemberVO extends InputForm {
 	private boolean recommandPhoneval;
 	@Transient
 	private boolean adminAuthval;
+	
+	
+	@Transient
+	private String messageTxt;
+	
+	@Transient
+	private String messageTitle;
+	
+	private boolean checked;
+	private boolean noticeChecked;
+
 	@Override
 	public String toString() {
 		return "MemberVO [seq=" + seq + ", adminAuth=" + adminAuth + ", mrank=" + mrank + ", dangwon=" + dangwon
@@ -170,17 +191,20 @@ public class MemberVO extends InputForm {
 				+ ", representiveRankName=" + representiveRankName + ", representiveName=" + representiveName
 				+ ", representiveCode=" + representiveCode + ", yyyymmdd=" + yyyymmdd + ", sojeji=" + sojeji
 				+ ", detailAddress=" + detailAddress + ", cityCode=" + cityCode + ", gunCode=" + gunCode + ", dongCode="
-				+ dongCode + ", cityN=" + cityN + ", gunN=" + gunN + ", dongN=" + dongN + ", regDt=" + regDt
-				+ ", editDt=" + editDt + ", endDate=" + endDate + ", endDateval=" + endDateval + ", validationYn="
-				+ validationYn + ", groupKeyval=" + groupKeyval + ", groupJikhamval=" + groupJikhamval + ", nameval="
-				+ nameval + ", yyyymmddval=" + yyyymmddval + ", phoneval=" + phoneval + ", sexval=" + sexval
-				+ ", cityCodeval=" + cityCodeval + ", gunCodeval=" + gunCodeval + ", dongCodeval=" + dongCodeval
-				+ ", detailAddressval=" + detailAddressval + ", mrankval=" + mrankval + ", levelval=" + levelval
-				+ ", dangwonval=" + dangwonval + ", churchval=" + churchval + ", churchRankval=" + churchRankval
-				+ ", recommandNameval=" + recommandNameval + ", recommandPhoneval=" + recommandPhoneval
-				+ ", adminAuthval=" + adminAuthval + ", input1=" + input1 + ", input2=" + input2 + ", list=" + list
-				+ ", map=" + map + ", length=" + length + ", start=" + start + ", startDate=" + startDate + "]";
+				+ dongCode + ", cityN=" + cityN + ", gunN=" + gunN + ", dongN=" + dongN + ", districtCode="
+				+ districtCode + ", districtName=" + districtName + ", regDt=" + regDt + ", editDt=" + editDt
+				+ ", endDate=" + endDate + ", endDateval=" + endDateval + ", validationYn=" + validationYn
+				+ ", groupKeyval=" + groupKeyval + ", groupJikhamval=" + groupJikhamval + ", nameval=" + nameval
+				+ ", yyyymmddval=" + yyyymmddval + ", phoneval=" + phoneval + ", sexval=" + sexval + ", cityCodeval="
+				+ cityCodeval + ", gunCodeval=" + gunCodeval + ", dongCodeval=" + dongCodeval + ", detailAddressval="
+				+ detailAddressval + ", mrankval=" + mrankval + ", levelval=" + levelval + ", dangwonval=" + dangwonval
+				+ ", churchval=" + churchval + ", churchRankval=" + churchRankval + ", recommandNameval="
+				+ recommandNameval + ", recommandPhoneval=" + recommandPhoneval + ", adminAuthval=" + adminAuthval
+				+ ", messageTxt=" + messageTxt + ", checked=" + checked + "]";
 	}
+
+	
+	
 	
 	
 	

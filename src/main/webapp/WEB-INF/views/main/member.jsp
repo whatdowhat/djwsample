@@ -199,6 +199,7 @@
 		                                        <table id="datatable"    class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 		                                            <thead>
 		                                            <tr>
+														<th><input type="checkbox" name="selectBoxTargetAll" id="selectBoxTargetAll" value="all" onclick="selectAll()"></th>
 		                                                <th>#</th>
 		                                                <th>당원(일반/책임)</th>
 		                                                <th>이름</th>
@@ -265,6 +266,10 @@ var inputform = {};
     	"destroy" : true,
     	"lengthChange" : true,
         "columns" : [ 
+        	{"data" : "checked",     	render: function (data, type, full, meta){
+        		$("#selectBoxTargetAll").prop("checked",false);
+     	       return '<input type="checkbox" name="selectBoxTarget" id="selectBoxTarget"  value="'+full.seq+','+full.name+','+full.phone+'">'
+        	}},
         	{"data" : "seq",render:function(a,b,c,d){
         		return d.row + d.settings._iDisplayStart +1;
         	}},        	
@@ -296,11 +301,24 @@ var inputform = {};
         		
         	}},  
        	],
+       	'columnDefs': [{
+        	   'targets': 0,
+        	   'searchable':false,
+        	   'orderable':false,
+        	   'className': 'dt-body-center',
+        	   'render': function (data, type, full, meta){
+        	       return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+        	   },
+        	   /* {
+                "targets": [ 3 ],
+                "visible": false
+            } */
+        	}],
         "ajax" : {
         	type : "POST",
             url : url,
             "data" : {
-                "columnsize" : 14,
+                "columnsize" : 15,
                 "vo" : inputform,
             }
         },

@@ -1,6 +1,6 @@
 <!doctype html>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-        
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
         
         <!-- App favicon -->
         <link rel="shortcut icon" href="/resources/assets/images/favicon.ico">
@@ -47,33 +47,45 @@
 
     <div data-simplebar class="h-100">
 
+
+
         <!--- Sidemenu -->
         <div id="sidebar-menu">
             <!-- Left Menu Start -->
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title">Menu</li>
-
                 <li>
-                    <a href="/login.do" class="waves-effect">
+                <%-- <sec:authorize access="hasAuthority('ROLE_ADMIN')">
+                	<a href="/admin/loginAfter.do" class="waves-effect">
+                </sec:authorize>
+				<sec:authorize access="hasAuthority('ROLE_USER')">
+					<a href="/user/loginAfter.do" class="waves-effect">
+                </sec:authorize> --%>
+                	<a href="/admin/loginAfter.do" class="waves-effect">
                         <i class="mdi mdi-home-variant-outline"></i>
                         <span>조직현황</span>
                     </a>
                 </li>
-
+<sec:authorize access="hasAuthority('ROLE_ADMIN')">
 				<li>
                     <a href="/admin/member/chart/member.do" class="waves-effect">
                         <i class="mdi mdi-calendar-outline"></i>
                         <span>당원추이현황</span>
                     </a>
                 </li>
+</sec:authorize>
+
+<%-- <sec:authorize access="hasAuthority('ROLE_ADMIN')"> --%>
 				<li>
                     <a href="/admin/district/chart/member.do" class="waves-effect">
                         <i class="mdi mdi-calendar-outline"></i>
                         <span>선거구별현황</span>
                     </a>
                 </li>
+<%-- </sec:authorize> --%>
                 
-                <li>
+<sec:authorize access="hasAuthority('ROLE_ADMIN')">
+				<li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="mdi mdi-gradient"></i>
                         <span>당원관리</span>
@@ -85,9 +97,8 @@
                         
                     </ul>
                 </li>
-
-
-
+</sec:authorize>
+<sec:authorize access="hasAuthority('ROLE_ADMIN')">
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="mdi mdi-page-layout-header"></i>
@@ -100,21 +111,22 @@
                         <!-- <li><a href="layouts-hori-boxed-width.html">Boxed width</a></li> -->
                     </ul>
                 </li>
+</sec:authorize>
+ 				<li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="mdi mdi-account-circle-outline"></i>
+                        <span>메세지관리</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="/admin/message/innerMessage.do">쪽지</a></li>
+                        <li><a href="#">문자(SMS)</a></li>
+                        <li><a href="/admin/notice/innernotice.do">공지사항</a></li>
+                    </ul>
+                </li>
 
                 <!-- <li class="menu-title">Pages</li>
 
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="mdi mdi-account-circle-outline"></i>
-                        <span>Authentication</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="auth-login.html">Login</a></li>
-                        <li><a href="auth-register.html">Register</a></li>
-                        <li><a href="auth-recoverpw.html">Recover Password</a></li>
-                        <li><a href="auth-lock-screen.html">Lock Screen</a></li>
-                    </ul>
-                </li>
+               
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">

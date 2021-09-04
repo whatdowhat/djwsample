@@ -38,7 +38,7 @@
                                                                 <div class="my-3">
                                                                     <i class="dripicons-tags h2 text-primary"></i>
                                                                 </div>
-                                                                <h5 class="font-size-15 mb-3">국회의원지역 선거구</h5>
+                                                                <h5 class="font-size-15 mb-3">일반당원</h5>
                                                                  <br>
                                                                 <fmt:formatNumber value="${dangwonCount00 }" pattern="#,###" />
                                                             </a>

@@ -246,6 +246,7 @@ var inputform = {};
 
 	inputform.cityCode = '${cityCode}';
 	inputform.districtCode = '${districtCode}';
+	inputform.dongCode = '${dongCode}';
 	
 	console.dir(inputform);
 	
@@ -340,7 +341,7 @@ function search(){
 	
 	console.dir(inputform);
 	
-    var url = "/admin/member/listtable.do";
+    var url = "/admin/district/memberlist.do";
     $('#datatable').DataTable({
     	paging : true,
     	info: true,

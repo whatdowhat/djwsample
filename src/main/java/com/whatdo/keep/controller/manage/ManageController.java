@@ -103,6 +103,17 @@ public class ManageController extends MotherController{
 		inputform.setSignPad("");
 		inputform.setSignData(contentBytes);
 		
+		
+		Map<String,String> param = new HashMap();
+		param.put("cityCode", inputform.getCityCode());
+		param.put("gunCode", inputform.getGunCode());
+		param.put("dongCode", inputform.getDongCode());
+		AddressCodeVO getvo = dao.search_districtCode(param);
+		
+		inputform.setDistrictCode(getvo.getDistrictCode());
+		inputform.setDistrictName(getvo.getDistrictName());
+		
+		
 		//default data
 		inputform.setRegDt(new Date());
 		inputform.setLevel("읍면동");

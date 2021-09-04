@@ -6,5 +6,8 @@
 
 <% 
 	RequestDispatcher rd = request.getRequestDispatcher("/index.do");
+	String errorMessage = (String)request.getAttribute("errorMessage");
+	System.out.println("error message : "+errorMessage);
+	request.setAttribute("errorMessage", errorMessage);
 	rd.forward(request, response); 
 %>

@@ -1,11 +1,10 @@
 package com.whatdo.keep.controller.login;
 
+import java.security.Principal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,21 +18,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.whatdo.keep.config.em.AuthorityEm;
 import com.whatdo.keep.controller.MotherController;
 import com.whatdo.keep.controller.member.SpecificationMmemberVO;
 import com.whatdo.keep.service.dao.AddressCodeDAO;
 import com.whatdo.keep.vo.AddressCodeVO;
-import com.whatdo.keep.vo.ChildTestVO;
-import com.whatdo.keep.vo.GroupVO;
 import com.whatdo.keep.vo.MemberVO;
-import com.whatdo.keep.vo.SystemCommonVO;
 
 
 @Controller
@@ -69,14 +73,11 @@ public class LoginController extends MotherController{
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/login.do", method = { RequestMethod.GET,RequestMethod.POST })
-	public ModelAndView login(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session){
-		
+	@RequestMapping(value = "/admin/loginAfter.do", method = { RequestMethod.GET,RequestMethod.POST })
+	public ModelAndView adminloginAfter(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session){
 		
 		LOGGER.debug("##login enter");
-		
 		List<AddressCodeVO> citys = dao.getCitys();
-		
 		Map<String,String> param = new HashMap();
 		param.put("cityCode", citys.get(0).getCityCode());
 		List<AddressCodeVO> gus = dao.getGus(param);
@@ -106,6 +107,48 @@ public class LoginController extends MotherController{
 		modelAndView.addObject("gunCode", gus.get(0).getGunCode() );
 		modelAndView.addObject("dongs",dongs );
 		modelAndView.addObject("dongCode", dongs.get(0).getDongCode() );
+		modelAndView.setViewName("main/page");
+		
+		return modelAndView;
+	}
+	
+	
+	@RequestMapping(value = "/user/loginAfter.do", method = { RequestMethod.GET,RequestMethod.POST })
+	public ModelAndView userloginAfter(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session,Principal principal){
+		
+		
+		MemberVO user = memVoRepository.findByPhone(principal.getName());
+		
+		Map<String,String> authMap = getAuthentics();
+		
+		LOGGER.debug("##login enter");
+		List<AddressCodeVO> citys = dao.getCitys();
+		Map<String,String> param = new HashMap();
+
+		param.put("cityCode", user.getCityCode());
+		List<AddressCodeVO> gus = dao.getGus(param);
+		
+		param = new HashMap();
+		param.put("cityCode", user.getCityCode());
+		param.put("gunCode", user.getGunCode());
+		List<AddressCodeVO> dongs = dao.getDongs(param);
+		LOGGER.debug("##cities {} "+ citys);
+		Integer total = dao.gettotaldangwon(param);
+		
+		Integer groupCount = (int) groupVORepository.count();
+		Integer dangwonCount00 = dao.getenterdangwon00d(param);
+		Integer dangwonCount01 = dao.getenterdangwon01d(param);
+		
+		modelAndView.addObject("total", total);
+		modelAndView.addObject("groupCount", groupCount);
+		modelAndView.addObject("dangwonCount00", dangwonCount00);
+		modelAndView.addObject("dangwonCount01", dangwonCount01);
+		modelAndView.addObject("cities", citys );
+		modelAndView.addObject("cityCode", user.getCityCode());
+		modelAndView.addObject("gus",gus );
+		modelAndView.addObject("gunCode", user.getGunCode());
+		modelAndView.addObject("dongs",dongs );
+		modelAndView.addObject("dongCode", user.getDongCode());
 		modelAndView.setViewName("main/page");
 		
 		return modelAndView;
@@ -174,14 +217,19 @@ public class LoginController extends MotherController{
 	
 	
 	
-	@RequestMapping(value = "/admin/main/member.do", method = { RequestMethod.GET})
-	public ModelAndView memberlist(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
-			) {		
+//	@RequestMapping(value = "/admin/main/member.do", method = { RequestMethod.POST})
+	@PostMapping(value = "/admin/main/member.do")
+	public ModelAndView memberlist(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session) {		
 		
 		LOGGER.debug("##adminmemberlistfrommain enter");
 		String cityCode = Optional.ofNullable(req.getParameter("cityCode")).orElse("");
 		String gunCode = Optional.ofNullable(req.getParameter("gunCode")).orElse("");
 		String dongCode = Optional.ofNullable(req.getParameter("dongCode")).orElse("");
+		LOGGER.debug("##param dongCode :: "+cityCode);
+		LOGGER.debug("##param dongCode :: "+gunCode);
+		LOGGER.debug("##param dongCode :: "+dongCode);
+		
+		LOGGER.debug("##adminmemberlistfrommain enter");
 		
 		modelAndView.addObject("cityCode", cityCode);
 		modelAndView.addObject("gunCode", gunCode);
@@ -324,5 +372,6 @@ public class LoginController extends MotherController{
 //		result.put("dongs",dongs );
 //		return result;		
 //	}
+	
 	
 }
