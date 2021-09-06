@@ -124,6 +124,13 @@
                     </ul>
                 </li>
 
+
+				<li>
+                    <a href="/admin/myprofile/page.do" class="waves-effect">
+                        <i class="mdi mdi-calendar-outline"></i>
+                        <span>내정보</span>
+                    </a>
+                </li>
                 <!-- <li class="menu-title">Pages</li>
 
                

@@ -3,6 +3,7 @@ package com.whatdo.keep.controller.district;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -75,43 +76,85 @@ public class DistrictController extends MotherController{
 	
 	
 	@RequestMapping(value = "/admin/district/chart/member.do", method = { RequestMethod.GET,RequestMethod.POST })
-	public ModelAndView admidistrictchartmember(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session){
+	public ModelAndView admidistrictchartmember(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session,Principal principal){
 		
 		
 		LOGGER.debug("##admidistrictchartmember enter");
 		
-		Map param = new HashMap<String, Object>();
-//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//		String endDate = dateFormat.format(new Date());
-//		LocalDate date = LocalDate.now();
-//		date = date.minusDays(7);
-//		Date convertDate =   Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
-//		String startDate = dateFormat.format(convertDate);
-//		param.put("startDate", startDate);
-//		LOGGER.debug("##endDate endDate"+endDate);
-//		param.put("endDate", endDate);
+		Map<String,String> auth =  getAuthentics();
+		boolean isAdmin = auth.get("ROLE_ADMIN") !=null ? true : false;
+		boolean user = auth.get("ROLE_USER") !=null ? true : false;
+		if(isAdmin) {
+			Map param = new HashMap<String, Object>();
+//			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//			String endDate = dateFormat.format(new Date());
+//			LocalDate date = LocalDate.now();
+//			date = date.minusDays(7);
+//			Date convertDate =   Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//			String startDate = dateFormat.format(convertDate);
+//			param.put("startDate", startDate);
+//			LOGGER.debug("##endDate endDate"+endDate);
+//			param.put("endDate", endDate);
+			
+			Integer total = dao.gettotaldangwon(param); //총당원 가입날자가 있는
+			Integer districtTotal = dao.getdistrict_district().size(); //선거구 숫자
+			List<AddressCodeVO> citys = dao.getCitys();//시
+			param = new HashMap<String, Object>();
+			
+			param.put("cityCode", citys.get(0).getCityCode());
+			List<AddressCodeVO> districts =  dao.getGuns_district(param);
+			param.put("districtCode", districts.get(0).getDistrictCode());
+			List<AddressCodeVO> dongs =  dao.getDongs_district(param);
+			
+			System.out.println("dongs count:"+dongs.size());
+			
+			modelAndView.addObject("total", total);
+			modelAndView.addObject("districtTotal", districtTotal);
+			modelAndView.addObject("citys", citys);
+			modelAndView.addObject("districts", districts);
+			modelAndView.addObject("dongs", dongs);
+			
+			modelAndView.addObject("cityCode", citys.get(0).getCityCode());
+			modelAndView.addObject("districCode", districts.get(0).getDistrictCode());
+			modelAndView.addObject("dongCode", dongs.get(0).getDongCode());
+		}else {
+			MemberVO memberVO = memVoRepository.findByPhone(principal.getName());
+			Map param = new HashMap<String, Object>();
+//			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//			String endDate = dateFormat.format(new Date());
+//			LocalDate date = LocalDate.now();
+//			date = date.minusDays(7);
+//			Date convertDate =   Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//			String startDate = dateFormat.format(convertDate);
+//			param.put("startDate", startDate);
+//			LOGGER.debug("##endDate endDate"+endDate);
+//			param.put("endDate", endDate);
+			
+			Integer total = dao.gettotaldangwon(param); //총당원 가입날자가 있는
+			Integer districtTotal = dao.getdistrict_district().size(); //선거구 숫자
+			List<AddressCodeVO> citys = dao.getCitys();//시
+			param = new HashMap<String, Object>();
+			
+			param.put("cityCode", memberVO.getCityCode());
+			List<AddressCodeVO> districts =  dao.getGuns_district(param);
+			param.put("districtCode", memberVO.getDistrictCode());
+			List<AddressCodeVO> dongs =  dao.getDongs_district(param);
+			
+			System.out.println("dongs count:"+dongs.size());
+			
+			modelAndView.addObject("total", total);
+			modelAndView.addObject("districtTotal", districtTotal);
+			modelAndView.addObject("citys", citys);
+			modelAndView.addObject("districts", districts);
+			modelAndView.addObject("dongs", dongs);
+			
+			modelAndView.addObject("cityCode", memberVO.getCityCode());
+			modelAndView.addObject("districCode", memberVO.getDistrictCode());
+			modelAndView.addObject("dongCode", memberVO.getDongCode());
+			
+		}
 		
-		Integer total = dao.gettotaldangwon(param); //총당원 가입날자가 있는
-		Integer districtTotal = dao.getdistrict_district().size(); //선거구 숫자
-		List<AddressCodeVO> citys = dao.getCitys();//시
-		param = new HashMap<String, Object>();
 		
-		param.put("cityCode", citys.get(0).getCityCode());
-		List<AddressCodeVO> districts =  dao.getGuns_district(param);
-		param.put("districtCode", districts.get(0).getDistrictCode());
-		List<AddressCodeVO> dongs =  dao.getDongs_district(param);
-		
-		System.out.println("dongs count:"+dongs.size());
-		
-		modelAndView.addObject("total", total);
-		modelAndView.addObject("districtTotal", districtTotal);
-		modelAndView.addObject("citys", citys);
-		modelAndView.addObject("districts", districts);
-		modelAndView.addObject("dongs", dongs);
-		
-		modelAndView.addObject("cityCode", citys.get(0).getCityCode());
-		modelAndView.addObject("districCode", districts.get(0).getDistrictCode());
-		modelAndView.addObject("dongCode", dongs.get(0).getDongCode());
 		
 		modelAndView.setViewName("district/main");
 		return modelAndView;
@@ -131,7 +174,10 @@ public class DistrictController extends MotherController{
 		List<AddressCodeVO> districts =  dao.getGuns_district(param);
 		param.put("districtCode", String.valueOf(districts.get(0).getDistrictCode()));
 		List<AddressCodeVO> dongs =  dao.getDongs_district(param);
+		
+		System.out.println(citys.size());
 		System.out.println(districts.size());
+		System.out.println(dongs.size());
 		
 		modelAndView.addObject("citys", citys);
 		modelAndView.addObject("districts", districts);

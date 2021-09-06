@@ -5,7 +5,6 @@
 
 <!doctype html>
 <html lang="en">
-
     <body data-topbar="colored">
 
         <!-- Begin page -->
@@ -13,7 +12,9 @@
         	<jsp:include page="../template/menu.jsp"></jsp:include>
         	<jsp:include page="../template/header.jsp"></jsp:include>
         	
-        	
+        	<link href="/resources/assets/css/select/select.dataTables.scss" rel="stylesheet" type="text/css" />
+		 	<script src="/resources/assets/js/select/dataTables.select.js"></script>
+        	<link href="/resources/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
         	<!--  page content -->
         	
             <div class="main-content">
@@ -28,14 +29,13 @@
                             <div class="col-12">
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                                     <h4 class="mb-sm-0">당원현황</h4>
-
-                                    <div class="page-title-right">
+<!--                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">당원관리</a></li>
                                             <li class="breadcrumb-item active">당원현황</li>
                                         </ol>
-                                    </div>
-
+                                    </div> -->
+                                    <button type="button" class="btn btn-primary"  onclick="goEditPage()">정보 수정</button>
                                 </div>
                             </div>
                         </div>
@@ -237,13 +237,10 @@
     </body>
 <script type="text/javascript">
 
-
+var selectedData;
+var table;
 $(document).ready(function() {
     
-	
-
-	
-	
 var inputform = {};
 	
 	inputform.name = $("#name").val();
@@ -276,8 +273,9 @@ var inputform = {};
 	
     var url = "/admin/member/listtable.do";
     $.fn.dataTable.ext.errMode = 'none';
-    $('#datatable').DataTable({
-    	
+    table = $('#datatable').DataTable({
+    	select: true,
+    	 
     	paging : true,
     	info: true,
     	searching: false,
@@ -340,11 +338,44 @@ var inputform = {};
             }
         },
     });
+    
 
-
-
+   	$('#datatable tbody').on( 'click', 'tr', function () {
+  		selectedData = table.rows('.selected').data()[0].name
+  		console.dir(table.rows('.selected').data()[0].name);
+    } );  
+    
+    
+	
+    
 });
 
+
+function goEditPage(){
+	
+	var data = table.rows('.selected').data();
+	if(data[0] ==undefined){
+		 
+		Swal.fire({
+             title: "수정 할 회원을 선택하세요",
+             text: "",
+             icon: "error",
+             confirmButtonColor: "#ff3d60",
+             confirmButtonText: "확인"
+         })
+         return false;
+	}
+	var phone = data[0].phone;
+	goMember(phone);
+	
+}
+
+function goMember(phone){
+ 	var parm = new Array();
+	parm.push( ['phone', phone] );
+    goPage("/admin/myprofile/pageAdmin.do",parm);
+    		
+}
 
 
 function search(){
@@ -375,6 +406,7 @@ function search(){
 	
     var url = "/admin/member/listtable.do";
     $('#datatable').DataTable({
+    	select: true,
     	paging : true,
     	info: true,
     	searching: false,
@@ -440,6 +472,7 @@ function search(){
 	
 	
 }
+
 
 function formatDate(date) {
     var d = new Date(date),

@@ -74,39 +74,80 @@ public class LoginController extends MotherController{
 	}
 	
 	@RequestMapping(value = "/admin/loginAfter.do", method = { RequestMethod.GET,RequestMethod.POST })
-	public ModelAndView adminloginAfter(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session){
+	public ModelAndView adminloginAfter(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session,Principal principal){
 		
 		LOGGER.debug("##login enter");
-		List<AddressCodeVO> citys = dao.getCitys();
-		Map<String,String> param = new HashMap();
-		param.put("cityCode", citys.get(0).getCityCode());
-		List<AddressCodeVO> gus = dao.getGus(param);
 		
-		param = new HashMap();
-		param.put("cityCode", citys.get(0).getCityCode());
-		param.put("gunCode", gus.get(0).getGunCode());
-		List<AddressCodeVO> dongs = dao.getDongs(param);
-		
-		LOGGER.debug("##cities {} "+ citys);
-		
-		Integer total = dao.gettotaldangwon(param);
-		
-		Integer groupCount = (int) groupVORepository.count();
-		Integer dangwonCount00 = dao.getenterdangwon00d(param);
-		Integer dangwonCount01 = dao.getenterdangwon01d(param);
-		
-		modelAndView.addObject("total", total);
-		modelAndView.addObject("groupCount", groupCount);
-		modelAndView.addObject("dangwonCount00", dangwonCount00);
-		modelAndView.addObject("dangwonCount01", dangwonCount01);
-		
-		
-		modelAndView.addObject("cities", citys );
-		modelAndView.addObject("cityCode", citys.get(0).getCityCode() );
-		modelAndView.addObject("gus",gus );
-		modelAndView.addObject("gunCode", gus.get(0).getGunCode() );
-		modelAndView.addObject("dongs",dongs );
-		modelAndView.addObject("dongCode", dongs.get(0).getDongCode() );
+		Map<String,String> auth =  getAuthentics();
+		boolean isAdmin = auth.get("ROLE_ADMIN") !=null ? true : false;
+		boolean user = auth.get("ROLE_USER") !=null ? true : false;
+		if(isAdmin) {
+			
+			List<AddressCodeVO> citys = dao.getCitys();
+			Map<String,String> param = new HashMap();
+			param.put("cityCode", citys.get(0).getCityCode());
+			List<AddressCodeVO> gus = dao.getGus(param);
+			
+			param = new HashMap();
+			param.put("cityCode", citys.get(0).getCityCode());
+			param.put("gunCode", gus.get(0).getGunCode());
+			List<AddressCodeVO> dongs = dao.getDongs(param);
+			
+			LOGGER.debug("##cities {} "+ citys);
+			
+			Integer total = dao.gettotaldangwon(param);
+			
+			Integer groupCount = (int) groupVORepository.count();
+			Integer dangwonCount00 = dao.getenterdangwon00d(param);
+			Integer dangwonCount01 = dao.getenterdangwon01d(param);
+			
+			modelAndView.addObject("total", total);
+			modelAndView.addObject("groupCount", groupCount);
+			modelAndView.addObject("dangwonCount00", dangwonCount00);
+			modelAndView.addObject("dangwonCount01", dangwonCount01);
+			
+			
+			modelAndView.addObject("cities", citys );
+			modelAndView.addObject("cityCode", citys.get(0).getCityCode() );
+			modelAndView.addObject("gus",gus );
+			modelAndView.addObject("gunCode", gus.get(0).getGunCode() );
+			modelAndView.addObject("dongs",dongs );
+			modelAndView.addObject("dongCode", dongs.get(0).getDongCode() );
+		}else {
+			MemberVO memberVO = memVoRepository.findByPhone(principal.getName());
+			
+			List<AddressCodeVO> citys = dao.getCitys();
+			Map<String,String> param = new HashMap();
+			param.put("cityCode", memberVO.getCityCode());
+			List<AddressCodeVO> gus = dao.getGus(param);
+			
+			param = new HashMap();
+			param.put("cityCode", memberVO.getCityCode());
+			param.put("gunCode", memberVO.getGunCode());
+			List<AddressCodeVO> dongs = dao.getDongs(param);
+			
+			LOGGER.debug("##cities {} "+ citys);
+			
+			Integer total = dao.gettotaldangwon(param);
+			
+			Integer groupCount = (int) groupVORepository.count();
+			Integer dangwonCount00 = dao.getenterdangwon00d(param);
+			Integer dangwonCount01 = dao.getenterdangwon01d(param);
+			
+			modelAndView.addObject("total", total);
+			modelAndView.addObject("groupCount", groupCount);
+			modelAndView.addObject("dangwonCount00", dangwonCount00);
+			modelAndView.addObject("dangwonCount01", dangwonCount01);
+			
+			
+			modelAndView.addObject("cities", citys );
+			modelAndView.addObject("cityCode", memberVO.getCityCode() );
+			modelAndView.addObject("gus",gus );
+			modelAndView.addObject("gunCode", memberVO.getGunCode());
+			modelAndView.addObject("dongs",dongs );
+			modelAndView.addObject("dongCode", memberVO.getDongCode() );
+		}
+
 		modelAndView.setViewName("main/page");
 		
 		return modelAndView;
@@ -118,8 +159,6 @@ public class LoginController extends MotherController{
 		
 		
 		MemberVO user = memVoRepository.findByPhone(principal.getName());
-		
-		Map<String,String> authMap = getAuthentics();
 		
 		LOGGER.debug("##login enter");
 		List<AddressCodeVO> citys = dao.getCitys();

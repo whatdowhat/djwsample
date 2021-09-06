@@ -6,6 +6,7 @@
 <!doctype html>
 <html lang="en">
 
+
     <body data-topbar="colored">
 
         <!-- Begin page -->
@@ -13,7 +14,9 @@
         	<jsp:include page="../template/menu.jsp"></jsp:include>
         	<jsp:include page="../template/header.jsp"></jsp:include>
         	
-        	
+        	<header>
+				<script src="/resources/assets/js/pages/form-mask.init.js"></script>
+			</header>
         	<!--  page content -->
         	
             <div class="main-content">
@@ -47,8 +50,16 @@
                                 <div class="card">
                                     <div class="card-body">
 	                                    <div class="mb-3 row">
-										 <label for="example-date-input" class="col-md-5">가입날짜</label>
-						                 <input class="form-control" type="date" value="${endDate}" id="endDate" >
+										 <label for="example-date-input" class="col-md-1 col-form-label">가입날짜</label>
+ 										 <div class="col-md-5">
+                                                <input class="form-control" type="date" value="${endDate}" id="endDate" >
+                                         </div>
+						                 <label class="col-md-1 col-form-label" style="display: none;">성별</label>
+                                            <div class="col-md-5">
+                                                <select class="form-select" id="dummy" style="display: none;">
+													
+                                                </select>
+                                            </div>
 	                                    </div>
 
                                         
@@ -70,13 +81,14 @@
                                             <label for="example-email-input" class="col-md-1 col-form-label">생년월일</label>
                                             <div class="col-md-5">
                                                 <!-- <input class="form-control" type="email"  id="example-email-input"> -->
-                                                <input id="yyyymmdd" class="form-control input-mask" data-inputmask="'alias': 'datetime'" data-inputmask-inputformat="yyyy/mm/dd" inputmode="numeric">
+                                                <!-- <input id="yyyymmdd" class="form-control input-mask" data-inputmask="'alias': 'datetime'" data-inputmask-inputformat="yyyy/mm/dd" inputmode="numeric"> -->
+                                                <input id="yyyymmdd" class="form-control input-mask" data-inputmask="'alias': 'datetime'" data-inputmask-inputformat="yyyy/mm/dd">
                                             </div>
                                             
 											<label for="example-email-input" class="col-md-1 col-form-label">연락처</label>
                                             <div class="col-md-5">
                                                 <!-- <input class="form-control" type="email"  id="example-email-input"> -->
-                                                <input id="phone" class="form-control input-mask" data-inputmask="'alias': 'datetime'" data-inputmask-inputformat="yyyy/mm/dd" inputmode="numeric">
+                                                <input id="phone" class="form-control input-mask"  data-inputmask="'mask': '999-9999-9999'">
                                             </div>
 
                                         </div>
@@ -256,8 +268,8 @@ function make(){
 	inputform.endDate = $("#endDate").val();
 	
 	inputform.name = $("#name").val();
-	inputform.yyyymmdd = $("#yyyymmdd").val();
-	inputform.phone = $("#phone").val();
+	inputform.yyyymmdd = $("#yyyymmdd").val().replaceAll("/","");
+	inputform.phone = $("#phone").val().replaceAll("-","");
 	inputform.sex = $("#sex option:selected").val();
 	
 	inputform.cityCode = $("#city").val();

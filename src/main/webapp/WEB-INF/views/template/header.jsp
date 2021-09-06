@@ -162,28 +162,23 @@
                                 <i class="ri-fullscreen-line"></i>
                             </button>
                         </div>
-
+                          <div class="dropdown d-inline-block user-dropdown">
+		                   <c:if test="${path  eq '/admin/member/list.do' }">
+		                                <button type="button" class="btn header-item waves-effect" style="margin-left: auto; border: solid;" onclick="snedMessage()">쪽지 보내기</button>
+		                                
+		                   </c:if> 
+		                   <c:if test="${path  eq '/admin/message/innerMessage.do' }">
+		                                <button type="button" class="btn header-item waves-effect" style="margin-left: auto; border: solid;" onclick="snedMessage()">쪽지 보내기</button>
+		                                
+		                   </c:if> 	           
+		                   <c:if test="${path  eq '/admin/main/member.do' }">
+		                                <button type="button" class="btn header-item waves-effect" style="margin-left: auto; border: solid;" onclick="snedMessage()">쪽지 보내기</button>
+		                   </c:if> 
+	                   </div>
                         <div class="dropdown d-inline-block user-dropdown">
                             <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						
-	                   <c:if test="${path  eq '/admin/member/list.do' }">
-	                                <button type="button" class="btn btn-primary" style="margin-left: auto;" onclick="snedMessage()">쪽지 보내기</button>
- 									<!-- <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#myModal">메세지 보내기</button> -->
-	                                
-	                   </c:if> 
-	                   <c:if test="${path  eq '/admin/message/innerMessage.do' }">
-	                                <button type="button" class="btn btn-primary" style="margin-left: auto;" onclick="snedMessage()">쪽지 보내기</button>
- 									<!-- <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#myModal">메세지 보내기</button> -->
-	                                
-	                   </c:if> 	           
-	                   <c:if test="${path  eq '/admin/main/member.do' }">
-	                                <button type="button" class="btn btn-primary" style="margin-left: auto;" onclick="snedMessage()">쪽지 보내기</button>
- 									<!-- <button type="button" class="btn btn-primary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#myModal">메세지 보내기</button> -->
-	                                
-	                   </c:if> 	           	                   
-	                           
-	                   
                                 <span class="d-none d-xl-inline-block ms-1">더보기</span>
                                 <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                             </button>

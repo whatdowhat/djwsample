@@ -85,7 +85,6 @@ public class MemberController extends MotherController{
 		LOGGER.debug("##adminmemberpage enter");
 		
 		List<GroupVO> groups = groupVORepository.findAll();
-//		
 		List<AddressCodeVO> citys = dao.getCitys();
 		Map<String,String> param = new HashMap();
 		param.put("cityCode", citys.get(0).getCityCode());

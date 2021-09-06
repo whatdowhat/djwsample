@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!doctype html>
 <html lang="en">
 
@@ -40,6 +40,8 @@
                             </div>
                         </div>
                         <!-- end page title -->
+                        
+						<sec:authorize access="hasAuthority('ROLE_ADMIN')">
                         <div class="row">
                             <div class="col-xl-12">
                                 <div class="card">
@@ -79,7 +81,11 @@
                                     
                                     </div>
 								</div>
-							</div>                       
+							</div> 
+										
+										
+						</sec:authorize>
+                      
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
