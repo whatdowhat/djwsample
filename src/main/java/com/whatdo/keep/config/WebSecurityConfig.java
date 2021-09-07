@@ -1,7 +1,10 @@
 package com.whatdo.keep.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -27,8 +30,11 @@ import com.whatdo.keep.config.handler.CustomLogoutHandler;
 
 @Configuration
 @EnableWebSecurity
+@PropertySource(value = {"classpath:config.properties", "classpath:web.properties"})
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	@Value("${config.happyAPI}")
+	private String happyAPI;
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {		
@@ -51,7 +57,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //		http.authorizeRequests().antMatchers("*").permitAll().and().csrf().disable().httpBasic();;
 //		
 				
-		
+		System.out.println("############# happyAPI:"+happyAPI);
+//		Environment env = (Environment) ApplicationContextProvider.getApplicationContext()
+//				.getBean("environment");
+//		String happyAPI = env.getProperty("config.happyAPI");
 		
 //		http.headers().frameOptions().disable();
 //		CharacterEncodingFilter filter = new CharacterEncodingFilter("UTF-8");
@@ -62,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers(
 				
 				"/",
+				happyAPI,
 				"/login.do",
 				"/index.jsp"
 //				"/favicon.ico",

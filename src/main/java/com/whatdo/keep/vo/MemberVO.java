@@ -178,31 +178,42 @@ public class MemberVO extends InputForm {
 	@Transient
 	private String messageTitle;
 	
+	
+	@Transient
+	private String happyurl;
+	@Transient
+	private String sdate;
+	@Transient
+	private String edate;
+	
+	
 	private boolean checked;
 	private boolean noticeChecked;
-
 	@Override
 	public String toString() {
 		return "MemberVO [seq=" + seq + ", adminAuth=" + adminAuth + ", mrank=" + mrank + ", dangwon=" + dangwon
 				+ ", church=" + church + ", churchRank=" + churchRank + ", captain=" + captain + ", level=" + level
-				+ ", groupJikham=" + groupJikham + ", phone=" + phone + ", signPad=" + signPad + ", sex=" + sex
-				+ ", recommandName=" + recommandName + ", recommandPhone=" + recommandPhone + ", signData="
-				+ Arrays.toString(signData) + ", groupKey=" + groupKey + ", groupName=" + groupName + ", name=" + name
-				+ ", representiveRankName=" + representiveRankName + ", representiveName=" + representiveName
-				+ ", representiveCode=" + representiveCode + ", yyyymmdd=" + yyyymmdd + ", sojeji=" + sojeji
-				+ ", detailAddress=" + detailAddress + ", cityCode=" + cityCode + ", gunCode=" + gunCode + ", dongCode="
-				+ dongCode + ", cityN=" + cityN + ", gunN=" + gunN + ", dongN=" + dongN + ", districtCode="
-				+ districtCode + ", districtName=" + districtName + ", regDt=" + regDt + ", editDt=" + editDt
-				+ ", endDate=" + endDate + ", endDateval=" + endDateval + ", validationYn=" + validationYn
-				+ ", groupKeyval=" + groupKeyval + ", groupJikhamval=" + groupJikhamval + ", nameval=" + nameval
-				+ ", yyyymmddval=" + yyyymmddval + ", phoneval=" + phoneval + ", sexval=" + sexval + ", cityCodeval="
-				+ cityCodeval + ", gunCodeval=" + gunCodeval + ", dongCodeval=" + dongCodeval + ", detailAddressval="
-				+ detailAddressval + ", mrankval=" + mrankval + ", levelval=" + levelval + ", dangwonval=" + dangwonval
-				+ ", churchval=" + churchval + ", churchRankval=" + churchRankval + ", recommandNameval="
-				+ recommandNameval + ", recommandPhoneval=" + recommandPhoneval + ", adminAuthval=" + adminAuthval
-				+ ", messageTxt=" + messageTxt + ", checked=" + checked + "]";
+				+ ", groupJikham=" + groupJikham + ", phone=" + phone + ", phonePassword=" + phonePassword
+				+ ", signPad=" + signPad + ", sex=" + sex + ", recommandName=" + recommandName + ", recommandPhone="
+				+ recommandPhone + ", signData=" + Arrays.toString(signData) + ", groupKey=" + groupKey + ", groupName="
+				+ groupName + ", name=" + name + ", representiveRankName=" + representiveRankName
+				+ ", representiveName=" + representiveName + ", representiveCode=" + representiveCode + ", yyyymmdd="
+				+ yyyymmdd + ", sojeji=" + sojeji + ", detailAddress=" + detailAddress + ", cityCode=" + cityCode
+				+ ", gunCode=" + gunCode + ", dongCode=" + dongCode + ", cityN=" + cityN + ", gunN=" + gunN + ", dongN="
+				+ dongN + ", districtCode=" + districtCode + ", districtName=" + districtName + ", regDt=" + regDt
+				+ ", editDt=" + editDt + ", endDate=" + endDate + ", endDateval=" + endDateval + ", validationYn="
+				+ validationYn + ", groupKeyval=" + groupKeyval + ", groupJikhamval=" + groupJikhamval + ", nameval="
+				+ nameval + ", yyyymmddval=" + yyyymmddval + ", phoneval=" + phoneval + ", sexval=" + sexval
+				+ ", cityCodeval=" + cityCodeval + ", gunCodeval=" + gunCodeval + ", dongCodeval=" + dongCodeval
+				+ ", detailAddressval=" + detailAddressval + ", mrankval=" + mrankval + ", levelval=" + levelval
+				+ ", dangwonval=" + dangwonval + ", churchval=" + churchval + ", churchRankval=" + churchRankval
+				+ ", recommandNameval=" + recommandNameval + ", recommandPhoneval=" + recommandPhoneval
+				+ ", adminAuthval=" + adminAuthval + ", messageTxt=" + messageTxt + ", messageTitle=" + messageTitle
+				+ ", happyurl=" + happyurl + ", sdate=" + sdate + ", edate=" + edate + ", checked=" + checked
+				+ ", noticeChecked=" + noticeChecked + "]";
 	}
 
+	
 	
 	
 	

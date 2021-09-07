@@ -37,8 +37,8 @@
                                 <div class="">
                                     <div class="text-center">
                                         <a href="index.html" class="">
-                                            <img src="/resources/assets/images/logo-dark.png" alt="" height="24" class="auth-logo logo-dark mx-auto">
-                                            <img src="/resources/assets/images/logo-light.png" alt="" height="24" class="auth-logo logo-light mx-auto">
+                                            <img src="/resources/assets/images/logo.png" alt="" height="24" class="auth-logo logo-dark mx-auto">
+                                            <img src="/resources/assets/images/logo.png" alt="" height="24" class="auth-logo logo-light mx-auto">
                                         </a>
                                     </div>
                                     <!-- end row -->

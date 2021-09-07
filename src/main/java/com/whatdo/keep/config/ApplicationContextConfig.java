@@ -84,6 +84,10 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 	
 	@Value("${config.sampleFilePath}")
 	private String sampleFilePath;
+
+	@Value("${config.happyAPI}")
+	private String happyAPI;
+	
 	
 	@Autowired
 	Environment environment;

@@ -283,7 +283,8 @@ public class MemberController extends MotherController{
     	    		insertList.get(i).setRegDt(new Date());
     	    		String password = "";
     	    				try {
-    	    					password = CryptoOnewayPasswrod.encryptPassword(insertList.get(i).getPhone(),insertList.get(i).getPhone());
+//    	    					password = CryptoOnewayPasswrod.encryptPassword(insertList.get(i).getPhone(),insertList.get(i).getPhone());
+    	    					password = CryptoOnewayPasswrod.encryptPassword(insertList.get(i).getYyyymmdd(),insertList.get(i).getPhone());
     	    				} catch (Exception e) {
     	    					// TODO Auto-generated catch block
     	    					e.printStackTrace();
@@ -560,6 +561,24 @@ public class MemberController extends MotherController{
 		date = date.minusDays(7);
 		Date convertDate =   Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
 		String startDate = dateFormat.format(convertDate);
+		
+		List<AddressCodeVO> citys = dao.getCitys();
+		
+		Map<String,String> param = new HashMap();
+		param.put("cityCode", citys.get(0).getCityCode());
+		List<AddressCodeVO> gus = dao.getGus(param);
+		
+		param = new HashMap();
+		param.put("cityCode", citys.get(0).getCityCode());
+		param.put("gunCode", gus.get(0).getGunCode());
+		List<AddressCodeVO> dongs = dao.getDongs(param);
+		
+		LOGGER.debug("##cities {} "+ citys);
+		
+		modelAndView.addObject("cities", citys );
+		modelAndView.addObject("gus",gus );
+		modelAndView.addObject("dongs",dongs );
+		
 		modelAndView.addObject("groups", groupList);
 		modelAndView.addObject("startDate", startDate);
 		modelAndView.addObject("endDate", endDate);
@@ -630,7 +649,8 @@ public class MemberController extends MotherController{
 		inputform.setDistrictName(getvo.getDistrictName());
 		String password = "";
 				try {
-					password = CryptoOnewayPasswrod.encryptPassword(inputform.getPhone(),inputform.getPhone());
+//					password = CryptoOnewayPasswrod.encryptPassword(inputform.getPhone(),inputform.getPhone());
+					password = CryptoOnewayPasswrod.encryptPassword(inputform.getYyyymmdd(),inputform.getPhone());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -650,7 +670,7 @@ public class MemberController extends MotherController{
 	@RequestMapping(value = "/admin/member/getcity", method = { RequestMethod.GET,RequestMethod.POST })
 	@ResponseBody
 	public Map getcity(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
-			,AddressCodeVO inputform	) throws InterruptedException{
+			,MemberVO inputform	) throws InterruptedException{
 		
 		
 		LOGGER.debug("##getcity enter");

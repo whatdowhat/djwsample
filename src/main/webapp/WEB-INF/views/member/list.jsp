@@ -87,7 +87,7 @@
 			                                            </div>
 			                                        </div>
 		                                        	                                        
-		
+		<!-- 
 			                                        <div class="mb-3 row">
 			                                            <label for="example-tel-input" class="col-md-2 col-form-label">지역</label>
 			                                            <div class="col-md-10">
@@ -105,10 +105,39 @@
 			                                            <div class="col-md-10">
 			                                                 <input type="text"  class="form-control" id="dongN">
 			                                            </div>
+			                                        </div> -->
+		                                        <div class="mb-3 row">
+		                                            <label class="col-md-2 col-form-label">주소</label>
+		                                            <div class="col-md-3">
+		                                                <select class="form-select" onchange="clickCity(this)" id="city">
+		                                                	<option value="all">전체</option>
+															<c:forEach var="item" items="${cities}" varStatus="status"> 
+																		<option value="${item.cityCode}">${item.cityN}</option>
+															</c:forEach>
+		                                                </select>
+		 											</div>
+			                                        <div class="col-md-3">
+			                                                <select class="form-select" onchange="clickGun(this)" id="gun">
+			                                                <option value="all">전체</option>
+																<c:forEach var="item" items="${gus}" varStatus="status"> 
+																			<option value="${item.gunCode}">${item.gunN}</option>
+																</c:forEach>
+			                                                </select>
+			                                            </div>
+			                                        <div class="col-md-4">
+			                                                <select class="form-select" id="dong">
+			                                                <option value="all">전체</option>
+																<c:forEach var="item" items="${dongs}" varStatus="dong"> 
+																			<option value="${item.dongCode}">${item.dongN}</option>
+																</c:forEach>
+			                                                </select>
 			                                        </div>
+                                           
+
+                                        </div>
 			                                        
 			                                        <div class="mb-3 row">
-			                                            <label for="example-tel-input" class="col-md-2 col-form-label">주소</label>
+			                                            <label for="example-tel-input" class="col-md-2 col-form-label">주소 상세</label>
 			                                            <div class="col-md-10">
 			                                                 <input type="text" class="form-control" id="detailAddress">
 			                                            </div>
@@ -247,10 +276,15 @@ var inputform = {};
 	inputform.yyyymmdd = $("#yyyymmdd").val();
 	inputform.phone = $("#phone").val();
 
-	inputform.cityN = $("#cityN").val();
-	inputform.gunN = $("#gunN").val();
-	inputform.dongN = $("#dongN").val();
 
+	inputform.cityN = $("#city option:selected").text();
+	inputform.gunN = $("#gun option:selected").text();
+	inputform.dongN = $("#dong option:selected").text();
+	
+	inputform.cityN = inputform.cityN == "전체" ? "" : inputform.cityN;
+	inputform.gunN = inputform.gunN == "전체" ? "" : inputform.gunN;
+	inputform.dongN = inputform.dongN == "전체" ? "" : inputform.dongN;
+	
 	inputform.dangwon = $("#dangwon").val();
 	inputform.recommandName = $("#recommandName").val();
 	inputform.recommandPhone = $("#recommandPhone").val();
@@ -385,10 +419,14 @@ function search(){
 	inputform.yyyymmdd = $("#yyyymmdd").val();
 	inputform.phone = $("#phone").val();
 
-	inputform.cityN = $("#cityN").val();
-	inputform.gunN = $("#gunN").val();
-	inputform.dongN = $("#dongN").val();
-
+	inputform.cityN = $("#city option:selected").text();
+	inputform.gunN = $("#gun option:selected").text();
+	inputform.dongN = $("#dong option:selected").text();
+	
+	inputform.cityN = inputform.cityN == "전체" ? "" : inputform.cityN;
+	inputform.gunN = inputform.gunN == "전체" ? "" : inputform.gunN;
+	inputform.dongN = inputform.dongN == "전체" ? "" : inputform.dongN;
+	
 	inputform.dangwon = $("#dangwon").val();
 	inputform.recommandName = $("#recommandName").val();
 	inputform.recommandPhone = $("#recommandPhone").val();

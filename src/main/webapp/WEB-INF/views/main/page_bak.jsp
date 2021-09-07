@@ -41,7 +41,7 @@
                         <div class="navbar-brand-box text-center">
                             <a href="index.html" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <img src="/resources/assets/images/logo-sm.png" alt="logo-sm-dark" height="22">
+                                    <img src="/resources/assets/images/logo.png" alt="logo-sm-dark" height="22">
                                 </span>
                                 <span class="logo-lg">
                                     <img src="/resources/assets/images/logo-dark.png" alt="logo-dark" height="24">
@@ -50,7 +50,7 @@
 
                             <a href="index.html" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="/resources/assets/images/logo-sm.png" alt="logo-sm-light" height="22">
+                                    <img src="/resources/assets/images/logo.png" alt="logo-sm-light" height="22">
                                 </span>
                                 <span class="logo-lg">
                                     <img src="/resources/assets/images/logo-light.png" alt="logo-light" height="24">

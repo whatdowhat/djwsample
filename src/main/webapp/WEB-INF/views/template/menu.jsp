@@ -123,7 +123,17 @@
                         <li><a href="/admin/notice/innernotice.do">공지사항</a></li>
                     </ul>
                 </li>
-
+<sec:authorize access="hasAuthority('ROLE_ADMIN')">
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="ri-table-2"></i>
+                        <span>당비관리</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="/admin/happy/list.do">해피나눔</a></li>
+                    </ul>
+                </li>
+</sec:authorize>                
 
 				<li>
                     <a href="/admin/myprofile/page.do" class="waves-effect">
@@ -131,6 +141,7 @@
                         <span>내정보</span>
                     </a>
                 </li>
+                
                 <!-- <li class="menu-title">Pages</li>
 
                

@@ -76,7 +76,7 @@ public class SmsAPIController extends MotherController{
 			Map<String, String> sms = new HashMap<String, String>();
 			
 			sms.put("user_id", "koreacrp"); // SMS 아이디
-			sms.put("sender", "01050589150"); // 발신번호
+			sms.put("sender", ""); // 발신번호
 			sms.put("key", "n6p1fwvzj1l54ehteruj5x607842bpom"); //인증키
 			sms.put("receiver", "01050589150"); // 수신번호
 			/******************** 인증정보 ********************/
