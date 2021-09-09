@@ -4,11 +4,73 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 
-<!doctype html>
+
+<%
+/*     NiceID.Check.CPClient niceCheck = new  NiceID.Check.CPClient();
+    
+    String sSiteCode = "BV284";			// NICE로부터 부여받은 사이트 코드
+    String sSitePassword = "ElInK3g8bwwu";		// NICE로부터 부여받은 사이트 패스워드
+    String sRequestNumber = "REQ0000000001";        	// 요청 번호, 이는 성공/실패후에 같은 값으로 되돌려주게 되므로 
+                                                    	// 업체에서 적절하게 변경하여 쓰거나, 아래와 같이 생성한다.
+    sRequestNumber = niceCheck.getRequestNO(sSiteCode);
+  	//session.setAttribute("REQ_SEQ" , sRequestNumber);	// 해킹등의 방지를 위하여 세션을 쓴다면, 세션에 요청번호를 넣는다.
+   	String sAuthType = "M";      	// 없으면 기본 선택화면, M(휴대폰), X(인증서공통), U(공동인증서), F(금융인증서), S(PASS인증서), C(신용카드)
+	String customize 	= "";		//없으면 기본 웹페이지 / Mobile : 모바일페이지
+	
+    // CheckPlus(본인인증) 처리 후, 결과 데이타를 리턴 받기위해 다음예제와 같이 http부터 입력합니다.
+	//리턴url은 인증 전 인증페이지를 호출하기 전 url과 동일해야 합니다. ex) 인증 전 url : http://www.~ 리턴 url : http://www.~
+    String sReturnUrl = "http://localhost:8080//public/authReturnS.do";      // 성공시 이동될 URL
+    String sErrorUrl = "http://localhost:8080/public/authReturnF.do";            // 실패시 이동될 URL
+
+    // 입력될 plain 데이타를 만든다.
+    String sPlainData = "7:REQ_SEQ" + sRequestNumber.getBytes().length + ":" + sRequestNumber +
+                        "8:SITECODE" + sSiteCode.getBytes().length + ":" + sSiteCode +
+                        "9:AUTH_TYPE" + sAuthType.getBytes().length + ":" + sAuthType +
+                        "7:RTN_URL" + sReturnUrl.getBytes().length + ":" + sReturnUrl +
+                        "7:ERR_URL" + sErrorUrl.getBytes().length + ":" + sErrorUrl +
+                        "9:CUSTOMIZE" + customize.getBytes().length + ":" + customize;
+    
+    String sMessage = "";
+    String sEncData = "";
+    
+    int iReturn = niceCheck.fnEncode(sSiteCode, sSitePassword, sPlainData);
+    if( iReturn == 0 )
+    {
+        sEncData = niceCheck.getCipherData();
+    }
+    else if( iReturn == -1)
+    {
+        sMessage = "암호화 시스템 에러입니다.";
+    }    
+    else if( iReturn == -2)
+    {
+        sMessage = "암호화 처리오류입니다.";
+    }    
+    else if( iReturn == -3)
+    {
+        sMessage = "암호화 데이터 오류입니다.";
+    }    
+    else if( iReturn == -9)
+    {
+        sMessage = "입력 데이터 오류입니다.";
+    }    
+    else
+    {
+        sMessage = "알수 없는 에러 입니다. iReturn : " + iReturn;
+    } */
+%>
+
 <html lang="en">
 
     <head>
-        
+        	<!-- 본인인증 서비스 팝업을 호출하기 위해서는 다음과 같은 form이 필요합니다. -->
+	<form name="form_chk" method="post">
+		<input type="hidden" name="m" value="checkplusService">						<!-- 필수 데이타로, 누락하시면 안됩니다. -->
+		<%-- <input type="hidden" name="EncodeData" value="<%= sEncData %>">	 --%>	<!-- 위에서 업체정보를 암호화 한 데이타입니다. -->
+		<input type="hidden" name="EncodeData" value="${sEncData }">		<!-- 위에서 업체정보를 암호화 한 데이타입니다. -->
+	    
+		<!-- <a href="javascript:fnPopup();"> CheckPlus 안심본인인증 Click</a> -->
+	</form>
         <meta charset="utf-8" />
         <title>Login | Upzet - Admin & Dashboard Template</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -81,19 +143,21 @@
                                         <div class="row" style="margin-top: 40px">
                                                 <div class="col-6 mb-4">
                                                     <label class="form-label" for="username">이름 </label>
-                                                    <input type="text" class="form-control" id="name" >
+                                                    <input type="text" class="form-control" id="auth_name" >
                                                 </div>
                                                 <div class="col-6 mb-4">
                                                     <label class="form-label" for="userpassword">생년월일</label>
-                                                    <input type="text" class="form-control" id="yyyymmdd" >
+                                                    <input type="text" class="form-control" id="auth_yyyymmdd" >
                                                 </div>
                                                 <div class="col-6 mb-4">
                                                     <label class="form-label" for="username">연락처</label>
                                                     <div class="input-group date">
-                                                    	<input type="text" class="form-control" id="phone" ><button type="button" class="btn btn-primary">인증 요청</button>
+                                                    	<%-- <input type="text" class="form-control" id="phone" value="${sMobileNo }" ><button type="button" class="btn btn-primary" onclick="selft_authentic()">인증 요청</button> --%>
+                                                    	<input type="text" class="form-control" id="auth_phone" value="" ><button type="button" class="btn btn-primary" onclick="selft_authentic()" id=authBtn>인증 요청</button>
                                                     </div>
                                                 </div>
-                                                <div class="col-6">
+                                                <input type="hidden" id="sex" value="">
+                                                <!-- <div class="col-6">
                                                     <label class="form-label" for="userpassword">성별</label>
                                                     <div class="col-lg-6">
 		                                                <div class="btn-group btn-group-toggle mt-2 mt-lg-0" data-bs-toggle="buttons">
@@ -105,7 +169,7 @@
 		                                                    </label>
 		                                                </div>
                                             		</div>
-                                                </div>
+                                                </div> -->
                                                 
                                                 <div class="col-12">
                                                 <label class="col-md-2 col-form-label">주소</label>
@@ -155,7 +219,7 @@
 														  <canvas id="signature-pad" class="signature-pad" style="max-width: 100%;border: 1px solid #0bb197"></canvas>
 														</div>
 														<button class="btn btn-primary waves-effect waves-light" id="clear">지우기</button>
-														<button class="btn btn-primary waves-effect waves-light" id="save-png">저장</button>     
+														<!-- <button class="btn btn-primary waves-effect waves-light" id="save-png">저장</button> -->     
 														                                              
                                                 </div>
 												
@@ -166,7 +230,7 @@
                                                 
                                                 <hr>
                                                 <div class="d-grid mt-4">
-                                                    <button class="btn btn-primary waves-effect waves-light" onclick="submit()">당원가입</button>
+                                                    <button class="btn btn-primary waves-effect waves-light" id="apply" onclick="submit()" style="display: none;">당원가입</button>
                                                 </div>
                                         </div>
                                 </div>
@@ -225,9 +289,9 @@
 		inputform.groupName = "${vo.name}";
 		
 		
-		inputform.name = $("#name").val();
-		inputform.yyyymmdd = $("#yyyymmdd").val();
-		inputform.phone = $("#phone").val();
+		inputform.name = $("#auth_name").val();
+		inputform.yyyymmdd = $("#auth_yyyymmdd").val();
+		inputform.phone = $("#auth_phone").val();
 
 		inputform.cityCode = $("#city").val();
 		inputform.gunCode = $("#gun").val();
@@ -244,8 +308,7 @@
 		inputform.representiveCode = $("#representiveCode").val();
 
 		inputform.signPad = signaturePad.toDataURL('image/png');
-		
-		inputform.sex = sex;
+		inputform.sex = $("#sex").val();
 		
 		var validation = true;
 		
@@ -283,11 +346,11 @@
 		}
 		
 		Swal.fire({
-	        title: "당원을 생성하시겠습니까?",
+	        title: "가입 하시겠습니까?",
 	        text: "",
 	        icon: "warning",
 	        showCancelButton: !0,
-	        confirmButtonText: "생성",
+	        confirmButtonText: "예",
 	        cancelButtonText: "취소",
 	        confirmButtonClass: "btn btn-success mt-2",
 	        cancelButtonClass: "btn btn-danger ms-2 mt-2",
@@ -309,7 +372,6 @@
 	$(document).ready(function() {
 		
 		//canvas
-		
 		var canvas = document.getElementById('signature-pad');
 
 		// Adjust canvas coordinate space taking into account pixel ratio,
@@ -433,6 +495,53 @@
 			}
 		})
 
+	}
+	
+	
+ 	function selft_authentic(){
+
+		var openWin;
+		
+		window.name = "parentForm";
+		
+		window.open('', 'popupChk', 'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no');
+		document.form_chk.action = "https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb";
+		
+		document.form_chk.target = "popupChk";
+		document.form_chk.submit();
+	} 
+	
+	function sayHello(){
+		alert('from children');
+	}
+	
+	function callParentFun(result){
+		
+		/* result.sMobileNo = sMobileNo;
+		result.sName = sName;
+		result.sBirthDate = sBirthDate; */
+		console.dir(result);
+		if(document.getElementById("auth_name").value == result.sName &&
+				document.getElementById("auth_phone").value == result.sMobileNo &&
+				document.getElementById("auth_yyyymmdd").value == result.sBirthDate){
+
+			$("#auth_name").prop("readonly",true);
+			$("#auth_phone").prop("readonly",true);
+			$("#auth_yyyymmdd").prop("readonly",true);
+			$("#authBtn").prop("disabled",true);
+			if(result.sGender == "1" || result.sGender == "3" ){
+				$("#sex").val("남자");	
+			}else{
+				$("#sex").val("여자");
+			}
+			alert("본인인증 성공");
+	    	$("#apply").css("display","block");
+		}else{
+			alert("본인인증 실패.\n 이름,생년월일,연락처를 확인해주세요.");
+		}
+    	
+
+		
 	}
 	
 	</script>

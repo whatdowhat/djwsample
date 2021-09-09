@@ -149,7 +149,7 @@ $(document).ready(function() {
         	{"data" : "totalCount"},
         	{"data" : "detailAddress"},
         	{"data" : "phone",render:function(a,b,c,d){
-        		return "/public/manage/inviteMember?groupKey="+c.groupKey;
+        		return "/public?groupKey="+c.groupKey;
         	}},
         	/* {"data" : "phone",render:$.fn.dataTable.render.number(',','.',0,'$')}, */
 

@@ -17,7 +17,7 @@
         	<link href="/resources/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
         	<!--  page content -->
         	
-            <div class="main-content">
+            <div class="main-content" id="loading">
 
                 <div class="page-content">
                     <div class="container-fluid">
@@ -29,13 +29,28 @@
                             <div class="col-12">
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                                     <h4 class="mb-sm-0">해피나눔</h4>
+                                    
                                 </div>
                             </div>
                         </div>
                         <!-- end page title -->
                         <div class="row">
                         
-                        
+				                                    <div class="mb-3 row">
+				                                            <label for="example-date-input" class="col-md-1 col-form-label">날자 조건</label>
+				                                            <div class="col-md-5">
+				                                                <input class="form-control" type="date" value="${startDate}" id="startDate" >
+				                                                
+				                                            </div>
+															<div class="col-md-5">
+				                                                <input class="form-control" type="date" value="${endDate}" id="endDate" >
+				                                            </div>
+				                                            <div class="col-md-1">
+				                                            	<button type="button" class="btn btn-primary" onclick="search()">검색</button>
+				                                            </div>
+				                                            
+				                                    </div>
+
 
                             <div class="col-12">
                                 <div class="card">
@@ -47,7 +62,6 @@
 		                                            <thead>
 		                                            <tr>
 		                                                <th>#</th>
-		                                                <th>단체이름</th>
 		                                                <th>멤버이름</th>
 		                                                <th>연락처</th>
 		                                                <th>결제방법</th>
@@ -88,6 +102,24 @@ var edate = "${endDate}";
 var url = "${happyAPI}";
 var code = "${happyAPICode}";
 
+var edt = new Date(edate);
+var sdt = new Date(sdate);
+
+var dateDiff = Math.ceil((edt.getTime()-sdt.getTime())/(1000*3600*24));
+
+if(dateDiff >90){
+	
+	Swal.fire({
+		title: "최대 1주일 검색 가능합니다.",
+        text: "",
+        icon: "error",
+        confirmButtonColor: "#ff3d60",
+        confirmButtonText: "확인"
+    });
+	return false;
+}
+
+
 sdate = sdate.replaceAll("-","");
 edate = edate.replaceAll("-","");
 var requestUrl = url + "?" + "code="+code + "&sdate="+sdate+"&edate="+edate;
@@ -96,7 +128,6 @@ var inputform = {};
 inputform.happyurl = requestUrl;
 inputform.sdate = sdate;
 inputform.edate = edate;
-
 ajax("/admin/happy/listdata.do",inputform,function(result){
 	
 	console.dir(result);
@@ -149,14 +180,15 @@ var inputform = {};
         	{"data" : "orgaName",render:function(a,b,c,d){
         		return d.row + d.settings._iDisplayStart +1;
         	}},   
-        	{"data" : "orgaName"},
         	{"data" : "memNm"},
         	{"data" : "userTel1"},
         	{"data" : "paywayCode"},
-        	{"data" : "applyAmount",     	render: function (data, type, full, meta){
+        	{"data" : "applyAmount",   	render: function (data, type, full, meta){
       	       return numberWithCommas(full.applyAmount);
          	}},
-        	{"data" : "payDate"},
+         	{"data" : "payDate",     	render: function (data, type, full, meta){
+         		return full.payDate.substr(0,4)+"-"+full.payDate.substr(4,2)+"-"+full.payDate.substr(6,2)
+         	}},
         	{"data" : "payNorCode"},
         	{"data" : "payType"},
         	{"data" : "memNo"},
@@ -204,96 +236,110 @@ function goMember(phone){
 
 function search(){
 	
+	var sdate =  $("#startDate").val(); 
+	var edate = $("#endDate").val();
+	
+	var edt = new Date(edate);
+	var sdt = new Date(sdate);
+
+	var dateDiff = Math.ceil((edt.getTime()-sdt.getTime())/(1000*3600*24));
+
+	if(dateDiff >90){
+		
+		Swal.fire({
+	        title: "최대 90일 검색 가능합니다.",
+	        text: "",
+	        icon: "error",
+	        confirmButtonColor: "#ff3d60",
+	        confirmButtonText: "확인"
+	    });
+		return false;
+	}
+	
+	
+	var url = "${happyAPI}";
+	var code = "${happyAPICode}";
+
+	sdate = sdate.replaceAll("-","");
+	edate = edate.replaceAll("-","");
+	var requestUrl = url + "?" + "code="+code + "&sdate="+sdate+"&edate="+edate;
+	console.log(requestUrl);
 	var inputform = {};
-	inputform.name = $("#name").val();
-	inputform.yyyymmdd = $("#yyyymmdd").val();
-	inputform.phone = $("#phone").val();
+	inputform.happyurl = requestUrl;
+	inputform.sdate = sdate;
+	inputform.edate = edate;
+	ajax("/admin/happy/listdata.do",inputform,function(result){
+		
+		console.dir(result);
+		//JSON.string
 
-	inputform.cityN = $("#cityN").val();
-	inputform.gunN = $("#gunN").val();
-	inputform.dongN = $("#dongN").val();
+		
+	var inputform = {};
+		
+		inputform.name = $("#name").val();
+		inputform.yyyymmdd = $("#yyyymmdd").val();
+		inputform.phone = $("#phone").val();
 
-	inputform.dangwon = $("#dangwon").val();
-	inputform.recommandName = $("#recommandName").val();
-	inputform.recommandPhone = $("#recommandPhone").val();
-	
-	inputform.groupName = $("#groupName").val();
-	inputform.detailAddress = $("#detailAddress").val();
-	inputform.level = $("#level").val();
-	
-	
-	inputform.church = $("#church").val();
-	inputform.churchRank = $("#churchRank").val();
+		inputform.cityN = $("#cityN").val();
+		inputform.gunN = $("#gunN").val();
+		inputform.dongN = $("#dongN").val();
 
-	inputform.startDate = $("#startDate").val();
-	inputform.endDate = $("#endDate").val();
-	
-    var url = "/admin/member/listtable.do";
-    $('#datatable').DataTable({
-    	select: true,
-    	paging : true,
-    	info: true,
-    	searching: false,
-    	"pageLength": 10,
-    	"serverSide" : true,
-    	"pagingType" : "full_numbers",
-    	"processing" : true,
-    	"destroy" : true,
-    	"lengthChange" : true,
-        "columns" : [ 
-        	{"data" : "checked",     	render: function (data, type, full, meta){
-        		$("#selectBoxTargetAll").prop("checked",false);
-     	       return '<input type="checkbox" name="selectBoxTarget" id="selectBoxTarget"  value="'+full.seq+','+full.name+','+full.phone+'">'
-        	}},
-        	{"data" : "seq",render:function(a,b,c,d){
-        		return d.row + d.settings._iDisplayStart +1;
-        	}},        	
-        	{"data" : "dangwon"},
-        	{"data" : "name"},
-        	{"data" : "phone"},
-        	{"data" : "cityN"},
-        	{"data" : "gunN"},
-        	{"data" : "dongN"},
-        	{"data" : "yyyymmdd"},
-        	
-        	{"data" : "detailAddress"},
-        	{"data" : "level"},
-        	{"data" : "groupName"},
-        	{"data" : "recommandName"},
-        	{"data" : "recommandPhone"},
-        	/* {"data" : "regDt"}, */
-        	{"data" : "regDt",render:function(a,b,c,d){
-        		
-        		if(c.regDt != '' && c.regDt != undefined){
-        			//var d = new Date(c.yyyymmdd);
-        			return formatDate(c.regDt);
-        			
-        		}else{
-        			return "-";
-        		}
-        		
-        		
-        	}},  
-       	],
-       	'columnDefs': [{
-        	   'targets': 0,
-        	   'searchable':false,
-        	   'orderable':false,
-        	   'className': 'dt-body-center',
-        	   'render': function (data, type, full, meta){
-        	       return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
-        	   }
-        	}],
-        "ajax" : {
-        	type : "POST",
-            url : url,
-            "data" : {
-                "columnsize" : 14,
-                "vo" : inputform,
-            }
-        },
-    });
-	
+		inputform.dangwon = $("#dangwon").val();
+		inputform.recommandName = $("#recommandName").val();
+		inputform.recommandPhone = $("#recommandPhone").val();
+		
+		inputform.groupName = $("#groupName").val();
+		inputform.detailAddress = $("#detailAddress").val();
+		inputform.level = $("#level").val();
+		
+		
+		inputform.church = $("#church").val();
+		inputform.churchRank = $("#churchRank").val();
+
+		inputform.startDate = $("#startDate").val();
+		inputform.endDate = $("#endDate").val();
+
+		
+		console.dir(inputform);
+		
+	    $.fn.dataTable.ext.errMode = 'none';
+	    table = $('#datatable').DataTable({
+	    	select: true,
+	    	 
+	    	paging : true,
+	    	info: true,
+	    	searching: true,
+	    	"pageLength": 10,
+	    	"serverSide" : false,
+	    	"pagingType" : "full_numbers",
+	    	"processing" : true,
+	    	"destroy" : true,
+	    	"lengthChange" : true,
+	        "data":result.RESULT_MESSAGE,
+	        "columns" : [
+	        	{"data" : "orgaName",render:function(a,b,c,d){
+	        		return d.row + d.settings._iDisplayStart +1;
+	        	}},   
+	        	{"data" : "orgaName"},
+	        	{"data" : "memNm"},
+	        	{"data" : "userTel1"},
+	        	{"data" : "paywayCode"},
+	        	{"data" : "applyAmount",   	render: function (data, type, full, meta){
+	      	       return numberWithCommas(full.applyAmount);
+	         	}},
+	         	
+	        	{"data" : "payDate",     	render: function (data, type, full, meta){
+	        		return full.payDate.substr(0,4)+"-"+full.payDate.substr(4,2)+"-"+full.payDate.substr(6,2);
+	        	}},
+	        	{"data" : "payNorCode"},
+	        	{"data" : "payType"},
+	        	{"data" : "memNo"},
+	        ]
+	    	
+	    });
+		
+		}
+	);
 	
 }
 

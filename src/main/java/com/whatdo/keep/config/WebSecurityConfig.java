@@ -73,7 +73,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				"/",
 				happyAPI,
 				"/login.do",
+				"https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb",
+				"http://www.test.co.kr/checkplus_success.jsp",
+				"http://www.test.co.kr/checkplus_fail.jsp",
 				"/index.jsp"
+
 //				"/favicon.ico",
 //				"/restapi/post/order.do",
 //				"/restapi/post/isComplete.do",
