@@ -64,7 +64,7 @@
 
 var messageList =[];
 var finalmessageList = [];
-
+var sendType;
 
 $(document).ready(function() {
 	
@@ -86,7 +86,8 @@ function selectAll(){
 	}
 
  }
-function snedMessage(){
+function snedMessage(type){
+	sendType = type;
 	
 	$.each($("input[name=selectBoxTarget]"), function(index, value) {
 		if(value.checked){
@@ -144,7 +145,11 @@ function snedMessageCommit(){
 	}
 	
 	else{
-		var url="/admin/send/message.do";
+		
+		
+		
+		
+		var url="";
 		var list = [];
 		for(var i =0 ; i<messageList.length; i++){
 			var item ={};
@@ -159,26 +164,54 @@ function snedMessageCommit(){
 			
 			list.push(item);
 		}
-		ajaxSendData(url,list,function(result){
-			console.dir(result);
-			if(result.result ==true){
-				Swal.fire({
-		        title: "성공",
-		        text: "쪽지를 보냈습니다.",
-		        icon: "success"
-		    });	 
-		    
-			}else{
-				Swal.fire({
-			        title: "실패",
-			        text: "관리자에게 문의하세요.",
-			        icon: "error"
-			    });
-			}
+		
+		if(sendType == 1){
+			url="/admin/send/message.do";
+			ajaxSendData(url,list,function(result){
+				console.dir(result);
+				if(result.result ==true){
+					Swal.fire({
+			        title: "성공",
+			        text: "쪽지를 보냈습니다.",
+			        icon: "success"
+			    });	 
+			    
+				}else{
+					Swal.fire({
+				        title: "실패",
+				        text: "관리자에게 문의하세요.",
+				        icon: "error"
+				    });
+				}
+				
+				$("#myModal").modal("hide");
+				
+			});
 			
-			$("#myModal").modal("hide");
-			
-		});
+		}else if(sendType == 2){
+			url="/admin/sms/send.do";
+			ajaxSendData(url,list,function(result){
+				console.dir(result);
+				if(result.result ==true){
+					Swal.fire({
+			        title: "성공",
+			        text: "쪽지를 보냈습니다.",
+			        icon: "success"
+			    });	 
+			    
+				}else{
+					Swal.fire({
+				        title: "실패",
+				        text: "관리자에게 문의하세요.",
+				        icon: "error"
+				    });
+				}
+				
+				$("#myModal").modal("hide");
+				
+			});
+		}
+
 		
 	}
 }

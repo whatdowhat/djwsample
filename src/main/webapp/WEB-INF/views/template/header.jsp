@@ -164,15 +164,18 @@
                         </div>
                           <div class="dropdown d-inline-block user-dropdown">
 		                   <c:if test="${path  eq '/admin/member/list.do' }">
-		                                <button type="button" class="btn header-item waves-effect" style="margin-left: auto; border: solid;" onclick="snedMessage()">쪽지 보내기</button>
+		                                <button type="button" class="btn header-item waves-effect" style="margin-left: auto; border: solid;" onclick="snedMessage(1)">쪽지 보내기</button>
+		                                <button type="button" class="btn header-item waves-effect" style="margin-left: auto; border: solid;" onclick="snedMessage(2)">문자 보내기</button>
 		                                
 		                   </c:if> 
 		                   <c:if test="${path  eq '/admin/message/innerMessage.do' }">
-		                                <button type="button" class="btn header-item waves-effect" style="margin-left: auto; border: solid;" onclick="snedMessage()">쪽지 보내기</button>
+		                                <button type="button" class="btn header-item waves-effect" style="margin-left: auto; border: solid;" onclick="snedMessage(1)">쪽지 보내기</button>
+		                                <button type="button" class="btn header-item waves-effect" style="margin-left: auto; border: solid;" onclick="snedMessage(2)">문자 보내기</button>
 		                                
 		                   </c:if> 	           
 		                   <c:if test="${path  eq '/admin/main/member.do' }">
-		                                <button type="button" class="btn header-item waves-effect" style="margin-left: auto; border: solid;" onclick="snedMessage()">쪽지 보내기</button>
+		                                <button type="button" class="btn header-item waves-effect" style="margin-left: auto; border: solid;" onclick="snedMessage(1)">쪽지 보내기</button>
+		                                <button type="button" class="btn header-item waves-effect" style="margin-left: auto; border: solid;" onclick="snedMessage(2)">문자 보내기</button>
 		                   </c:if> 
 	                   </div>
                         <div class="dropdown d-inline-block user-dropdown">

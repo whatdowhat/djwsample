@@ -119,7 +119,7 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="/admin/message/innerMessage.do">쪽지</a></li>
-                        <li><a href="#">문자(SMS)</a></li>
+                        <li><a href="/admin/message/sms.do">문자(SMS)</a></li>
                         <li><a href="/admin/notice/innernotice.do">공지사항</a></li>
                     </ul>
                 </li>

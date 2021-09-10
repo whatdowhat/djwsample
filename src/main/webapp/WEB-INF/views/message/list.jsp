@@ -80,12 +80,9 @@
         </div>
     </body>
 <script type="text/javascript">
-
-
 $(document).ready(function() {
     
 	
-
 	
 	
 var inputform = {};
@@ -95,7 +92,6 @@ var inputform = {};
 	inputform.messageTitle = "";
 	inputform.messageTxt = "";
 	inputform.regDt = "";
-
 	console.dir(inputform);
 	
     var url = "/admin/message/listtable.do";
@@ -158,24 +154,16 @@ var inputform = {};
             }
         },
     });
-
-
-
 });
-
-
-
 function search(){
 	
 	var inputform = {};
 	inputform.name = $("#name").val();
 	inputform.yyyymmdd = $("#yyyymmdd").val();
 	inputform.phone = $("#phone").val();
-
 	inputform.cityN = $("#cityN").val();
 	inputform.gunN = $("#gunN").val();
 	inputform.dongN = $("#dongN").val();
-
 	inputform.dangwon = $("#dangwon").val();
 	inputform.recommandName = $("#recommandName").val();
 	inputform.recommandPhone = $("#recommandPhone").val();
@@ -187,7 +175,6 @@ function search(){
 	
 	inputform.church = $("#church").val();
 	inputform.churchRank = $("#churchRank").val();
-
 	inputform.startDate = $("#startDate").val();
 	inputform.endDate = $("#endDate").val();
 	
@@ -258,19 +245,15 @@ function search(){
 	
 	
 }
-
 function formatDate(date) {
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
-
     if (month.length < 2) 
         month = '0' + month;
     if (day.length < 2) 
         day = '0' + day;
-
     return [year, month, day].join('-');
 }
 </script>
-    

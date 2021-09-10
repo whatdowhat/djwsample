@@ -96,7 +96,6 @@ public class HappyController extends MotherController{
 	public ModelAndView happyList(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session,Principal principal){
 		
 		LOGGER.debug("##happyList enter");
-		List<GroupVO> groupList = groupVORepository.findAll();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String endDate = dateFormat.format(new Date());
 		LocalDate date = LocalDate.now();

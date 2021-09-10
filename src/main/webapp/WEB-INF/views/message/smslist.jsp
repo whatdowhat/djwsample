@@ -28,7 +28,7 @@
 						<div class="row">
                             <div class="col-12">
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                    <h4 class="mb-sm-0">해피나눔</h4>
+                                    <h4 class="mb-sm-0">SMS 이력</h4>
                                     
                                 </div>
                             </div>
@@ -48,6 +48,7 @@
 				                                            <div class="col-md-1">
 				                                            	<button type="button" class="btn btn-primary" onclick="search()">검색</button>
 				                                            </div>
+
 				                                            
 				                                    </div>
 
@@ -62,14 +63,9 @@
 		                                            <thead>
 		                                            <tr>
 		                                                <th>#</th>
-		                                                <th>멤버이름</th>
-		                                                <th>연락처</th>
-		                                                <th>결제방법</th>
-		                                                <th>결제금액</th>
-		                                                <th>결제일</th>
-		                                                <th>결제결과</th>
-		                                                <th>결제타입</th>
-		                                                <th>멤버번호</th>
+		                                                <th>발신자</th>
+		                                                <th>내용</th>
+		                                                <th>발신일자</th>
 		                                            </tr>
 		                                            </thead>
 		                                        </table>
@@ -99,15 +95,12 @@ $(document).ready(function() {
     
 var sdate = "${startDate}"; 
 var edate = "${endDate}";
-var url = "${happyAPI}";
-var code = "${happyAPICode}";
-
 var edt = new Date(edate);
 var sdt = new Date(sdate);
 
 var dateDiff = Math.ceil((edt.getTime()-sdt.getTime())/(1000*3600*24));
 
-if(dateDiff >90){
+if(dateDiff >7){
 	
 	Swal.fire({
 		title: "최대 1주일 검색 가능합니다.",
@@ -119,45 +112,15 @@ if(dateDiff >90){
 	return false;
 }
 
+var list =${list};
 
-sdate = sdate.replaceAll("-","");
-edate = edate.replaceAll("-","");
-var requestUrl = url + "?" + "code="+code + "&sdate="+sdate+"&edate="+edate;
-console.log(requestUrl);
-var inputform = {};
-inputform.happyurl = requestUrl;
-inputform.sdate = sdate;
-inputform.edate = edate;
-ajax("/admin/happy/listdata.do",inputform,function(result){
-	
-	console.dir(result);
-	//JSON.string
+
 
 	
 var inputform = {};
 	
-	inputform.name = $("#name").val();
-	inputform.yyyymmdd = $("#yyyymmdd").val();
-	inputform.phone = $("#phone").val();
-
-	inputform.cityN = $("#cityN").val();
-	inputform.gunN = $("#gunN").val();
-	inputform.dongN = $("#dongN").val();
-
-	inputform.dangwon = $("#dangwon").val();
-	inputform.recommandName = $("#recommandName").val();
-	inputform.recommandPhone = $("#recommandPhone").val();
-	
-	inputform.groupName = $("#groupName").val();
-	inputform.detailAddress = $("#detailAddress").val();
-	inputform.level = $("#level").val();
-	
-	
-	inputform.church = $("#church").val();
-	inputform.churchRank = $("#churchRank").val();
-
-	inputform.startDate = $("#startDate").val();
-	inputform.endDate = $("#endDate").val();
+	inputform.sDate = $("#startDate").val();
+	inputform.eDate = $("#endDate").val();
 
 	
 	console.dir(inputform);
@@ -175,32 +138,22 @@ var inputform = {};
     	"processing" : true,
     	"destroy" : true,
     	"lengthChange" : true,
-        "data":result.RESULT_MESSAGE,
+        "data":list.list,
         "columns" : [
-        	{"data" : "orgaName",render:function(a,b,c,d){
+        	{"data" : "mid",render:function(a,b,c,d){
         		return d.row + d.settings._iDisplayStart +1;
         	}},   
-        	{"data" : "memNm"},
-        	{"data" : "userTel1"},
-        	{"data" : "paywayCode"},
-        	{"data" : "applyAmount",   	render: function (data, type, full, meta){
-      	       return numberWithCommas(full.applyAmount);
-         	}},
-         	{"data" : "payDate",     	render: function (data, type, full, meta){
+        	{"data" : "sender"},
+        	{"data" : "msg"},
+        	{"data" : "reg_date"},
+/*          	{"data" : "payDate",     	render: function (data, type, full, meta){
          		return full.payDate.substr(0,4)+"-"+full.payDate.substr(4,2)+"-"+full.payDate.substr(6,2)
-         	}},
-        	{"data" : "payNorCode"},
-        	{"data" : "payType"},
-        	{"data" : "memNo"},
+         	}}, */
         ]
     	
     });
 	
-	}
-);
-	
 });
-
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -256,55 +209,16 @@ function search(){
 		return false;
 	}
 	
-	
-	var url = "${happyAPI}";
-	var code = "${happyAPICode}";
-
 	sdate = sdate.replaceAll("-","");
 	edate = edate.replaceAll("-","");
-	var requestUrl = url + "?" + "code="+code + "&sdate="+sdate+"&edate="+edate;
-	console.log(requestUrl);
 	var inputform = {};
-	inputform.happyurl = requestUrl;
 	inputform.sdate = sdate;
 	inputform.edate = edate;
-	ajax("/admin/happy/listdata.do",inputform,function(result){
+	ajax("/admin/message/smslist.do",inputform,function(result){
 		
+		console.log("result!!");
 		console.dir(result);
 		//JSON.string
-
-		if(result.RESULT_CODE == "9999"){
-			alert(result.RESULT_MESSAGE);
-		}
-		
-		
-	var inputform = {};
-		
-		inputform.name = $("#name").val();
-		inputform.yyyymmdd = $("#yyyymmdd").val();
-		inputform.phone = $("#phone").val();
-
-		inputform.cityN = $("#cityN").val();
-		inputform.gunN = $("#gunN").val();
-		inputform.dongN = $("#dongN").val();
-
-		inputform.dangwon = $("#dangwon").val();
-		inputform.recommandName = $("#recommandName").val();
-		inputform.recommandPhone = $("#recommandPhone").val();
-		
-		inputform.groupName = $("#groupName").val();
-		inputform.detailAddress = $("#detailAddress").val();
-		inputform.level = $("#level").val();
-		
-		
-		inputform.church = $("#church").val();
-		inputform.churchRank = $("#churchRank").val();
-
-		inputform.startDate = $("#startDate").val();
-		inputform.endDate = $("#endDate").val();
-
-		
-		console.dir(inputform);
 		
 	    $.fn.dataTable.ext.errMode = 'none';
 	    table = $('#datatable').DataTable({
@@ -319,39 +233,14 @@ function search(){
 	    	"processing" : true,
 	    	"destroy" : true,
 	    	"lengthChange" : true,
-	        "data":result.RESULT_MESSAGE,
+	        "data":result.list,
 	        "columns" : [
-	        	{"data" : "orgaName",render:function(a,b,c,d){
+	        	{"data" : "mid",render:function(a,b,c,d){
 	        		return d.row + d.settings._iDisplayStart +1;
 	        	}},   
-	        	{"data" : "memNm"},
-	        	{"data" : "userTel1"},
-	        	{"data" : "paywayCode"},
-	        	{"data" : "applyAmount",   	render: function (data, type, full, meta){
-	        		var result ="";
-	        		try{
-	        			result = numberWithCommas(full.applyAmount);;	
-	        		}catch(e){
-	        			result = full.applyAmount;
-	        		}
-	        		
-	      	       return result
-	         	}},
-	         	
-	        	{"data" : "payDate",     	render: function (data, type, full, meta){
-	        		
-	        		var result ="";
-	        		try{
-	        			result = full.payDate.substr(0,4)+"-"+full.payDate.substr(4,2)+"-"+full.payDate.substr(6,2);	
-	        		}catch(e){
-	        			result = full.payDate;
-	        		}
-	        		
-	        		return result;
-	        	}},
-	        	{"data" : "payNorCode"},
-	        	{"data" : "payType"},
-	        	{"data" : "memNo"},
+	        	{"data" : "sender"},
+	        	{"data" : "msg"},
+	        	{"data" : "reg_date"},
 	        ]
 	    	
 	    });
