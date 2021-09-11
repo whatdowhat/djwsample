@@ -54,18 +54,14 @@
             <!-- Left Menu Start -->
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title">Menu</li>
+<sec:authorize access="hasAuthority('ROLE_ADMIN') || hasRole('ROLE_전국') || hasRole('ROLE_시군구') || hasRole('ROLE_읍면동')">
                 <li>
-                <%-- <sec:authorize access="hasAuthority('ROLE_ADMIN')">
-                	<a href="/admin/loginAfter.do" class="waves-effect">
-                </sec:authorize>
-				<sec:authorize access="hasAuthority('ROLE_USER')">
-					<a href="/user/loginAfter.do" class="waves-effect">
-                </sec:authorize> --%>
                 	<a href="/admin/loginAfter.do" class="waves-effect">
                         <i class="mdi mdi-home-variant-outline"></i>
                         <span>조직현황</span>
                     </a>
                 </li>
+</sec:authorize>
 <sec:authorize access="hasAuthority('ROLE_ADMIN')">
 				<li>
                     <a href="/admin/member/chart/member.do" class="waves-effect">
@@ -75,16 +71,16 @@
                 </li>
 </sec:authorize>
 
-<%-- <sec:authorize access="hasAuthority('ROLE_ADMIN')"> --%>
+<sec:authorize access="hasAuthority('ROLE_ADMIN') || hasRole('ROLE_전국') || hasRole('ROLE_시군구') || hasRole('ROLE_읍면동')">
 				<li>
                     <a href="/admin/district/chart/member.do" class="waves-effect">
                         <i class="mdi mdi-calendar-outline"></i>
                         <span>선거구별현황</span>
                     </a>
                 </li>
-<%-- </sec:authorize> --%>
+</sec:authorize>
                 
-<sec:authorize access="hasAuthority('ROLE_ADMIN')">
+<sec:authorize access="hasAuthority('ROLE_ADMIN') || hasRole('ROLE_전국') || hasRole('ROLE_시군구') || hasRole('ROLE_읍면동')">
 				<li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="mdi mdi-gradient"></i>
@@ -119,7 +115,9 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="/admin/message/innerMessage.do">쪽지</a></li>
+<sec:authorize access="hasAuthority('ROLE_ADMIN') || hasRole('ROLE_전국') || hasRole('ROLE_시군구') || hasRole('ROLE_읍면동')">                        
                         <li><a href="/admin/message/sms.do">문자(SMS)</a></li>
+</sec:authorize>                        
                         <li><a href="/admin/notice/innernotice.do">공지사항</a></li>
                     </ul>
                 </li>

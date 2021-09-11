@@ -33,6 +33,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,6 +54,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.whatdo.keep.config.CryptoOnewayPasswrod;
+import com.whatdo.keep.config.em.AuthorityEm;
 import com.whatdo.keep.controller.MotherController;
 import com.whatdo.keep.service.dao.AddressCodeDAO;
 import com.whatdo.keep.util.FileDownload;
@@ -548,11 +552,11 @@ public class MemberController extends MotherController{
 	
 	
 	@RequestMapping(value = "/admin/member/list.do", method = { RequestMethod.GET})
-	public ModelAndView adminmemberlist(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session
+	public ModelAndView adminmemberlist(ModelAndView modelAndView, HttpServletRequest req, HttpServletResponse res,HttpSession session,Principal principal
 			
 			) {		
 		
-		
+		MemberVO memberVO = memVoRepository.findByPhone(principal.getName());
 		LOGGER.debug("##adminmemberlist enter");
 		List<GroupVO> groupList = groupVORepository.findAll();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -562,22 +566,87 @@ public class MemberController extends MotherController{
 		Date convertDate =   Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
 		String startDate = dateFormat.format(convertDate);
 		
-		List<AddressCodeVO> citys = dao.getCitys();
+		
+		
+		Map<String,String> auth =  getAuthentics();
+		
+		boolean isAdmin = auth.get("ROLE_ADMIN") !=null ? true : false;
+		boolean isUser = auth.get("ROLE_USER") !=null ? true : false;
+		boolean isCity = auth.get("ROLE_전국") !=null ? true : false;
+		boolean isGun = auth.get("ROLE_시군구") !=null ? true : false;
+		boolean isDon = auth.get("ROLE_읍면동") !=null ? true : false;
+		
+		boolean isControl = memberVO.getAdminAuth().equals("02") ? true : false; 
 		
 		Map<String,String> param = new HashMap();
-		param.put("cityCode", citys.get(0).getCityCode());
-		List<AddressCodeVO> gus = dao.getGus(param);
 		
-		param = new HashMap();
-		param.put("cityCode", citys.get(0).getCityCode());
-		param.put("gunCode", gus.get(0).getGunCode());
-		List<AddressCodeVO> dongs = dao.getDongs(param);
+		if(isAdmin) {
+			List<AddressCodeVO> citys = dao.getCitys();
+			LOGGER.debug("##cities {} "+ citys);
+			param.put("cityCode", citys.get(0).getCityCode());
+			List<AddressCodeVO> gus = dao.getGus(param);
+//			param = new HashMap();
+			param.put("cityCode", citys.get(0).getCityCode());
+			param.put("gunCode", gus.get(0).getGunCode());
+			List<AddressCodeVO> dongs = dao.getDongs(param);
+			
+			
+			modelAndView.addObject("cities", citys );
+			modelAndView.addObject("gus",gus );
+			modelAndView.addObject("dongs",dongs );
+
+		}else if(isCity && isControl) {
+			param.put("cityCode", memberVO.getCityCode());
+			List<AddressCodeVO> citys = dao.getCitys_user(param);
+			LOGGER.debug("##cities {} "+ citys);
+			param.put("gunCode", memberVO.getGunCode());
+			List<AddressCodeVO> gus = dao.getGus_user(param);
+//			param = new HashMap();
+			List<AddressCodeVO> dongs = dao.getDongs(param);
+//			param.put("cityCode", citys.get(0).getCityCode());
+//			param.put("gunCode", gus.get(0).getGunCode());
+
+			
+			
+			modelAndView.addObject("cities", citys );
+			modelAndView.addObject("gus",gus );
+			modelAndView.addObject("dongs",dongs );
+			
+		}else if(isGun && isControl) {
+			param.put("cityCode", memberVO.getCityCode());
+			List<AddressCodeVO> citys = dao.getCitys_user(param);
+			LOGGER.debug("##cities {} "+ citys);
+			param.put("gunCode", memberVO.getGunCode());
+			List<AddressCodeVO> gus = dao.getGus_user(param);
+//			param = new HashMap();
+//			param.put("gunCode", memberVO.getGunCode());
+			List<AddressCodeVO> dongs = dao.getDongs(param);
+			
+			
+			modelAndView.addObject("cities", citys );
+			modelAndView.addObject("gus",gus );
+			modelAndView.addObject("dongs",dongs );
+			
+			
+		}else if(isDon && isControl) {
+			
+			param.put("cityCode", memberVO.getCityCode());
+			param.put("gunCode", memberVO.getGunCode());
+			param.put("dongCode", memberVO.getDongCode());
+			List<AddressCodeVO> citys = dao.getCitys_user(param);
+			LOGGER.debug("##cities {} "+ citys);
+			
+			List<AddressCodeVO> gus = dao.getGus_user(param);
+//			param = new HashMap();
+			
+			List<AddressCodeVO> dongs = dao.getDongs_user(param);
+			modelAndView.addObject("cities", citys );
+			modelAndView.addObject("gus",gus );
+			modelAndView.addObject("dongs",dongs );
+			
+		}
+	
 		
-		LOGGER.debug("##cities {} "+ citys);
-		
-		modelAndView.addObject("cities", citys );
-		modelAndView.addObject("gus",gus );
-		modelAndView.addObject("dongs",dongs );
 		
 		modelAndView.addObject("groups", groupList);
 		modelAndView.addObject("startDate", startDate);
@@ -658,10 +727,15 @@ public class MemberController extends MotherController{
 		inputform.setPhonePassword(password);
 		
 		inputform.setDetailAddress(inputform.getCityN()+" "+inputform.getGunN()+" "+inputform.getDongN()+" "+inputform.getDetailAddress());
-		MemberVO vo = memVoRepository.save(inputform);
 		Map<String, Object> result =  new HashMap();
-		result.put("already", false);
-		result.put("vo", vo);
+		MemberVO searchMember = memVoRepository.findByPhone(inputform.getPhone());
+		if(searchMember!=null) {
+			result.put("already", true);
+		}else {
+			MemberVO vo = memVoRepository.save(inputform);
+			result.put("already", false);
+			result.put("vo", vo);
+		}
 		
 		return result;
 	}

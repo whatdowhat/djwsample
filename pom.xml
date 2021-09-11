@@ -20,8 +20,24 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<spring.security.version>5.2.1.RELEASE</spring.security.version>
 	</properties>
+	<!-- <repositories>
+		<repository>
+			<id>etc-repository</id>
+			<name>etc-repository</name>
+			<url>file\\${project.basedir}\src\main\resources\lib</url>
+		</repository>
+	</repositories> -->
+	
 
 	<dependencies>
+
+		<dependency>
+		    <groupId>NiceID</groupId>
+		    <artifactId>NiceID</artifactId>
+		    <version>1.0</version>
+		    <scope>system</scope>
+		    <systemPath>${basedir}/src/main/resources/lib/NiceID.jar</systemPath>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
 		<dependency>
@@ -271,7 +287,13 @@
 		    <artifactId>json-smart</artifactId>
 		    <version>2.3.1</version>
 		</dependency>
-
+		
+		<dependency>
+		    <groupId>javax.xml.bind</groupId>
+		    <artifactId>jaxb-api</artifactId>
+		    <version>2.3.0</version>
+		</dependency>
+	
 
 
 	</dependencies>

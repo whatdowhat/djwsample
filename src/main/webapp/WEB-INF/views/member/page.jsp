@@ -368,7 +368,7 @@ function commit(inputform){
 		}else{
 			Swal.fire({
 		        title: "실패",
-		        text: "이미 생성된 단체코드 입니다.",
+		        text: "이미 생성된 회원 정보 입니다.",
 		        icon: "error"
 		    });
 		}

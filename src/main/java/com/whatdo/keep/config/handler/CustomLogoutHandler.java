@@ -15,7 +15,6 @@ public class CustomLogoutHandler  implements LogoutSuccessHandler{
 	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException, ServletException {
 		
-		System.out.println("call logout !!!!");
 		if (authentication != null && authentication.getDetails() != null) {
 	            try {
 	            	request.getSession().setAttribute("member", null);

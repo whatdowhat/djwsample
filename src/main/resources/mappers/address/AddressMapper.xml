@@ -63,7 +63,9 @@
 		ON a.cityCode = tem.cityCode
 
         where 1=1 
-		and tem.cityCode= #{cityCode}
+		and tem.cityCode = #{cityCode}
+		and tem.gunCode = #{gunCode}
+		and tem.dongCode = #{dongCode}
         
 		GROUP BY a.cityCode
         <!-- order by cityN asc -->
@@ -131,9 +133,11 @@
         and  a.gunCode = tem.gunCode
 
         where 1=1 
-		and a.cityCode = #{cityCode}
+<!-- 		and a.cityCode = #{cityCode}
+		and a.gunCode = #{gunCode} -->
+        and a.cityCode = #{cityCode}
 		and a.gunCode = #{gunCode}
-        
+		and a.dongCode = #{dongCode}
 		GROUP BY a.cityCode ,a.gunCode 
         order by gunN asc
    

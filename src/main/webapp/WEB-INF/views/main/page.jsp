@@ -80,33 +80,6 @@
                                                 <div class="row">
                                                     <div class="col-lg-3">
                                                         <div class="border p-3 text-center rounded mb-4">
-                                                        <sec:authorize access="hasRole('ROLE_읍면동')">
-														    USER 읍면동
-														</sec:authorize> 
-                                                        <sec:authorize access="hasRole('ROLE_시군동')">
-														    USER 시군동
-														</sec:authorize> 
-														<sec:authorize access="hasAuthority('ROLE_admin')">
-														  관리자 페이지
-														</sec:authorize>
-                                                        <!-- <iframe id="iframe" width="1024" height="500" src="/admin/member/page.do"></iframe> -->
-                                                        <%-- <h1>TYPE: </h1><sec:authentication property="principal"/>
-														<sec:authorize access="!isAuthenticated()">
-														  Login
-														</sec:authorize>
-														<sec:authorize access="isAuthenticated()">
-														  Login 2
-														</sec:authorize>
-														<sec:authorize access="hasRole('USER')">
-														    USER Users
-														</sec:authorize> --%>
-														<%-- <sec:authorize access="hasAuthority('ROLE_ADMIN')">
-														    Manage Users
-														</sec:authorize>
-														<sec:authorize access="hasAuthority('USER')">
-														    USER Users
-														</sec:authorize>
-											 --%>
                                                             <a href="#">
                                                                 <div class="my-3">
                                                                     <i class="dripicons-question h2 text-primary"></i>
@@ -165,6 +138,9 @@
                         </div>
                         
                         <div id="target">
+                        
+                        <sec:authorize access="hasRole('ROLE_ADMIN') || hasRole('ROLE_전국')">
+                        
   						<div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -218,6 +194,11 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        </sec:authorize>
+                        
+                        <sec:authorize access="hasRole('ROLE_ADMIN') || hasRole('ROLE_전국') || hasRole('ROLE_시군구')">
+                        
   						<div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -272,6 +253,9 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        </sec:authorize>
+
   						<div class="row">
                             <div class="col-lg-12">
                                 <div class="card">

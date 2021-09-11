@@ -37,17 +37,16 @@ public class CustomAuthProvider implements AuthenticationProvider, InitializingB
 				.getBean("environment");
 		MemberVORepository memberVORepository = (MemberVORepository) ApplicationContextProvider.getApplicationContext()
 				.getBean("memberVORepository");
-		System.out.println("env size"+  env.getActiveProfiles().length);
 		String administrator = env.getProperty("web.administrator");
 		String administratorPassword = env.getProperty("web.administratorPassword");
 		
 		String username = authentication.getName(); 
 		String password = (String)authentication.getCredentials();	
 
-		System.out.println("AUTHPROVIDER:"+administrator);
-		System.out.println("AUTHPROVIDER:"+administratorPassword);
-		System.out.println("AUTHPROVIDER:"+username);
-		System.out.println("AUTHPROVIDER:"+password);
+//		System.out.println("AUTHPROVIDER:"+administrator);
+//		System.out.println("AUTHPROVIDER:"+administratorPassword);
+//		System.out.println("AUTHPROVIDER:"+username);
+//		System.out.println("AUTHPROVIDER:"+password);
 		if(administrator.equals(username)){
 			if(administratorPassword.equals(password)){
 				

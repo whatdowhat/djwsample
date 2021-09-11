@@ -81,6 +81,7 @@ public class LoginController extends MotherController{
 		Map<String,String> auth =  getAuthentics();
 		boolean isAdmin = auth.get("ROLE_ADMIN") !=null ? true : false;
 		boolean user = auth.get("ROLE_USER") !=null ? true : false;
+		
 		if(isAdmin) {
 			
 			List<AddressCodeVO> citys = dao.getCitys();
@@ -113,6 +114,7 @@ public class LoginController extends MotherController{
 			modelAndView.addObject("gunCode", gus.get(0).getGunCode() );
 			modelAndView.addObject("dongs",dongs );
 			modelAndView.addObject("dongCode", dongs.get(0).getDongCode() );
+			modelAndView.setViewName("main/page");
 		}else {
 			MemberVO memberVO = memVoRepository.findByPhone(principal.getName());
 			
@@ -146,9 +148,13 @@ public class LoginController extends MotherController{
 			modelAndView.addObject("gunCode", memberVO.getGunCode());
 			modelAndView.addObject("dongs",dongs );
 			modelAndView.addObject("dongCode", memberVO.getDongCode() );
+			
+			if(memberVO.getAdminAuth().contentEquals("02")) { //관리 허용.
+				modelAndView.setViewName("main/page");
+			}else {
+				modelAndView.setViewName("notice/list");		
+			}
 		}
-
-		modelAndView.setViewName("main/page");
 		
 		return modelAndView;
 	}

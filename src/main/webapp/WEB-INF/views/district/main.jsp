@@ -86,6 +86,8 @@
                         </div>
                         
   						<div id="target">
+  						<sec:authorize access="hasRole('ROLE_ADMIN') || hasRole('ROLE_전국')">
+  						
 						<div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -144,7 +146,12 @@
                                 </div>
                             </div>
                         </div>
-  						<div class="row">
+  						
+  						</sec:authorize>
+						
+						<sec:authorize access="hasRole('ROLE_ADMIN') || hasRole('ROLE_전국') || hasRole('ROLE_시군구') ">
+						
+<div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-body">
@@ -208,6 +215,9 @@
                                 </div>
                             </div>
                         </div>
+						
+						</sec:authorize>
+  						
   						<div class="row">
                             <div class="col-lg-12">
                                 <div class="card">

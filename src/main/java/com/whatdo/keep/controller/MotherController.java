@@ -87,7 +87,7 @@ public class MotherController {
 		 Iterator<? extends GrantedAuthority> iter = authorities.iterator(); 
 		 while (iter.hasNext()) { 
 			 GrantedAuthority auth =  iter.next(); 
-			 System.out.println(auth.getAuthority()); 
+//			 System.out.println(auth.getAuthority()); 
 			 result.put(auth.getAuthority(), auth.getAuthority());
 		 }
 		return result;
