@@ -32,13 +32,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,15 +47,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.whatdo.keep.config.CryptoOnewayPasswrod;
-import com.whatdo.keep.config.em.AuthorityEm;
 import com.whatdo.keep.controller.MotherController;
 import com.whatdo.keep.service.dao.AddressCodeDAO;
 import com.whatdo.keep.util.FileDownload;
 import com.whatdo.keep.vo.AddressCodeVO;
 import com.whatdo.keep.vo.ChartDataVO;
-import com.whatdo.keep.vo.FileuploadVO;
 import com.whatdo.keep.vo.GroupVO;
 import com.whatdo.keep.vo.InnerMessage;
 import com.whatdo.keep.vo.MemberVO;
@@ -575,8 +567,16 @@ public class MemberController extends MotherController{
 		boolean isCity = auth.get("ROLE_전국") !=null ? true : false;
 		boolean isGun = auth.get("ROLE_시군구") !=null ? true : false;
 		boolean isDon = auth.get("ROLE_읍면동") !=null ? true : false;
+		boolean isControl = false;
 		
-		boolean isControl = memberVO.getAdminAuth().equals("02") ? true : false; 
+		if(isAdmin) {
+			isControl = true;
+		}else {
+			isControl = memberVO.getAdminAuth().equals("02") ? true : false;
+		}
+		
+		 
+				 
 		
 		Map<String,String> param = new HashMap();
 		
