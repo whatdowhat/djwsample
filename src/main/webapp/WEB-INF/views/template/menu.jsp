@@ -88,8 +88,12 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="/admin/member/list.do">당원정보</a></li>
+                        <sec:authorize access="hasAuthority('ROLE_ADMIN')">
                         <li><a href="/admin/member/page.do">당원등록</a></li>
+                        </sec:authorize>
+                        <sec:authorize access="hasAuthority('ROLE_ADMIN')">
                         <li><a href="/admin/member/excelPage.do">엑셀등록</a></li>
+                        </sec:authorize>
                         
                     </ul>
                 </li>
@@ -114,8 +118,11 @@
                         <span>메세지관리</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
+<sec:authorize access="hasAuthority('ROLE_ADMIN') || hasRole('ROLE_전국') || hasRole('ROLE_시군구') || hasRole('ROLE_읍면동')">
                         <li><a href="/admin/message/innerMessage.do">쪽지</a></li>
-<sec:authorize access="hasAuthority('ROLE_ADMIN') || hasRole('ROLE_전국') || hasRole('ROLE_시군구') || hasRole('ROLE_읍면동')">                        
+</sec:authorize>
+
+<sec:authorize access="hasAuthority('ROLE_ADMIN')">                        
                         <li><a href="/admin/message/sms.do">문자(SMS)</a></li>
 </sec:authorize>                        
                         <li><a href="/admin/notice/innernotice.do">공지사항</a></li>

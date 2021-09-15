@@ -597,10 +597,12 @@ public class MemberController extends MotherController{
 
 		}else if(isCity && isControl) {
 			param.put("cityCode", memberVO.getCityCode());
+			param.put("gunCode", memberVO.getGunCode());
 			List<AddressCodeVO> citys = dao.getCitys_user(param);
 			LOGGER.debug("##cities {} "+ citys);
-			param.put("gunCode", memberVO.getGunCode());
-			List<AddressCodeVO> gus = dao.getGus_user(param);
+			
+//			List<AddressCodeVO> gus = dao.getGus_user(param);
+			List<AddressCodeVO> gus = dao.getGus(param);
 //			param = new HashMap();
 			List<AddressCodeVO> dongs = dao.getDongs(param);
 //			param.put("cityCode", citys.get(0).getCityCode());
@@ -614,10 +616,13 @@ public class MemberController extends MotherController{
 			
 		}else if(isGun && isControl) {
 			param.put("cityCode", memberVO.getCityCode());
+			param.put("gunCode", memberVO.getGunCode());
 			List<AddressCodeVO> citys = dao.getCitys_user(param);
 			LOGGER.debug("##cities {} "+ citys);
-			param.put("gunCode", memberVO.getGunCode());
-			List<AddressCodeVO> gus = dao.getGus_user(param);
+			
+			//List<AddressCodeVO> gus = dao.getGus_user(param);
+			List<AddressCodeVO> gus = dao.getGus(param);
+			
 //			param = new HashMap();
 //			param.put("gunCode", memberVO.getGunCode());
 			List<AddressCodeVO> dongs = dao.getDongs(param);
@@ -636,7 +641,8 @@ public class MemberController extends MotherController{
 			List<AddressCodeVO> citys = dao.getCitys_user(param);
 			LOGGER.debug("##cities {} "+ citys);
 			
-			List<AddressCodeVO> gus = dao.getGus_user(param);
+//			List<AddressCodeVO> gus = dao.getGus_user(param);
+			List<AddressCodeVO> gus = dao.getGus(param);
 //			param = new HashMap();
 			
 			List<AddressCodeVO> dongs = dao.getDongs_user(param);
@@ -648,6 +654,7 @@ public class MemberController extends MotherController{
 	
 		
 		
+		modelAndView.addObject("memberVO", memberVO);
 		modelAndView.addObject("groups", groupList);
 		modelAndView.addObject("startDate", startDate);
 		modelAndView.addObject("endDate", endDate);

@@ -52,11 +52,12 @@
                                         <div class="row justify-content-center mt-3">
                                             <div class="col-lg-6">
                                                 <div class="row">
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-6" style="font-size: 20px;">
                                                         <div class="border p-3 text-center rounded mb-4">
                                                             <a href="#">
                                                                 <div class="my-3">
-                                                                    <i class="dripicons-question h2 text-primary"></i>
+                                                                    <!-- <i class="dripicons-question h2 text-primary"></i> -->
+                                                                    <img alt="" src="/resources/assets/images/four.png" width="150px;" height="150px;">
                                                                 </div>
                                                                 <h5 class="font-size-15 mb-3">당원</h5>
                                                                  <br>
@@ -64,11 +65,12 @@
                                                             </a>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-6" style="font-size: 20px;">
                                                         <div class="border p-3 text-center rounded mb-4">
                                                             <a href="#">
                                                                 <div class="my-3">
-                                                                    <i class="dripicons-tags h2 text-primary"></i>
+                                                                    <!-- <i class="dripicons-tags h2 text-primary"></i> -->
+                                                                    <img alt="" src="/resources/assets/images/three.png" width="150px;" height="150px;">
                                                                 </div>
                                                                 <h5 class="font-size-15 mb-3">입당</h5>
                                                                  <br>

@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <!doctype html>
 <html lang="en">
@@ -106,6 +107,7 @@
 			                                                 <input type="text"  class="form-control" id="dongN">
 			                                            </div>
 			                                        </div> -->
+<sec:authorize access="hasAuthority('ROLE_ADMIN')">
 		                                        <div class="mb-3 row">
 		                                            <label class="col-md-2 col-form-label">주소</label>
 		                                            <div class="col-md-3">
@@ -132,10 +134,82 @@
 																</c:forEach>
 			                                                </select>
 			                                        </div>
-                                           
-
                                         </div>
-			                                        
+</sec:authorize>
+<sec:authorize access="hasRole('ROLE_전국')">
+		                                        <div class="mb-3 row">
+		                                            <label class="col-md-2 col-form-label">주소</label>
+		                                            <div class="col-md-3">
+		                                                <select class="form-select" onchange="clickCity(this)" id="city">
+															<option value="${memberVO.cityCode}">${memberVO.cityN}</option>
+		                                                </select>
+		 											</div>
+			                                        <div class="col-md-3">
+			                                                <select class="form-select" onchange="clickGun(this)" id="gun">
+			                                                <option value="all">전체</option>
+																<c:forEach var="item" items="${gus}" varStatus="status"> 
+																			<option value="${item.gunCode}">${item.gunN}</option>
+																</c:forEach>
+			                                                </select>
+			                                                
+			                                            </div>
+			                                        <div class="col-md-4">
+			                                                <select class="form-select" id="dong">
+			                                                <option value="all">전체</option>
+																<c:forEach var="item" items="${dongs}" varStatus="dong"> 
+																			<option value="${item.dongCode}">${item.dongN}</option>
+																</c:forEach>
+			                                                </select>
+			                                        </div>
+                                        </div>
+                                        </div>
+</sec:authorize>
+<sec:authorize access="hasRole('ROLE_시군구')">
+		                                        <div class="mb-3 row">
+		                                            <label class="col-md-2 col-form-label">주소</label>
+		                                            <div class="col-md-3">
+		                                                <select class="form-select" onchange="clickCity(this)" id="city">
+															<option value="${memberVO.cityCode}">${memberVO.cityN}</option>
+		                                                </select>
+		 											</div>
+			                                        <div class="col-md-3">
+			                                                <select class="form-select" onchange="clickGun(this)" id="gun">
+																<option value="${memberVO.gunCode}">${memberVO.gunN}</option>
+			                                                </select>
+			                                                
+			                                            </div>
+			                                        <div class="col-md-4">
+			                                                <select class="form-select" id="dong">
+			                                                <option value="all">전체</option>
+																<c:forEach var="item" items="${dongs}" varStatus="dong"> 
+																			<option value="${item.dongCode}">${item.dongN}</option>
+																</c:forEach>
+			                                                </select>
+			                                        </div>
+                                        </div>
+</sec:authorize>
+<sec:authorize access="hasRole('ROLE_읍면동')">
+		                                        <div class="mb-3 row">
+		                                            <label class="col-md-2 col-form-label">주소</label>
+		                                            <div class="col-md-3">
+		                                                <select class="form-select" onchange="clickCity(this)" id="city">
+															<option value="${memberVO.cityCode}">${memberVO.cityN}</option>
+		                                                </select>
+		 											</div>
+			                                        <div class="col-md-3">
+			                                                <select class="form-select" onchange="clickGun(this)" id="gun">
+																<option value="${memberVO.gunCode}">${memberVO.gunN}</option>
+			                                                </select>
+			                                                
+			                                            </div>
+			                                        <div class="col-md-4">
+			                                                <select class="form-select" id="dong">
+																<option value="${memberVO.dongCode}">${memberVO.dongN}</option>
+			                                                </select>
+			                                        </div>
+                                        </div>
+</sec:authorize>
+
 			                                        <div class="mb-3 row">
 			                                            <label for="example-tel-input" class="col-md-2 col-form-label">주소 상세</label>
 			                                            <div class="col-md-10">

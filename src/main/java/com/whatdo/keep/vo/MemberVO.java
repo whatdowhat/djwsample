@@ -195,7 +195,7 @@ public class MemberVO extends InputForm {
 				+ ", church=" + church + ", churchRank=" + churchRank + ", captain=" + captain + ", level=" + level
 				+ ", groupJikham=" + groupJikham + ", phone=" + phone + ", phonePassword=" + phonePassword
 				+ ", signPad=" + signPad + ", sex=" + sex + ", recommandName=" + recommandName + ", recommandPhone="
-				+ recommandPhone + ", signData=" + Arrays.toString(signData) + ", groupKey=" + groupKey + ", groupName="
+				+ recommandPhone + ", groupKey=" + groupKey + ", groupName="
 				+ groupName + ", name=" + name + ", representiveRankName=" + representiveRankName
 				+ ", representiveName=" + representiveName + ", representiveCode=" + representiveCode + ", yyyymmdd="
 				+ yyyymmdd + ", sojeji=" + sojeji + ", detailAddress=" + detailAddress + ", cityCode=" + cityCode

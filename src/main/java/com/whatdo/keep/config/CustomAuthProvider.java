@@ -68,11 +68,10 @@ public class CustomAuthProvider implements AuthenticationProvider, InitializingB
 			}
 			
 			MemberVO user =  memberVORepository.findByPhone(username);
-			if(user==null) {
+			if(user.getPhonePassword()==null || user.getAdminAuth() == null ) {
 				throw new BadCredentialsException("user is not exist");
 			}
-			System.out.println("user.getPhonePassword() :"+user.getPhonePassword());
-			System.out.println("password :"+password);
+			
 			if(user.getPhonePassword().equals(password)){
 				if(user.getAdminAuth().equals("02")) { //허용
 					System.out.println("관리 허용 :"+username);

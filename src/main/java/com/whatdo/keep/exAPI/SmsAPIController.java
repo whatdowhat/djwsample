@@ -124,7 +124,7 @@ public class SmsAPIController extends MotherController{
 				sms.put("user_id", "koreacrp"); // SMS 아이디
 				sms.put("sender", ""); // 발신번호
 				sms.put("key", "n6p1fwvzj1l54ehteruj5x607842bpom"); //인증키
-				sms.put("receiver", "01050589150"); // 수신번호
+				sms.put("receiver", insertList.get(k).getPhone()); // 수신번호
 				/******************** 인증정보 ********************/
 				sms.put("msg", insertList.get(k).getMessageTxt()); // 메세지 내용
 				/******************** 전송정보 ********************/

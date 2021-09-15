@@ -20,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -82,6 +84,8 @@ public class MessageController extends MotherController{
 		
 		Map resultMap = new HashMap<String, Object>();
 		Pageable p = getPageable(req,  vo.getStart(), vo.getLength());
+		int editPage = vo.getStart() / vo.getLength(); 
+		p =  PageRequest.of(editPage,10,  Sort.Direction.DESC,"regDt");
 		
 		Map<String,String> auth =  getAuthentics();
 		boolean admin = auth.get("ROLE_ADMIN") !=null ? true : false;
@@ -100,26 +104,26 @@ public class MessageController extends MotherController{
 		}
 		param.put("startP",vo.getStart());
 		param.put("endP",vo.getLength());
-		System.out.println("######### :: "+param);
+//		System.out.println("######### :: "+param);
 		
 		List<InnerMessage>list =  dao.getMessages(param);
 		Integer total =  dao.getMessages_count(param);
-		System.out.println("#########");
-		System.out.println(total);
-		System.out.println(list.size());
-		System.out.println("#########");
+//		System.out.println("#########");
+//		System.out.println(total);
+//		System.out.println(list.size());
+//		System.out.println("#########");
 		
-		for(int i=0; i<list.size();i++) {
-			System.out.println(list.get(i).toString());
-		}
-		
+//		for(int i=0; i<list.size();i++) {
+//			System.out.println(list.get(i).toString());
+//		}
+//		
 		Page<InnerMessage> page = new PageImpl<>(list,p,total);
-		System.out.println("#########");
+//		System.out.println("#########");
 		page = new PageImpl<>(page.getContent(),page.getPageable(),page.getTotalElements());
 
-		for(int i=0; i<page.getContent().size();i++) {
-			System.out.println(page.getContent().get(i).toString());
-		}
+//		for(int i=0; i<page.getContent().size();i++) {
+//			System.out.println(page.getContent().get(i).toString());
+//		}
 		
 		
 		resultMap.put("recordsFiltered",total);

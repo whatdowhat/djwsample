@@ -109,6 +109,11 @@ function snedMessage(type){
    		messagehtml += ' </div>                                                                                               ';
 	}
 	$("#messageTarget").html(messagehtml);
+	if(type == 1){
+		$("#myModalLabel")[0].innerHTML= "쪽지 보내기"
+	}else{
+		$("#myModalLabel")[0].innerHTML= "문자 보내기"
+	}
 	 $("#myModal").modal("show");
 }
 
@@ -188,6 +193,9 @@ function snedMessageCommit(){
 				
 			});
 			
+			pageload();
+			
+			
 		}else if(sendType == 2){
 			url="/admin/sms/send.do";
 			ajaxSendData(url,list,function(result){
@@ -195,7 +203,7 @@ function snedMessageCommit(){
 				if(result.result ==true){
 					Swal.fire({
 			        title: "성공",
-			        text: "쪽지를 보냈습니다.",
+			        text: "문자를 보냈습니다.",
 			        icon: "success"
 			    });	 
 			    

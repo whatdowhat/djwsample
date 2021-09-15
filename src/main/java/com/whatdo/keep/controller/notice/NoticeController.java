@@ -21,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,6 +89,8 @@ public class NoticeController extends MotherController{
 		
 		Map resultMap = new HashMap<String, Object>();
 		Pageable p = getPageable(req,  vo.getStart(), vo.getLength());
+//		int editPage = vo.getStart() / vo.getLength(); 
+//		p =  PageRequest.of(editPage,10,  Sort.Direction.DESC,"regDt");
 		
 		Map<String,String> auth =  getAuthentics();
 		boolean admin = auth.get("ROLE_ADMIN") !=null ? true : false;

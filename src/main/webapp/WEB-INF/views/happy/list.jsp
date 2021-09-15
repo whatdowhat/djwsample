@@ -37,21 +37,23 @@
                         <div class="row">
                         
 				                                    <div class="mb-3 row">
-				                                            <label for="example-date-input" class="col-md-1 col-form-label">날자 조건</label>
-				                                            <div class="col-md-5">
+				                                            <label for="example-date-input" class="col-md-1 col-form-label">조회 기간:</label>
+				                                            <div class="col-md-3">
 				                                                <input class="form-control" type="date" value="${startDate}" id="startDate" >
 				                                                
 				                                            </div>
-															<div class="col-md-5">
+				                                            ~
+															<div class="col-md-3">
 				                                                <input class="form-control" type="date" value="${endDate}" id="endDate" >
 				                                            </div>
+				                                            (최대 90일 검색가능)
+				                                            
 				                                            <div class="col-md-1">
-				                                            	<button type="button" class="btn btn-primary" onclick="search()">검색</button>
+				                                            	<button type="button" class="btn btn-primary" onclick="search()">조회</button>
 				                                            </div>
 				                                            
 				                                    </div>
-
-
+ 								
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">

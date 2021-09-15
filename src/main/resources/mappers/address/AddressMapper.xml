@@ -63,9 +63,13 @@
 		ON a.cityCode = tem.cityCode
 
         where 1=1 
-		and tem.cityCode = #{cityCode}
+		<!-- and tem.cityCode = #{cityCode}
 		and tem.gunCode = #{gunCode}
 		and tem.dongCode = #{dongCode}
+		 -->
+		and a.cityCode = #{cityCode}
+		and a.gunCode = #{gunCode}
+		and a.dongCode = #{dongCode}
         
 		GROUP BY a.cityCode
         <!-- order by cityN asc -->
@@ -588,7 +592,7 @@
 		<if test="isAdmin == 'false' ">
 			and  (frommemberseq = #{memberseq} or tomemberseq = #{memberseq})
 		</if>
-	   
+		
 	</select>
 	<select id="getMessages" parameterType="java.util.HashMap"  resultType="InnerMessage">
 		
@@ -601,7 +605,10 @@
 		<if test="isAdmin == 'false' ">
 			and  (frommemberseq = #{memberseq} or tomemberseq = #{memberseq})
 		</if>
-	   <!-- order by regDt desc -->
+		order by regDt desc
+		limit #{startP} , #{endP}
+		
+	   
 	<!-- limit #{startP} , #{endP} -->	   
 	</select>
 

@@ -125,8 +125,83 @@
 <script type="text/javascript">
 
 
+function pageload(){
+	
+	
+	var inputform = {};
+	inputform.frommemberName = "";
+	inputform.noticeText = "";
+	inputform.noticeTitle = "";
+	inputform.regDt = "";
+
+	
+	console.dir(inputform);
+	
+	
+	
+    var url = "/admin/notice/listtable.do";
+    $.fn.dataTable.ext.errMode = 'none';
+    $('#datatable').DataTable({
+    	
+    	paging : true,
+    	info: true,
+    	searching: false,
+    	"pageLength": 10,
+    	"serverSide" : true,
+    	"pagingType" : "full_numbers",
+    	"processing" : true,
+    	"destroy" : true,
+    	"lengthChange" : true,
+        "columns" : [
+        	{"data" : "checked",     	render: function (data, type, full, meta){
+        		$("#selectBoxTargetAll").prop("checked",false);
+     	       return '<input type="checkbox" name="selectBoxTarget" id="selectBoxTarget"  value="'+full.seq+'">'
+        	}},
+        	
+        	{"data" : "seq",render:function(a,b,c,d){
+        		return d.row + d.settings._iDisplayStart +1;
+        	}},        	
+        	{"data" : "frommemberName"},
+        	{"data" : "noticeTitle"},
+        	{"data" : "noticeText"},
+        	/* {"data" : "regDt"}, */
+        	{"data" : "regDt",render:function(a,b,c,d){
+        		if(c.regDt != '' && c.regDt != undefined){
+        			//var d = new Date(c.yyyymmdd);
+        			return formatDate(c.regDt);
+        			
+        		}else{
+        			return "-";
+        		}
+        		
+        		
+        	}},  
+       	],
+ 			'columnDefs': [{
+       	   'targets': 0,
+       	   'searchable':false,
+       	   'orderable':false,
+       	   'className': 'dt-body-center',
+       	   'render': function (data, type, full, meta){
+       	       return '<input type="checkbox" name="id[]" value="-">';
+       	   },
+       	}], 
+        "ajax" : {
+        	type : "POST",
+            url : url,
+            "data" : {
+                "columnsize" : 6,
+                "vo" : inputform,
+            }
+        },
+    });
+	
+}
+
 $(document).ready(function() {
     
+	
+
 	
 	
 var inputform = {};
@@ -237,6 +312,8 @@ function noticeCommit(){
 		        icon: "success"
 		    });	 
 		    
+			pageload();
+				
 			}else{
 				Swal.fire({
 			        title: "실패",

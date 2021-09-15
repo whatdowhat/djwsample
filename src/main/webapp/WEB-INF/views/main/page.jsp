@@ -78,51 +78,55 @@
                                         <div class="row justify-content-center mt-3">
                                             <div class="col-lg-8">
                                                 <div class="row">
-                                                    <div class="col-lg-3">
+                                                    <div class="col-lg-3" style="font-size: 20px;">
                                                         <div class="border p-3 text-center rounded mb-4">
                                                             <a href="#">
                                                                 <div class="my-3">
-                                                                    <i class="dripicons-question h2 text-primary"></i>
+                                                                    <!-- <i class="dripicons-question h2 text-primary"></i> -->
+                                                                    <img alt="" src="/resources/assets/images/four.png" width="150px;" height="150px;">
                                                                 </div>
-                                                                <h5 class="font-size-15 mb-3">당원 현황</h5>
+                                                                <h5 class="font-size-20 mb-3">당원현황</h5>
                                                                  <br>
                                                                  <fmt:formatNumber value="${total }" pattern="#,###" />
                                                             </a>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-3">
+                                                    <div class="col-lg-3" style="font-size: 20px;">
                                                         <div class="border p-3 text-center rounded mb-4">
                                                             <a href="#">
                                                                 <div class="my-3">
-                                                                    <i class="dripicons-tags h2 text-primary"></i>
+                                                                    <!-- <i class="dripicons-tags h2 text-primary"></i> -->
+                                                                    <img alt="" src="/resources/assets/images/three.png" width="150px;" height="150px;">
                                                                 </div>
-                                                                <h5 class="font-size-15 mb-3">단체현황</h5>
+                                                                <h5 class="font-size-20 mb-3">단체현황</h5>
                                                                  <br>
                                                                  <fmt:formatNumber value="${groupCount }" pattern="#,###" />
                                                                 
                                                             </a>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-3">
+                                                    <div class="col-lg-3" style="font-size: 20px;">
                                                         <div class="border p-3 text-center rounded mb-4">
                                                             <a href="#">
                                                                 <div class="my-3">
-                                                                    <i class="dripicons-help h2 text-primary"></i>
+                                                                    <!-- <i class="dripicons-help h2 text-primary"></i> -->
+                                                                    <img alt="" src="/resources/assets/images/one.jpg" width="150px;" height="150px;">
                                                                 </div>
-                                                                <h5 class="font-size-15 mb-3">책임당원</h5>
+                                                                <h5 class="font-size-20 mb-3">책임당원</h5>
                                                                  <br>
                                                                  <fmt:formatNumber value="${dangwonCount01 }" pattern="#,###" />
                                                               
                                                             </a>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-3">
-                                                        <div class="border p-3 text-center rounded mb-4">
+                                                    <div class="col-lg-3" style="font-size: 20px;">
+                                                        <div class="border p-3 text-center rounded mb-4" >
                                                             <a href="#">
                                                                 <div class="my-3">
-                                                                    <i class="dripicons-article h2 text-primary"></i>
+                                                                    <!-- <i class="dripicons-article h2 text-primary"></i> -->
+                                                                    <img alt="" src="/resources/assets/images/two.png" width="150px;" height="150px;">
                                                                 </div>
-                                                                <h5 class="font-size-15 mb-3">일반당원</h5>
+                                                                <h5 class="font-size-20 mb-3">일반당원</h5>
                                                                 <br>
                                                                 <fmt:formatNumber value="${dangwonCount00 }" pattern="#,###" />
                                                             </a>
