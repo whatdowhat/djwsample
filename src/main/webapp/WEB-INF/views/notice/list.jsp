@@ -312,6 +312,11 @@ function noticeCommit(){
 		        icon: "success"
 		    });	 
 		    
+
+			$("#noticeTitle").val("");
+			$("#noticeText").val("");
+					
+				
 			pageload();
 				
 			}else{

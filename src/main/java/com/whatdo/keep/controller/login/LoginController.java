@@ -54,8 +54,10 @@ public class LoginController extends MotherController{
 		
 		LOGGER.debug("##index enter");
 		String data = req.getContextPath() + "/login.do";
+		String signUp = req.getContextPath() + "/public/signUp.do";
 		LOGGER.debug("controll data {} ", data);
 		modelAndView.addObject("data",data );
+		modelAndView.addObject("signUp",signUp );
 		modelAndView.setViewName("index");
 		
 		return modelAndView;

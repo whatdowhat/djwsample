@@ -177,13 +177,17 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
 //		props.setProperty("hibernate.dialect", dialect);
 		
 		
-		props.setProperty("hibernate.SQL", "debug");
-		props.setProperty("hibernate.show_sql", "true");
+//		props.setProperty("hibernate.SQL", "debug");
+		props.setProperty("hibernate.SQL", "info");
+//		props.setProperty("hibernate.show_sql", "true");
+		props.setProperty("hibernate.show_sql", "false");
 		props.setProperty("hibernate.format_sql", "true");
 		props.setProperty("hibernate.hbm2ddl.auto", "update");
-		props.setProperty("hibernate.use_sql_comments", "true");
-		props.setProperty("logging.level.org.hibernate.type.descriptor.sql", "trace");
-		props.setProperty("tracespring.jpa.show-sql", "true");
+//		props.setProperty("hibernate.use_sql_comments", "true");
+		props.setProperty("hibernate.use_sql_comments", "false");
+//		props.setProperty("logging.level.org.hibernate.type.descriptor.sql", "trace");
+		//props.setProperty("tracespring.jpa.show-sql", "true");
+		props.setProperty("tracespring.jpa.show-sql", "false");
 		props.setProperty("spring.jpa.properties.hibernate.format_sql", "true");
 		props.setProperty("spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation", "true");
 				

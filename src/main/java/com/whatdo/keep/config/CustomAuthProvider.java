@@ -68,6 +68,12 @@ public class CustomAuthProvider implements AuthenticationProvider, InitializingB
 			}
 			
 			MemberVO user =  memberVORepository.findByPhone(username);
+			if(user == null ) {
+//			if(user.getPhonePassword()==null || user.getAdminAuth() == null ) {
+//				throw new BadCredentialsException("user is not exist");
+				
+				throw new BadCredentialsException("AbstractUserDetailsAuthenticationProvider.badCredentials");
+			}
 			if(user.getPhonePassword()==null || user.getAdminAuth() == null ) {
 				throw new BadCredentialsException("user is not exist");
 			}

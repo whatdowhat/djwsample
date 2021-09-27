@@ -89,8 +89,8 @@ public class NoticeController extends MotherController{
 		
 		Map resultMap = new HashMap<String, Object>();
 		Pageable p = getPageable(req,  vo.getStart(), vo.getLength());
-//		int editPage = vo.getStart() / vo.getLength(); 
-//		p =  PageRequest.of(editPage,10,  Sort.Direction.DESC,"regDt");
+		int editPage = vo.getStart() / vo.getLength(); 
+		p =  PageRequest.of(editPage,10,  Sort.Direction.DESC,"regDt");
 		
 		Map<String,String> auth =  getAuthentics();
 		boolean admin = auth.get("ROLE_ADMIN") !=null ? true : false;

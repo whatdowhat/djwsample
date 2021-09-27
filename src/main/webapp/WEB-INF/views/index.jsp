@@ -46,12 +46,12 @@
                                     <!-- <p class="mb-5 text-center">Sign in to continue to Upzet.</p> -->
                                     
                                     
-									<form:form class="form-signin" method="post" action="/login.do">
 			
 			                                    <div class="form-horizontal">
 			
 			                                        <div class="row">
 			                                            <div class="col-md-12">
+			                                            <form:form class="form-signin" method="post" action="/login.do">
 			                                                <div class="mb-4">
 			                                                    <label class="form-label" for="username">로그인 아이디</label>
 			                                                    <input type="text" class="form-control" name="id"  id="id" placeholder="Enter username">
@@ -71,14 +71,15 @@
 			                                                    
 			                                                </div> -->
 			                                                <div class="d-grid mt-4">
-			                                                    <button class="btn btn-primary waves-effect waves-light" onclick="login()">로그인</button>
+			                                                    <button class="btn btn-primary waves-effect waves-light" style="margin-bottom: 10px" onclick="login()">로그인</button>
+			                                                </div>
+			                                                </form:form>
+			                                                <div class="d-grid mt-4">
+			                                                       <button class="btn btn-danger waves-effect waves-light" onclick="signUp()">가입하기</button>
 			                                                </div>
 			                                            </div>
 			                                        </div>
 			                                    </div>
-			
-			
-									</form:form>
                                     
                                 </div>
                             </div>
@@ -121,10 +122,13 @@ $(document).ready(function() {
 });
 
 function login(){
-	window.location.href ="${data}"
+	window.location.href ="${data}";
 }
 
-
+function signUp(){
+	window.location.href ="${signUp}";
+	 
+}
 </script>
     
 </html>

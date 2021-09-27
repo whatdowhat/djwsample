@@ -177,10 +177,12 @@ function snedMessageCommit(){
 				if(result.result ==true){
 					Swal.fire({
 			        title: "성공",
-			        text: "쪽지를 보냈습니다.",
+			        text: "전송완료되었습니다",
 			        icon: "success"
 			    });	 
-			    
+			    $("#messageTxt").val('');
+			    $("#messageTitle").val('');
+					
 				}else{
 					Swal.fire({
 				        title: "실패",
@@ -203,10 +205,12 @@ function snedMessageCommit(){
 				if(result.result ==true){
 					Swal.fire({
 			        title: "성공",
-			        text: "문자를 보냈습니다.",
+			        text: "전송완료되었습니다",
 			        icon: "success"
 			    });	 
-			    
+				    $("#messageTxt").val('');
+				    $("#messageTitle").val('');
+					
 				}else{
 					Swal.fire({
 				        title: "실패",
